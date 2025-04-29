@@ -1,0 +1,29 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <div style="background-color: #f8f9fa; padding: 20px; border-radius: 10px; width: 220px;">
+        <h2>Total Properties</h2>
+        <p style="font-size: 24px;">{{ total_properties }}</p>
+    </div>
+
+    <div style="background-color: #f8f9fa; padding: 20px; border-radius: 10px; width: 220px;">
+        <h2>Total Tenants</h2>
+        <p style="font-size: 24px;">{{ total_tenants }}</p>
+    </div>
+
+    <div style="background-color: #f8f9fa; padding: 20px; border-radius: 10px; width: 220px;">
+        <h2>Active Leases</h2>
+        <p style="font-size: 24px;">{{ active_leases }}</p>
+    </div>
+
+    <div style="background-color: #f8f9fa; padding: 20px; border-radius: 10px; width: 220px;">
+        <h2>Total Payments</h2>
+        <p style="font-size: 24px;">{{ total_rent_payments }}</p>
+    </div>
+</div>
+
+{% endblock %}
