@@ -1,0 +1,23 @@
+# Python
+*.pyc
+__pycache__/
+
+# Environment
+.env
+venv/
+env/
+
+# Django
+db.postgressql
+staticfiles/
+media/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
