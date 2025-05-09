@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analytics Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background:rgb(251, 251, 252);
+        }
+        .dashboard-title {
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 200px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .stat-label {
+            color: #555;
+        }
+        .charts-container {
+            margin-top: 40px;
+            display: grid;
+            gap: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 class="dashboard-title">Analytics Dashboard</h1>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-value">{{ total_properties }}</div>
+            <div class="stat-label">Total Properties</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ total_tenants }}</div>
+            <div class="stat-label">Total Tenants</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ total_leases }}</div>
+            <div class="stat-label">Total Leases</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">Ksh{{ total_rent_collected }}</div>
+            <div class="stat-label">Total Rent Collected</div>
+        </div>
+    </div>
+
+    <div class="charts-container">
+        <canvas id="rentChart" height="100"></canvas>
+        <canvas id="leaseChart" height="100"></canvas>
+    </div>
+
+    <script>
+        // Sample placeholder data
+        const rentChart = new Chart(document.getElementById('rentChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    label: 'Rent Collected (Ksh)',
+                    data: [10000, 10000, 10000, 10000, 10000],
+                    backgroundColor: '#007bff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Monthly Rent Collection'
+                    }
+                }
+            }
+        });
+
+        const leaseChart = new Chart(document.getElementById('leaseChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Active Leases', 'Expired Leases'],
+                datasets: [{
+                    label: 'Leases',
+                    data: [10, 10],
+                    backgroundColor: ['#28a745', '#dc3545']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Lease Status Overview'
+                    }
+                }
+            }
+        });
+    </script>
+
+    <footer>
+        <p>&copy; 2025 Zia Property Management System</p>
+    </footer>
+</body>
+</html>

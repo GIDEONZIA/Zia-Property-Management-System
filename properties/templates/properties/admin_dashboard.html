@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Admin Dashboard</h1>
+    <p>Welcome, {{ request.user.username }}!</p>
+
+    <!-- You can add admin-specific features here -->
+    <ul>
+        <li><a href="{% url 'property-list' %}">View All Properties</a></li>
+        <li><a href="{% url 'tenant-list-create' %}">Manage Tenants</a></li>
+        <li><a href="{% url 'lease-list-create' %}">View Leases</a></li>
+        <li><a href="{% url 'rent-payment-list-create' %}">Rent Payments</a></li>
+    </ul>
+</div>
+{% endblock %}

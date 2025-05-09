@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h2>Tenant Dashboard</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Profile</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Verified</th>
+            <th>Status</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tenant in tenants %}
+        <tr>
+            <td>
+                {% if tenant.profile_picture %}
+                    <img src="{{ tenant.profile_picture.url }}" alt="{{ tenant.name }}" width="40" height="40" style="border-radius: 50%;">
+                {% else %}
+                    <img src="{% static 'img/default-profile.png' %}" alt="Default" width="40" height="40" style="border-radius: 50%;">
+                {% endif %}
+            </td>
+            <td>{{ tenant.name }}</td>
+            <td>{{ tenant.email }}</td>
+            <td>{{ tenant.phone }}</td>
+            <td>{{ tenant.address|default:"N/A" }}</td>
+            <td>
+                {% if tenant.is_verified %}
+                    ✅
+                {% else %}
+                    ❌
+                {% endif %}
+            </td>
+            <td>
+                {% if tenant.is_active %}
+                    Active
+                {% else %}
+                    Inactive
+                {% endif %}
+            </td>
+            <td>{{ tenant.created_at|date:"Y-m-d H:i" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block footer %}
+<footer class="footer">
+  <p>&copy; 2025 Zia Property Management System</p>
+</footer>
+{% endblock %}

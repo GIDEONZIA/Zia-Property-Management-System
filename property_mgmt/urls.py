@@ -17,8 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
+from django.views.generic import TemplateView
+from django.contrib import admin
+from django.urls import path, include
+from django.http import HttpResponse
+from properties.views import CustomLoginView, dashboard
+from django.contrib.auth import views as auth_views
+from properties.views import admin_dashboard
 urlpatterns = [
+    path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('admin/', admin.site.urls),
     path('api/', include('properties.urls')),  # Make sure 'properties.urls' exists!
 
@@ -28,8 +35,7 @@ urlpatterns = [
 ]
 
 # project/urls.py
-from django.contrib import admin
-from django.urls import path, include
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,12 +43,21 @@ urlpatterns = [
 ]
 
 # project/urls.py (root folder of your project)
-from django.contrib import admin
-from django.urls import path, include
+
+def home(request):
+    return HttpResponse("Welcome to the Property Management System")
 
 urlpatterns = [
+    path('', dashboard, name='dashboard'),
+    
     path('admin/', admin.site.urls),
     path('properties/', include('properties.urls')),  # Make sure this line is there
+    path('admin_dashboard/', admin_dashboard, name='admin_dashboard'),
+
+    path('login/', CustomLoginView.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
+    path('dashboard/', dashboard, name='dashboard'),
+    path('', include('properties.urls')),
 ]
 
 

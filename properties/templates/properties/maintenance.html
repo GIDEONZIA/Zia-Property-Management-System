@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance Requests</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Maintenance Requests</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Submit a Maintenance Request</h2>
+            <form method="post" action="{% url 'submit_maintenance_request' %}">
+                {% csrf_token %}
+                <label for="property">Property:</label>
+                <select id="property" name="property" required>
+                    {% for property in properties %}
+                        <option value="{{ property.id }}">{{ property.name }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label for="issue">Issue Description:</label>
+                <textarea id="issue" name="issue" rows="4" required></textarea>
+                <br>
+                <label for="priority">Priority:</label>
+                <select id="priority" name="priority" required>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+                <br>
+                <button type="submit">Submit Request</button>
+            </form>
+        </section>
+        <section>
+            <h2>Existing Maintenance Requests</h2>
+            <ul>
+                {% for request in maintenance_requests %}
+                    <li>
+                        <strong>Property:</strong> {{ request.property.name }}<br>
+                        <strong>Issue:</strong> {{ request.issue }}<br>
+                        <strong>Status:</strong> {{ request.status }}<br>
+                        <strong>Priority:</strong> {{ request.priority }}
+                    </li>
+                {% empty %}
+                    <li>No maintenance requests found.</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Zia Property Management System</p>
+    </footer>
+</body>
+</html>

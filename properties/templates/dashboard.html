@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | Zia Property Agency{% endblock %}
+
+{% block content %}
+
+ <!-- Welcome Message -->
+ <div class="col-md-12">
+  <div class="card card-custom p-3">
+    <h5 class="mb-1">Welcome back, {{ user.first_name }}!</h5>
+    <p class="mb-0">Here's a quick overview of your properties and tenants.</p>
+  </div>
+</div>
+
+<div class="row g-4">
+
+  <!-- Properties -->
+  <h2 class="mt-4">Dashboard</h2>
+  <div class="dashboard-grid">
+    <div class="card">
+      <i class="fa fa-home icon"></i>
+      <h4>Total Properties</h4>
+      <p>{{ total_properties }}</p>
+    </div>
+  </div>
+
+  <!-- Tenants -->
+  <div class="card">
+    <i class="fa fa-users icon"></i>
+    <h4>Total Tenants</h4>
+    <p>{{ total_tenants }}</p>
+  </div>
+
+  <!-- Active Leases -->
+  <div class="card">
+    <i class="fa fa-file-contract icon"></i>
+    <h4>Active Leases</h4>
+    <p>{{ active_leases }}</p>
+
+</div>
+
+<hr class="my-5">
+
+<div class="row g-4">
+
+  <!-- Maintenance Requests -->
+  <div class="card">
+    <i class="fa fa-tools icon"></i>
+    <h4>Pending Maintenance</h4>
+    <p>{{ pending_maintenance }}</p>
+
+  </div>
+  </div>
+
+  <!-- Upcoming Inspections -->
+  <div class="card">
+    <i class="fa fa-search icon"></i>
+    <h4>Upcoming Inspections</h4>
+    <p>{{ upcoming_inspections }}</p>
+  </div>
+
+</div>
+
+<div class="charts-section">
+  <h3>Leases Over Time</h3>
+  <canvas id="leasesChart" width="400" height="200"></canvas>
+
+  <h3 class="mt-5">Maintenance Requests Status</h3>
+  <canvas id="maintenanceChart" width="400" height="200"></canvas>
+</div>
+
+<script>
+  const leasesCtx = document.getElementById('leasesChart').getContext('2d');
+  new Chart(leasesCtx, {
+    type: 'line',
+    data: {
+      labels: {{ lease_chart_labels|safe }},
+      datasets: [{
+        label: 'New Leases',
+        data: {{ lease_chart_data|safe }},
+        borderColor: 'rgba(75, 192, 192, 1)',
+        tension: 0.3,
+        fill: false
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  const maintenanceCtx = document.getElementById('maintenanceChart').getContext('2d');
+  new Chart(maintenanceCtx, {
+    type: 'doughnut',
+    data: {
+      labels: {{ maintenance_labels|safe }},
+      datasets: [{
+        label: 'Requests',
+        data: {{ maintenance_data|safe }},
+        backgroundColor: ['#007bff', '#ffc107', '#dc3545'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true
+    }
+  });
+</script>
+  
+  {% endblock %}
+  
+  {% block footer %}
+    <footer class="footer">
+      <p>&copy; 2025 Zia Property Management System</p>
+    </footer>
+
+
+{% endblock %}

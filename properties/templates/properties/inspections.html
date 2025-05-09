@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zia Property Agency</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+    <header>
+        <h1>Property Inspections</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Upcoming Inspections</h2>
+            <ul>
+                {% for inspection in inspections %}
+                    <li>
+                        <strong>Property:</strong> {{ inspection.property.name }}<br>
+                        <strong>Date:</strong> {{ inspection.date }}<br>
+                        <strong>Time:</strong> {{ inspection.time }}<br>
+                        <strong>Inspector:</strong> {{ inspection.inspector.name }}
+                    </li>
+                {% empty %}
+                    <p>No upcoming inspections.</p>
+                {% endfor %}
+            </ul>
+        </section>
+        <section>
+            <h2>Schedule a New Inspection</h2>
+            <form method="post" action="{% url 'schedule_inspection' %}">
+                {% csrf_token %}
+                <label for="property">Property:</label>
+                <select name="property" id="property" required>
+                    {% for property in properties %}
+                        <option value="{{ property.id }}">{{ property.name }}</option>
+                    {% endfor %}
+                </select><br>
+                <label for="date">Date:</label>
+                <input type="date" name="date" id="date" required><br>
+                <label for="time">Time:</label>
+                <input type="time" name="time" id="time" required><br>
+                <label for="inspector">Inspector:</label>
+                <select name="inspector" id="inspector" required>
+                    {% for inspector in inspectors %}
+                        <option value="{{ inspector.id }}">{{ inspector.name }}</option>
+                    {% endfor %}
+                </select><br>
+                <button type="submit">Schedule Inspection</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Zia Property Management System</p>
+    </footer>
+</body>
+</html>

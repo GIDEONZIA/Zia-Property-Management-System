@@ -153,3 +153,32 @@ class RentPayment(models.Model):
     def __str__(self):
         return f"Rent Payment by {self.tenant.name} for {self.amount_paid}"
 
+# Maintenance Request Model
+
+class MaintenanceRequest(models.Model):
+    property = models.ForeignKey('Property', on_delete=models.CASCADE)
+    issue = models.TextField()
+    status = models.CharField(max_length=20, choices=[
+        ('pending', 'Pending'),
+        ('in_progress', 'In Progress'),
+        ('resolved', 'Resolved'),
+    ], default='pending')
+    requested_on = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.property} - {self.status}"
+
+# Inspection Model
+class Inspection(models.Model):
+    property = models.ForeignKey('Property', on_delete=models.CASCADE)
+    inspection_date = models.DateField()
+    inspector_name = models.CharField(max_length=255)
+    notes = models.TextField()
+    status = models.CharField(max_length=20, choices=[
+        ('scheduled', 'Scheduled'),
+        ('completed', 'Completed'),
+        ('canceled', 'Canceled'),
+    ], default='scheduled')
+
+    def __str__(self):
+        return f"{self.property} - {self.inspection_date} - {self.status}"
