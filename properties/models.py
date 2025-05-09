@@ -182,3 +182,25 @@ class Inspection(models.Model):
 
     def __str__(self):
         return f"{self.property} - {self.inspection_date} - {self.status}"
+    from django.db import models
+from properties.models import Tenant  # adjust if your Tenant model is elsewhere
+
+
+class Payment(models.Model):
+    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE, related_name='payments')
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_method = models.CharField(max_length=50, choices=[
+        ('cash', 'Cash'),
+        ('mpesa', 'M-Pesa'),
+        ('bank', 'Bank Transfer'),
+        ('card', 'Card Payment'),
+    ])
+    reference_code = models.CharField(max_length=100, blank=True, null=True)
+    date_paid = models.DateField()
+    remarks = models.TextField(blank=True, null=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.tenant.name} - KES {self.amount} on {self.date_paid}"

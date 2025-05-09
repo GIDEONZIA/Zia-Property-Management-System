@@ -58,6 +58,9 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
     path('dashboard/', dashboard, name='dashboard'),
     path('', include('properties.urls')),
+    
+    path('reports/', include('reports.urls')),
+
 ]
 
 

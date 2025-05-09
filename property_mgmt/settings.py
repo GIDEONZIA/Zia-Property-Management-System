@@ -42,6 +42,7 @@ INSTALLED_APPS = [
      # Custom apps
     'properties',  # Property Management App
     'transactions', # Transaction Management App
+    'reports',  # Reporting App
     # Third-party apps
     'rest_framework',  # Django REST Framework
     'rest_framework_simplejwt', # JWT Authentication
