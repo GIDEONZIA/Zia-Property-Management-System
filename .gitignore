@@ -1,0 +1,43 @@
+# Python
+
+
+## Environment
+
+.env
+venv/
+env/
+
+## Django
+
+db.postgresql
+staticfiles/
+media/
+
+## Logs
+
+*.log
+
+## OS
+
+.DS_Store
+Thumbs.db
+
+## VS Code
+
+.vscode/
+
+## Python compiled files
+
+__pycache__/
+*.pyc
+
+## OS or IDE-specific
+
+.DS_Store
+*.log
+*.sqlite3
+
+## Static build artifacts (if needed)
+
+staticfiles/
+
