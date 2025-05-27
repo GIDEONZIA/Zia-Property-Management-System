@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+from decouple import config
 
 from pathlib import Path
 
@@ -27,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+DJANGO_SETTINGS_MODULE = "property_mgmt.settings"
 
 # Application definition
 
@@ -168,3 +170,5 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
   
 LOGOUT_REDIRECT_URL = '/'
+
+# Removed invalid pytest configuration from settings.py.
