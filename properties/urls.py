@@ -31,8 +31,9 @@ urlpatterns = [
     path('properties/<int:pk>/', PropertyRetrieveUpdateDestroyView.as_view(), name='property-detail'),
 
     # Tenant URLs
-    path('properties/tenants/', TenantListCreateView.as_view(), name='tenant-list-create'),
+    path('tenants/', TenantListCreateView.as_view(), name='tenant-list'),
     path('tenants/<int:pk>/', TenantRetrieveUpdateDestroyView.as_view(), name='tenant-detail'),
+    path('tenants/', tenant_dashboard_view, name='tenant-list'),  # For the tenants list page
 
     # Lease URLs
     path('leases/', LeaseListCreateView.as_view(), name='lease-list-create'),

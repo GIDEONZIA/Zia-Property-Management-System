@@ -5,12 +5,14 @@ from properties.models import Property, Tenant, Lease, RentPayment, MaintenanceR
 from rest_framework.permissions import IsAuthenticated
 from properties.serializers import PropertySerializer, TenantSerializer, LeaseSerializer, RentPaymentSerializer
 from django.shortcuts import render
+from .models import Tenant, Lease
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.utils import timezone
 from django.db.models.functions import TruncMonth
 from django.db.models import Count, Sum
+
 
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = "dashboard.html"
@@ -56,6 +58,7 @@ def tenant_dashboard_view(request):
 def admin_dashboard(request):
     properties = Property.objects.all()
     tenants = Tenant.objects.all()
+    leases = Lease.objects.all()
     return render(request, 'properties/admin_dashboard.html', {'properties': properties, 'tenants': tenants}) 
 
 def agent_dashboard(request):
@@ -96,12 +99,20 @@ class CustomLoginView(LoginView):
     
 @login_required
 def analytics_view(request):
+    gross_lease_count = Lease.objects.filter(lease_type='gross').count()
+    net_lease_count = Lease.objects.filter(lease_type='net').count()
+    modified_gross_lease_count = Lease.objects.filter(lease_type='modified_gross').count()
+    triple_net_lease_count = Lease.objects.filter(lease_type='triple_net').count()
+
+    # Include in context:
     context = {
-        "total_properties": Property.objects.count(),
-        "total_tenants": Tenant.objects.count(),
-        "total_leases": Lease.objects.count(),
-        "total_rent_collected": RentPayment.objects.aggregate(Sum('amount_paid'))['amount_paid__sum'] or 0
+        'gross_lease_count': gross_lease_count,
+        'net_lease_count': net_lease_count,
+        'modified_gross_lease_count': modified_gross_lease_count,
+        'triple_net_lease_count': triple_net_lease_count,
+        # Existing context values
     }
+
     return render(request, 'properties/analytics.html', context)
 # Property Views
 class PropertyListView(LoginRequiredMixin, ListView):
@@ -149,6 +160,21 @@ class TenantListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(agent=self.request.user.agent_profile)
+        
+    def get(self, request, *args, **kwargs):
+        tenants = self.get_queryset()  # Get the list of tenants
+        return render(request, 'properties/tenants.html', {'tenants': tenants})
+
+# properties/views.py
+
+def tenant_list_view(request):
+    tenants = Tenant.objects.all()
+    # Optionally filter based on user permissions (similar to your API view)
+    user = request.user
+    if not user.is_superuser:
+        tenants = tenants.filter(agent__user=user)
+    
+    return render(request, 'properties/tenants.html', {'tenants': tenants})
 
 class TenantRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TenantSerializer

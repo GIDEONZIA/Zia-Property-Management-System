@@ -1,8 +1,8 @@
-# reports/models.py
+    # reports/models.py
 
 from django.db import models
 from django.contrib.auth import get_user_model
-from properties.models import Payment
+from properties.models import RentPayment
 
 User = get_user_model()
 
@@ -24,12 +24,19 @@ class IncomeReport(models.Model):
 
     def save(self, *args, **kwargs):
         # Calculate the total income before saving
-        self.total_income = self.calculate_total_income()
+        self.total_income, self.number_of_payments = self.calculate_totals()
         super().save(*args, **kwargs)
 
-    def calculate_total_income(self):
-        # Calculate total income by summing related payments in the date range
-        payments = Payment.objects.filter(date_paid__range=[self.start_date, self.end_date])
-        total = sum(payment.amount for payment in payments)
-        self.number_of_payments = payments.count()  # Count payments in date range
-        return total
+    def calculate_totals(self):
+        payments = RentPayment.objects.all()
+
+        if self.start_date:
+            payments = payments.filter(payment_date__gte=self.start_date)
+        if self.end_date:
+            payments = payments.filter(payment_date__lte=self.end_date)
+
+        total_income = payments.aggregate(models.Sum('amount_paid'))['amount_paid__sum'] or 0
+        number_of_payments = payments.count()
+
+        return total_income, number_of_payments
+

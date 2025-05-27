@@ -2,6 +2,7 @@
 
 from django.db import models
 from django.contrib.auth.models import User
+from decimal import Decimal
 
 # === GLOBAL CHOICES ===
 PROPERTY_TYPES = [
@@ -46,14 +47,15 @@ class Agent(models.Model):
     email = models.EmailField(unique=True)
     profile_picture = models.ImageField(upload_to='agents/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
+    commission_rate = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, help_text="Commission rate percentage")
+    commission_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, help_text="Commission amount earned by the agent for this tenant")
     is_active = models.BooleanField(default=True)
-
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
 
 class Property(models.Model):
-    name = models.CharField(max_length=255)
+    property_name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
     description = models.TextField()
     property_type = models.CharField(max_length=20, choices=PROPERTY_TYPES)
@@ -65,7 +67,7 @@ class Property(models.Model):
     image = models.ImageField(upload_to='property_images/', null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.property_name
 
 
 class PropertyImage(models.Model):
@@ -74,12 +76,12 @@ class PropertyImage(models.Model):
     description = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
-        return f"Image for {self.property.name}"
+        return f"Image for {self.property.property_name}"
 
 
 class Tenant(models.Model):
     agent = models.ForeignKey(Agent, on_delete=models.CASCADE, related_name='tenants', null=True, blank=True)
-    name = models.CharField(max_length=255)
+    property_name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20, unique=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
@@ -88,14 +90,23 @@ class Tenant(models.Model):
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
     def __str__(self):
-        return self.name
+        return self.property_name
 
+
+LEASE_TYPE_CHOICES = [
+    ('gross', 'Gross Lease'),
+    ('net', 'Net Lease'),
+    ('modified_gross', 'Modified Gross Lease'),
+    ('triple_net', 'Triple Net Lease'),
+]
 
 class Lease(models.Model):
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, related_name='leases', null=True, blank=True)
+    lease_type = models.CharField(max_length=20, choices=LEASE_TYPE_CHOICES, default='gross')
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
+    lease_type = models.CharField(max_length=50, blank=True, null=True, help_text="Type of lease ('gross', 'net', 'modified_gross', 'triple_net')")
     start_date = models.DateField()
     end_date = models.DateField()
     rent_amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -106,6 +117,7 @@ class Lease(models.Model):
     is_active = models.BooleanField(default=True)
     is_signed = models.BooleanField(default=False)
     signed_date = models.DateTimeField(blank=True, null=True)
+    stamp_duty = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, null=True, blank=True, help_text="Stamp duty for this lease")
 
     # Renewal
     is_renewed = models.BooleanField(default=False)
@@ -137,8 +149,20 @@ class Lease(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def commission_amount(self):
+        Agent = getattr(self.tenant, 'agent', None)
+        rate = getattr(Agent, 'commission_rate', None)
+        if rate is not None:
+            return (self.rent_amount * rate) / Decimal(100)
+    
+        if self.tenant.agent and self.tenant.agent.commission_rate:
+            return (self.rent_amount * self.tenant.agent.commission_rate) / 100
+        return 0
+    
+    def total_cost(self):
+        return self.rent_amount + (self.stamp_duty or 0)
     def __str__(self):
-        return f"Lease: {self.tenant.name} - {self.property.name}"
+        return f"Lease: {self.tenant.property_name} - {self.property.property_name}"
 
 
 class RentPayment(models.Model):
@@ -151,7 +175,7 @@ class RentPayment(models.Model):
     rent_payment_receipt = models.FileField(upload_to='rent_payment_receipts/', blank=True, null=True)
 
     def __str__(self):
-        return f"Rent Payment by {self.tenant.name} for {self.amount_paid}"
+        return f"Rent Payment by {self.tenant.property_name} for {self.amount_paid}"
 
 # Maintenance Request Model
 
@@ -182,7 +206,8 @@ class Inspection(models.Model):
 
     def __str__(self):
         return f"{self.property} - {self.inspection_date} - {self.status}"
-    from django.db import models
+    
+from django.db import models
 from properties.models import Tenant  # adjust if your Tenant model is elsewhere
 
 
@@ -203,4 +228,4 @@ class Payment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.tenant.name} - KES {self.amount} on {self.date_paid}"
+        return f"{self.tenant.property_name} - KES {self.amount} on {self.date_paid}"

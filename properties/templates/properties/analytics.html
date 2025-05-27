@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Analytics Dashboard</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
@@ -27,7 +26,7 @@
             border-radius: 8px;
             flex: 1;
             min-width: 200px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 6px;
         }
         .stat-value {
             font-size: 24px;
@@ -65,21 +64,59 @@
             <div class="stat-label">Total Rent Collected</div>
         </div>
     </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ gross_lease_count }} leases</div>
+        <div class="stat-label">Gross Lease</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ net_lease_count }} leases</div>
+        <div class="stat-label">Net Lease</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ modified_gross_lease_count }} leases</div>
+        <div class="stat-label">Modified Gross Lease</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ triple_net_lease_count }} leases</div>
+        <div class="stat-label">Triple Net Lease</div>
+    </div>
+</div>
 
     <div class="charts-container">
+        <canvas id="propertiesChart" height="100"></canvas>
         <canvas id="rentChart" height="100"></canvas>
-        <canvas id="leaseChart" height="100"></canvas>
+        <canvas id="leaseTypeChart" height="100"></canvas>
     </div>
 
     <script>
         // Sample placeholder data
+        const propertiesChart = new Chart(document.getElementById('properties'), {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May','June','July','August','September','October','November','December'],
+                datasets: [{
+                    label: 'Properties Added',
+                    data: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+                    backgroundColor: '#28a745'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Monthly Properties Added'
+                    }
+                }
+            }
+        });
         const rentChart = new Chart(document.getElementById('rentChart'), {
             type: 'bar',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May','June','July','August','September','October','November','December'],
                 datasets: [{
                     label: 'Rent Collected (Ksh)',
-                    data: [10000, 10000, 10000, 10000, 10000],
+                    data: [0, 0, 0, 0, 35000, 0, 0, 0, 0, 0, 0, 0],
                     backgroundColor: '#007bff'
                 }]
             },
@@ -95,13 +132,19 @@
         });
 
         const leaseChart = new Chart(document.getElementById('leaseChart'), {
-            type: 'doughnut',
+            type: 'pie',
             data: {
-                labels: ['Active Leases', 'Expired Leases'],
+                labels: ['Gross Lease', 'Net Lease', 'Modified Gross Lease', 'Triple Net Lease'],
                 datasets: [{
-                    label: 'Leases',
-                    data: [10, 10],
-                    backgroundColor: ['#28a745', '#dc3545']
+                    label: 'Leases Types',
+                    data: [
+                        {{ gross_lease_count|default:0 }},
+                        {{ net_lease_count|default:0 }},
+                        {{ modified_gross_lease_count|default|0 }},
+                        {{ triple_net_lease_count|default:0 }}
+
+                    ],
+                    backgroundColor: ['#17a2b8', '#ffc107', '#6f42c1', '#20c997']
                 }]
             },
             options: {
@@ -109,7 +152,7 @@
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Lease Status Overview'
+                        text: 'Lease Types Distribution'
                     }
                 }
             }

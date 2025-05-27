@@ -60,7 +60,6 @@ urlpatterns = [
     path('', include('properties.urls')),
     
     path('reports/', include('reports.urls')),
-
 ]
 
 

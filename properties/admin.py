@@ -59,35 +59,63 @@ class AgentRestrictedAdmin(admin.ModelAdmin):
 # Property Admin
 @admin.register(Property)
 class PropertyAdmin(AgentRestrictedAdmin):
-    list_display = ('name', 'property_type', 'price', 'is_available', 'created_at')
-    search_fields = ('name', 'address', 'location')
+    list_display = ('property_name', 'property_type', 'price', 'is_available', 'created_at')
+    search_fields = ('property_property_name', 'address', 'location')
     list_filter = ('property_type', 'is_available')
 
 # Tenant Admin
 @admin.register(Tenant)
 class TenantAdmin(AgentRestrictedAdmin):
-    list_display = ('name', 'email', 'phone', 'is_active', 'created_at')
-    search_fields = ('name', 'email', 'phone')
+    list_display = ('property_name', 'email', 'phone', 'is_active', 'created_at')
+    search_fields = ('property_property_name', 'email', 'phone')
     list_filter = ('is_active', 'is_verified')
 
 # Lease Admin
 @admin.register(Lease)
 class LeaseAdmin(AgentRestrictedAdmin):
-    list_display = ('tenant_name', 'property_name', 'start_date', 'end_date', 'rent_amount', 'is_active')
-    search_fields = ('tenant__name', 'property__name')
-    list_filter = ('is_active', 'is_signed', 'is_renewed')
+    list_display = ('tenant_name',
+                    'property_name',
+                    'start_date',
+                    'end_date',
+                    'rent_amount',
+                    'stamp_duty',
+                    'commission_amount_display',
+                    'total_cost_display',
+                    'is_active')
+    search_fields = ('tenant__property_name', 'property__property_name')
+    list_filter = ('is_active',
+                   'is_signed',
+                   'is_renewed',
+                   ('agent', admin.EmptyFieldListFilter),
+    )
 
     def tenant_name(self, obj):
-        return obj.tenant.name
+        return obj.tenant.property_name
 
     def property_name(self, obj):
-        return obj.property.name
+        return obj.property.property_name
+    
+    def commission_amount_display(self, obj):
+        try:
+            return f"{obj.commission_amount():.2f}" 
+        except Exception:
+            return "N/A"
+        finally:
+            pass  # Optional: Add cleanup code here if needed
+    commission_amount_display.short_description = 'Commission Amount'
+    
+    def total_cost_display(self, obj):
+        try:
+            return f"{obj.total_cost():.2f}"
+        except Exception:
+                return "N/A"
+    total_cost_display.short_description = 'Total Cost'
 
 # RentPayment Admin
 @admin.register(RentPayment)
 class RentPaymentAdmin(AgentRestrictedAdmin):
     list_display = ('tenant', 'lease', 'amount_paid', 'payment_date')
-    search_fields = ('tenant__name', 'lease__property__name')
+    search_fields = ('tenant_property_name', 'lease_property_name')
     list_filter = ('payment_method',)
 
 # PropertyImage Admin
@@ -99,7 +127,7 @@ class PropertyImageAdmin(admin.ModelAdmin):
 # Agent Admin
 @admin.register(Agent)
 class AgentAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'email', 'phone_number', 'is_active')
+    list_display = ('first_name', 'last_name', 'email', 'phone_number', 'commission_rate', 'is_active')
     search_fields = ('first_name', 'last_name', 'email')
 
     def get_queryset(self, request):
