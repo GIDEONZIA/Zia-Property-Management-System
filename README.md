@@ -1,6 +1,6 @@
 # Zia-Property-Agency
 
-A Django-based property management platformfor handling real estate assets, agents, tenants leases, and rent payments.
+A Django-based property management platform for handling real estate assets, agents, tenants leases, and rent payments.
 
 ## Features
 - Property listing bt agents
