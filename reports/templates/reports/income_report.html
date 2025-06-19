@@ -1,0 +1,22 @@
+<h2>Income Report</h2>
+<form method="get">
+  {{ form.as_p }}
+  <button type="submit">Generate Report</button>
+</form>
+
+{% if total_income %}
+  <hr>
+  <p><strong>Total Income:</strong> ${{ total_income }}</p>
+  <p><strong>Number of Payments:</strong> {{ number_of_payments }}</p>
+  <h3>Payments:</h3>
+  <ul>
+    {% for payment in payments %}
+      <li>{{ payment.date }} — ${{ payment.amount }} — {{ payment.property }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% if total_income %}
+  <a href="?{% if form.data %}{{ form.data.urlencode }}&{% endif %}format=csv">Download CSV</a> |
+  <a href="?{% if form.data %}{{ form.data.urlencode }}&{% endif %}format=pdf">Download PDF</a>
+{% endif %}

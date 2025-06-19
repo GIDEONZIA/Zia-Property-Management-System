@@ -1,0 +1,9 @@
+<h1>Your Transactions</h1>
+<ul>
+  {% for transaction in transactions %}
+    <li>
+      {{ transaction.transaction_type }} - {{ transaction.amount }} - {{ transaction.status }}
+      <a href="{% url 'transactions:update_transaction_status' transaction.id %}">Update Status</a>
+    </li>
+  {% endfor %}
+</ul>

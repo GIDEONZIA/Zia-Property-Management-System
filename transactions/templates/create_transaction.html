@@ -1,0 +1,18 @@
+<form method="POST">
+    {% csrf_token %}
+    <label for="transaction_type">Transaction Type</label>
+    <select name="transaction_type">
+      <option value="Payment">Payment</option>
+      <option value="Charge">Charge</option>
+      <option value="Refund">Refund</option>
+    </select>
+    
+    <label for="amount">Amount</label>
+    <input type="number" name="amount" required>
+  
+    <label for="description">Description (optional)</label>
+    <textarea name="description"></textarea>
+  
+    <button type="submit">Create Transaction</button>
+  </form>
+  

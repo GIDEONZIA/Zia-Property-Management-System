@@ -1,0 +1,103 @@
+<!-- property_create.html -->
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ property_form.as_p }}
+
+    <div id="house-fields" style="display:none;">
+        <h3>House Dimensions</h3>
+        {{ house_form.as_p }}
+    </div>
+
+    <div id="hotel-fields" style="display:none;">
+        <h3>Hotel Dimensions</h3>
+        {{ hotel_form.as_p }}
+    </div>
+
+    <div id="apartment-fields" style="display:none;">
+        <h3>Apartment Dimensions</h3>
+        {{ apartment_form.as_p }}
+    </div>
+
+    <div id="restaurant-fields" style="display:none;">
+        <h3>Restaurant Dimensions</h3>
+        {{ restaurant_form.as_p }}
+    </div>
+
+    <div id="beach-fields" style="display:none;">
+        <h3>Beach Dimensions</h3>
+        {{ beach_form.as_p }}
+
+    <div id="office-fields" style="display:none;">
+        <h3>Office Dimensions</h3>
+        {{ office_form.as_p }}
+    </div>
+
+
+    <div id="resort-fields" style="display:none;">
+        <h3>Resort Dimensions</h3>
+        {{ resort_form.as_p }}
+    </div>
+
+    <div id="land-fields" style="display:none;">
+        <h3>Land Dimensions</h3>
+        {{ land_form.as_p }}
+    </div>
+
+    <div id="commercial-fields" style="display:none;">
+        <h3>Commercial Dimensions</h3>
+        {{ commercial_form.as_p }}
+    </div>
+
+    <div id="industrial-fields" style="display:none;">
+        <h3>Industrial Dimensions</h3>
+        {{ industrial_form.as_p }}
+    </div>
+
+    <div id="agricultural-fields" style="display:none;">
+        <h3>Agricultural Dimensions</h3>
+        {{ agricultural_form.as_p }}
+    </div>
+    
+    <div id="vacation-fields" style="display:none;">
+        <h3>Vacation Dimensions</h3>
+        {{ vacation_form.as_p }}
+    </div>
+
+    <div id="retail-fields" style="display:none;">
+        <h3>Retail Dimensions</h3>
+        {{ retail_form.as_p }}
+    </div>
+
+    <div id="warehouse-fields" style="display:none;">
+        <h3>Warehouse Dimensions</h3>
+        {{ warehouse_form.as_p }}
+    </div>
+
+    <div id="mixed-use-fields" style="display:none;">
+        <h3>Mixed Use Dimensions</h3>
+        {{ mixed_use_form.as_p }}
+    </div>
+
+    <div id="other-fields" style="display:none;">
+        <h3>Other Dimensions</h3>
+        {{ other_form.as_p }}
+    </div>
+    <button type="submit">Submit</button>
+</form>
+
+<script type="text/javascript">
+    document.getElementById('id_property_type').addEventListener('change', function () {
+        var selectedType = this.value;
+
+        if (selectedType === 'house') {
+            document.getElementById('house-fields').style.display = 'block';
+            document.getElementById('hotel-fields').style.display = 'none';
+        } else if (selectedType === 'hotel') {
+            document.getElementById('house-fields').style.display = 'none';
+            document.getElementById('hotel-fields').style.display = 'block';
+        } else {
+            document.getElementById('house-fields').style.display = 'none';
+            document.getElementById('hotel-fields').style.display = 'none';
+        }
+    });
+</script>

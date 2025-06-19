@@ -1,0 +1,9 @@
+<h1>My Properties</h1>
+
+<ul>
+    {% for property in properties %}
+        <li>{{ property.name }} - {{ property.address }} - {{ property.property_type }}</li>
+    {% empty %}
+        <p>You have no properties listed.</p>
+    {% endfor %}
+</ul>

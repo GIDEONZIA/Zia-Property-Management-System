@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background:rgb(251, 251, 252);
+        }
+        .dashboard-title {
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 200px;
+            box-shadow: 0 2px 6px;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .stat-label {
+            color: #555;
+        }
+        .charts-container {
+            margin-top: 40px;
+            display: grid;
+            gap: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 class="dashboard-title">Analytics Dashboard</h1>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-value">{{ total_properties }}</div>
+            <div class="stat-label">Total Properties</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ total_tenants }}</div>
+            <div class="stat-label">Total Tenants</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ total_leases }}</div>
+            <div class="stat-label">Total Leases</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">Ksh{{ total_rent_collected }}</div>
+            <div class="stat-label">Total Rent Collected</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ gross_lease_count }} leases</div>
+        <div class="stat-label">Gross Lease</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ net_lease_count }} leases</div>
+        <div class="stat-label">Net Lease</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ modified_gross_lease_count }} leases</div>
+        <div class="stat-label">Modified Gross Lease</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ triple_net_lease_count }} leases</div>
+        <div class="stat-label">Triple Net Lease</div>
+    </div>
+</div>
+
+    <div class="charts-container">
+        <canvas id="propertiesChart" height="100"></canvas>
+        <canvas id="rentChart" height="100"></canvas>
+        <canvas id="leaseTypeChart" height="100"></canvas>
+    </div>
+
+    <script>
+        // Sample placeholder data
+        const propertiesChart = new Chart(document.getElementById('properties'), {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May','June','July','August','September','October','November','December'],
+                datasets: [{
+                    label: 'Properties Added',
+                    data: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+                    backgroundColor: '#28a745'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Monthly Properties Added'
+                    }
+                }
+            }
+        });
+        const rentChart = new Chart(document.getElementById('rentChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May','June','July','August','September','October','November','December'],
+                datasets: [{
+                    label: 'Rent Collected (Ksh)',
+                    data: [0, 0, 0, 0, 35000, 0, 0, 0, 0, 0, 0, 0],
+                    backgroundColor: '#007bff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Monthly Rent Collection'
+                    }
+                }
+            }
+        });
+
+        const leaseChart = new Chart(document.getElementById('leaseChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Gross Lease', 'Net Lease', 'Modified Gross Lease', 'Triple Net Lease'],
+                datasets: [{
+                    label: 'Leases Types',
+                    data: [
+                        {{ gross_lease_count|default:0 }},
+                        {{ net_lease_count|default:0 }},
+                        {{ modified_gross_lease_count|default|0 }},
+                        {{ triple_net_lease_count|default:0 }}
+
+                    ],
+                    backgroundColor: ['#17a2b8', '#ffc107', '#6f42c1', '#20c997']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Lease Types Distribution'
+                    }
+                }
+            }
+        });
+    </script>
+
+    <footer>
+        <p>&copy; 2025 Zia Property Management System</p>
+    </footer>
+</body>
+</html>
