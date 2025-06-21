@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up - Zia Property Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background: #f4f6f8;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .signup-container {
+            background: #fff;
+            max-width: 400px;
+            margin: 60px auto;
+            padding: 32px 28px;
+            border-radius: 10px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+        .signup-container h2 {
+            text-align: center;
+            margin-bottom: 24px;
+            color: #2d3e50;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #34495e;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            font-size: 1rem;
+            background: #f9fafb;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus {
+            border-color: #0078d7;
+            outline: none;
+        }
+        .signup-btn {
+            width: 100%;
+            padding: 12px;
+            background: #0078d7;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .signup-btn:hover {
+            background: #005fa3;
+        }
+        .login-link {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #0078d7;
+            text-decoration: none;
+            font-size: 0.97rem;
+        }
+        .login-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h2>Create Your Account</h2>
+        <form method="POST" action="{% url 'signup' %}">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label for="id_username">Username</label>
+        {{ form.username }}
+    </div>
+
+    <div class="form-group">
+        <label for="id_email">Email</label>
+        {{ form.email }}
+    </div>
+
+    <div class="form-group">
+        <label for="id_password1">Password</label>
+        {{ form.password1 }}
+    </div>
+
+    <div class="form-group">
+        <label for="id_password2">Confirm Password</label>
+        {{ form.password2 }}
+    </div>
+
+    <div class="form-group">
+        <label for="id_phone">Phone</label>
+        {{ form.phone }}
+    </div>
+
+    <button type="submit" class="signup-btn">Sign Up</button>
+</form>
+{% if form.errors %}
+    <div class="error-container">
+        {{ form.errors }}
+    </div>
+{% endif %}
+
+
+        <a href="{% url 'login' %}" class="sign_up-link">Already have an account? Login</a>
+        <div style="max-width:400px;margin:24px auto 0;"></div>
+            <div style="text-align:center;margin-bottom:12px;color:#888;font-size:0.97rem;">
+                or sign up with
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+                <a href="#" style="display:flex;align-items:center;justify-content:center;padding:10px 0;background:#fff;border:1px solid #d1d5db;border-radius:5px;text-decoration:none;color:#444;font-weight:500;transition:background 0.2s;">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style="width:22px;height:22px;margin-right:10px;">Sign up with Google
+                </a>
+                <a href="#" style="display:flex;align-items:center;justify-content:center;padding:10px 0;background:#1877f2;border:1px solid #1877f2;border-radius:5px;text-decoration:none;color:#fff;font-weight:500;transition:background 0.2s;">
+                    <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" style="width:22px;height:22px;margin-right:10px;">Sign up with Facebook
+                </a>
+                <a href="#" style="display:flex;
+                align-items:center;justify-content:center;padding:10px 0;background:#24292f;border:1px solid #24292f;border-radius:5px;text-decoration:none;color:#fff;font-weight:500;transition:background 0.2s;">
+                    <img src="https://www.svgrepo.com/show/475654/github-color.svg" alt="GitHub" style="width:22px;height:22px;margin-right:10px;">Sign up with GitHub
+                </a>
+            </div>
+        </div>
+</body>
+</html>

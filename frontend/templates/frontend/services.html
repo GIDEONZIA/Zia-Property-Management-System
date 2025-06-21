@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Our Services - Zia Property Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'frontend/css/style.css' %}">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: #f8f9fa; }
+        header { background: #2c3e50; color: #fff; padding: 20px 0; text-align: center; }
+        main { max-width: 900px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07);}
+        h1 { margin-top: 0; }
+        .services-list { display: flex; flex-wrap: wrap; gap: 30px; margin-top: 30px; }
+        .service-card {
+            flex: 1 1 250px;
+            background: #f1f1f1;
+            border-radius: 6px;
+            padding: 24px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            min-width: 220px;
+        }
+        .service-card h2 { margin-top: 0; font-size: 1.2em; color: #2c3e50; }
+        @media (max-width: 700px) {
+            .services-list { flex-direction: column; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Our Services</h1>
+        <p>Comprehensive solutions for property owners and tenants</p>
+    </header>
+
+    <main>
+        <section class="services-list">
+            <div class="service-card">
+                <h2>Property Listing & Marketing</h2>
+                <p>We list your property on top platforms and market it to attract quality tenants quickly.</p>
+            </div>
+            <div class="service-card">
+                <h2>Tenant Screening</h2>
+                <p>Comprehensive background, credit, and reference checks to ensure reliable tenants.</p>
+            </div>
+            <div class="service-card">
+                <h2>Rent Collection</h2>
+                <p>Secure and timely rent collection with automated reminders and online payment options.</p>
+            </div>
+            <div class="service-card">
+                <h2>Maintenance & Repairs</h2>
+                <p>24/7 maintenance support and coordination with trusted contractors for all property needs.</p>
+            </div>
+            <div class="service-card">
+                <h2>Financial Reporting</h2>
+                <p>Monthly statements and transparent accounting to keep you informed about your investment.</p>
+            </div>
+            <div class="service-card">
+                <h2>Legal Compliance</h2>
+                <p>Guidance and management of leases, evictions, and regulatory requirements.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div style="background: #2c3e50; color: #fff; text-align: center; padding: 18px 0; margin-top: 40px;">
+            <nav>
+                <a href="{% url 'home' %}" style="color: #fff; text-decoration: underline; margin: 0 10px;">Home</a>
+                <a href="{% url 'about' %}" style="color: #fff; text-decoration: underline; margin: 0 10px;">About</a>
+                <a href="{% url 'contact' %}" style="color: #fff; text-decoration: underline; margin: 0 10px;">Contact</a>
+            </nav>
+            <section>
+                <div style="margin-top: 14px;">
+                    <a href="mailto:info@ziaproperty.com" title="Email" style="color: #fff; margin: 0 8px; text-decoration: none;">
+                        <span style="vertical-align: middle;">&#9993;</span> info@ziaproperty.com
+                    </a>
+                    <a href="https://wa.me/0758928268" title="WhatsApp" style="color: #fff; margin: 0 8px; text-decoration: none;">
+                        <span style="vertical-align: middle;">&#128241;</span> WhatsApp
+                    </a>
+                    <a href="https://www.facebook.com/propertiesmalindi" title="Facebook" style="color: #fff; margin: 0 8px; text-decoration: none;">
+                        <span style="vertical-align: middle;">&#xf09a;</span> Facebook
+                    </a>
+                </div>
+            </section>
+            <div style="margin-top: 10px; font-size: 0.95em;">&copy; 2024 Zia Property Management</div>
+        </div>
+    </footer>
+</body>
+</html>

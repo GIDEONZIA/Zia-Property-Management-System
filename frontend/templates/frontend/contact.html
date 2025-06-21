@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Zia Property Management</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: #f7f9fb;
+            margin: 0;
+            padding: 0;
+        }
+        .contact-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            display: flex;
+            overflow: hidden;
+        }
+        .contact-info {
+            background: #1a73e8;
+            color: #fff;
+            padding: 40px 30px;
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .contact-info h2 {
+            margin-top: 0;
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+        .contact-info p {
+            margin: 18px 0;
+            font-size: 1.1em;
+        }
+        .contact-info .info-item {
+            margin: 18px 0;
+            display: flex;
+            align-items: center;
+        }
+        .contact-info .info-item i {
+            font-size: 1.4em;
+            margin-right: 14px;
+        }
+        .contact-form {
+            flex: 2;
+            padding: 40px 30px;
+        }
+        .contact-form h3 {
+            margin-top: 0;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #1a73e8;
+        }
+        .contact-form form {
+            display: flex;
+            flex-direction: column;
+        }
+        .contact-form label {
+            margin: 12px 0 6px 0;
+            font-weight: 500;
+        }
+        .contact-form input,
+        .contact-form textarea {
+            padding: 12px;
+            border: 1px solid #d1d9e6;
+            border-radius: 6px;
+            font-size: 1em;
+            margin-bottom: 16px;
+            resize: vertical;
+        }
+        .contact-form textarea {
+            min-height: 100px;
+        }
+        .contact-form button {
+            background: #1a73e8;
+            color: #fff;
+            border: none;
+            padding: 14px 0;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .contact-form button:hover {
+            background: #155ab6;
+        }
+        @media (max-width: 800px) {
+            .contact-container {
+                flex-direction: column;
+            }
+            .contact-info, .contact-form {
+                padding: 30px 18px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <nav style="background:#1a73e8;color:#fff;padding:18px 0;">
+    <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:1.4em;font-weight:700;letter-spacing:1px;">Zia Property Management</span>
+        <div>
+            <a href="{% url 'home' %}" style="color:#fff;text-decoration:none;margin:0 18px;font-weight:500;">Home</a>
+            <a href="{% url 'about' %}" style="color:#fff;text-decoration:none;margin:0 18px;font-weight:500;">About</a>
+            <a href="{% url 'services' %}" style="color:#fff;text-decoration:none;margin:0 18px;font-weight:500;">Services</a>
+            <a href="{% url 'contact' %}" style="color:#fff;text-decoration:none;margin:0 18px;font-weight:500;">Contact</a>
+        </div>
+    </div>
+</nav>
+    <div class="contact-container">
+        <div class="contact-info">
+            <h2>Contact Us</h2>
+            <p>We'd love to hear from you. Reach out with any questions or inquiries.</p>
+            <div class="info-item">
+                <i class="fas fa-map-marker-alt"></i>
+                123 Main Street, City, Country
+            </div>
+            <div class="info-item">
+                <i class="fas fa-phone"></i>
+                +1 (234) 567-8901
+            </div>
+            <div class="info-item">
+                <i class="fas fa-envelope"></i>
+                info@ziaproperty.com
+            </div>
+        </div>
+        <div class="contact-form">
+            <h3>Send a Message</h3>
+            <form>
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">Message</label>
+                <textarea id="message" name="message" required></textarea>
+
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+    </div>
+</body>
+<footer style="background:#1a73e8;color:#fff;text-align:center;padding:22px 0;font-size:1em;margin-top:40px;">
+    &copy; 2025 Zia Property Management. All rights reserved.
+</footer>
+</html>

@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zia Property Agency - Home</title>
+    <link rel="stylesheet" href="{% static 'frontend/css/style.css' %}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">Zia Property Agency</div>
+            <ul class="nav-links " id="navLinks">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+            </ul>
+            <ul class="navLinks">
+                <li><a href="{% url 'testimonial' %}">Testimonials</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-text">
+            <h1>Helping<br>You Find Next<br>Property</h1>
+            <p>Browse verified properties for rent, lease, or purchase from anywhere in Kenya.</p>
+            <a href="{% url 'listings' %}" class="cta-button">Explore Listings</a>
+        </div>
+    </header>
+
+    <section class="categories">
+        <h2>Browse by Category</h2>
+        <div class="category-grid">
+            <div class="category-card">Apartments</div>
+            <div class="category-card">Houses</div>
+            <div class="category-card">Lands</div>
+            <div class="category-card">Shops</div>
+            <div class="category-card">Offices</div>
+        </div>
+    </section>
+
+    <section class="features">
+        <h2>Featured Properties</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <img src="{% static 'frontend/images/house1.jpg' %}" alt="House1"/>
+                <h3>3 Bedroom in Malindi</h3>
+                <p>Ksh 65,000/mo • Modern finishes</p>
+            </div>
+            <div class="feature-card">
+                <img src="{% static 'frontend/images/beach2.jpg' %}" alt="Beach2"/>
+                <h3>Beachfront Land - Diani</h3>
+                <p>Ksh 2.4M • 0.2 acres • Sea view</p>
+            </div>
+            <div class="feature-card">
+                <img src="{% static 'frontend/images/apartment1.jpg' %}" alt="Apartment1"/>
+                <h3>1 Bedroom Apartment - Westlands</h3>
+                <p>Ksh 35,000/mo • Secure estate</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Start Your Search Today</h2>
+        <p>Sign up for updates or contact our support for personalized help.</p>
+        <a href="{% url 'contact' %}" class="cta-button">Contact us</a>
+    </section>
+
+    <script src="{% static 'frontend/js/nav.js' %}"></script>
+    <script src="{% static 'frontend/js/script.js' %}"></script>
+</body>
+
+<footer>
+    <p>&copy; 2025 Zia Property Management. All rights reserved.</p>
+</footer>
+</html>

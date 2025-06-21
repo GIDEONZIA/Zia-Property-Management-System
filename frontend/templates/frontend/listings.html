@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Property Listings | Zia Property Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #003366;
+            color: #fff;
+            padding: 1.5rem 2rem;
+            text-align: center;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+        }
+        .listings {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .property-card {
+            background: #fafbfc;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+        .property-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+        }
+        .property-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #eaeaea;
+        }
+        .property-details {
+            padding: 1rem;
+        }
+        .property-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+        }
+        .property-location {
+            color: #666;
+            font-size: 0.98rem;
+            margin-bottom: 0.5rem;
+        }
+        .property-price {
+            color: #003366;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .property-description {
+            font-size: 0.97rem;
+            color: #444;
+            margin-bottom: 1rem;
+        }
+        .contact-btn {
+            display: inline-block;
+            background: #0072c6;
+            color: #fff;
+            padding: 0.5rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .contact-btn:hover {
+            background: #005fa3;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 0.5rem;
+            }
+            .property-card {
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Zia Property Management - Property Listings</h1>
+        <p>Find your next home or investment with our professional real estate listings.</p>
+    </header>
+    <div class="container">
+        <div class="listings">
+            <!-- Property Card Example -->
+            <div class="property-card">
+                <img class="property-image" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Modern Apartment">
+                <div class="property-details">
+                    <div class="property-title">Modern 2 Bedroom Apartment</div>
+                    <div class="property-location">Downtown, Cityville</div>
+                    <div class="property-price">$1,200 / month</div>
+                    <div class="property-description">
+                        Spacious apartment with open-plan living, modern kitchen, and balcony views. Close to shops and public transport.
+                    </div>
+                    <a href="mailto:info@ziaproperty.com" class="contact-btn">Contact Agent</a>
+                </div>
+            </div>
+            <div class="property-card">
+                <img class="property-image" src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=80" alt="Family Home">
+                <div class="property-details">
+                    <div class="property-title">Family Home with Garden</div>
+                    <div class="property-location">Greenfield Suburb</div>
+                    <div class="property-price">$350,000</div>
+                    <div class="property-description">
+                        4 bedroom, 2 bathroom home with large backyard, double garage, and updated interiors. Perfect for families.
+                    </div>
+                    <a href="mailto:info@ziaproperty.com" class="contact-btn">Contact Agent</a>
+                </div>
+            </div>
+            <div class="property-card">
+                <img class="property-image" src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=600&q=80" alt="Luxury Condo">
+                <div class="property-details">
+                    <div class="property-title">Luxury Downtown Condo</div>
+                    <div class="property-location">Central Business District</div>
+                    <div class="property-price">$2,500 / month</div>
+                    <div class="property-description">
+                        High-rise condo with city views, gym access, and 24/7 security. Walking distance to restaurants and offices.
+                    </div>
+                    <a href="mailto:info@ziaproperty.com" class="contact-btn">Contact Agent</a>
+                </div>
+            </div>
+            <!-- Add more property cards as needed -->
+        </div>
+    </div>
+</body>
+</html>

@@ -39,9 +39,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.facebook',
+
    
     
      # Custom apps
+     'frontend',  # Frontend App for the Property Management System
     'properties',  # Property Management App
     'transactions', # Transaction Management App
     'reports',  # Reporting App
@@ -62,6 +70,12 @@ STATIC_URL = 'static/'
 # Optional: collect all static files into one folder (e.g. for deployment)
 STATICFILES_DIRS = [
     BASE_DIR / 'property_mgmt_backend' / 'static',
+    BASE_DIR / 'frontend',  # Additional static files directory
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 # Authentication settings for DRF
@@ -89,6 +103,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'property_mgmt.urls'
@@ -97,7 +112,7 @@ import os
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR/'frontend'/'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,7 +139,12 @@ DATABASES = {
 }
 
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.ngrok-free.app"
+]
 
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -169,6 +189,8 @@ import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
   
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'login'
+
 
 # Removed invalid pytest configuration from settings.py.
