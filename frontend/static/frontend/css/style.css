@@ -137,6 +137,28 @@ body {
     margin-bottom: 1.5rem;
 }
 
+.social-icons {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+.social-icons li a {
+    color: #007bff;
+    font-size: 18px;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.social-icons li a:hover {
+    color: #0056b3;
+}
+
+
+
+
 .cta-button {
     padding: 12px 24px;
     background: #007bff;

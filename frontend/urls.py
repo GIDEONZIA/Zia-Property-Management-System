@@ -2,6 +2,7 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 from .views import signup_view, CustomLoginView
 from django.contrib.auth import views as auth_views
+from .views import idx_search_view
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='frontend/index.html'), name='landing_page'),
@@ -16,6 +17,11 @@ urlpatterns = [
     path('contact/', TemplateView.as_view(template_name='frontend/contact.html'), name='contact'),
     path('services/', TemplateView.as_view(template_name='frontend/services.html'), name='services'),
     path('testimonial/', TemplateView.as_view(template_name='frontend/testimonial.html'), name='testimonial'),
+    path('buyer/', TemplateView.as_view(template_name='frontend/buyer.html'), name='buy'),
+    path('sell/', TemplateView.as_view(template_name='frontend/seller.html'), name='sell'),
+    path('blog/', TemplateView.as_view(template_name='frontend/blog.html'), name='blog'),
+    path('blog_detail/', TemplateView.as_view(template_name='frontend/blog_detail.html'), name='blog_detail'),
+    path('idx_search/', idx_search_view, name='idx_search'),
 
     # Add other static routes as needed
     path('accounts/', include('allauth.urls')),

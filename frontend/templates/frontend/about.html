@@ -1,9 +1,14 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>About Us - Zia Property Management System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!---custom css--->
+    <link rel="stylesheet" href="{% static 'frontend/css/style.css' %}">
+
     <style>
         body { 
             font-family: Arial, sans-serif; 
@@ -40,11 +45,6 @@
             text-align: center;
             margin-bottom: 32px;
         }
-        .cta-section {
-            background: #eaf3fb;
-            padding: 24px 0;
-            border-radius: 8px;
-        }
         .footer {
             text-align: center;
             margin-top: 40px;
@@ -73,7 +73,6 @@
 
     <!-- Hero Section -->
     <div class="hero">
-        <img src="logo.png" alt="Zia PMS Logo" class="logo">
         <h1>About Zia Property Management System</h1>
          <h1>Who We Are</h2>
     </div>
@@ -91,20 +90,18 @@
     </div>
 
     <!-- CTA Section -->
-    <div class="cta-section">
-        <h3>Ready to simplify your property management?</h3>
-        <a href="{% url 'contact' %}" style="background:#2a7ae2;color:#fff;padding:10px 24px;border-radius:4px;text-decoration:none;font-weight:bold;">Contact Us</a>
-    </div>
+   <section class="cta-section">
+        <h2>Ready to get started?</h2>
+        <p>Sign up and start browsing Properties today.</p>
+        <a href="{% url 'login' %}" class="cta-button">Join Now</a>
+    </section>
+        
+    <script src="{% static 'frontend/js/nav.js' %}"></script>
+    <script src="{% static 'frontend/js/script.js' %}"></script>
 
-        <nav class="footer-nav">
-            <a href="{% url 'landing_page' %}" style="color:#fff;margin:0 12px;text-decoration:underline;">Home</a>
-            <a href="{% url 'about' %}" style="color:#fff;margin:0 12px;text-decoration:underline;">About</a>
-            <a href="{% url 'contact' %}" style="color:#fff;margin:0 12px;text-decoration:underline;">Contact</a>
-            <a href="{% url 'login' %}" style="color:#fff;margin:0 12px;text-decoration:underline;">Login</a>
-        </nav>
-            <a href="{% url 'contact' %}" style="color:#fff;margin:0 12px;text-decoration:underline;">Contact</a>
-            <a href="{% url 'login' %}" style="color:#fff;margin:0 12px;text-decoration:underline;">Login</a>
-        </nav>
+    <footer>
+        <p>&copy; 2025 Zia Property Management. All rights reserved.</p>
+    </footer>
     </div>
 </body>
 </html>

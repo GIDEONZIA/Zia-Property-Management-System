@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us | Zia Property Management</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'frontend/css/style.css' %}">
     <style>
         body {
             font-family: 'Roboto', Arial, sans-serif;
@@ -111,7 +113,7 @@
             <a href="{% url 'home' %}" style="color:#fff;text-decoration:none;margin:0 18px;font-weight:500;">Home</a>
             <a href="{% url 'about' %}" style="color:#fff;text-decoration:none;margin:0 18px;font-weight:500;">About</a>
             <a href="{% url 'services' %}" style="color:#fff;text-decoration:none;margin:0 18px;font-weight:500;">Services</a>
-            <a href="{% url 'contact' %}" style="color:#fff;text-decoration:none;margin:0 18px;font-weight:500;">Contact</a>
+            <a href="{% url 'testimonial' %}" style="color:#fff;text-decoration:none;margin:0 18px;font-weight:500;">Testimonial</a>
         </div>
     </div>
 </nav>
@@ -148,6 +150,12 @@
             </form>
         </div>
     </div>
+
+    <section class="cta-section">
+        <h2>Start Your Search Today</h2>
+        <p>Sign up for updates or contact our support for personalized help.</p>
+        <a href="{% url 'contact' %}" class="cta-button">Contact us</a>
+    </section>
 </body>
 <footer style="background:#1a73e8;color:#fff;text-align:center;padding:22px 0;font-size:1em;margin-top:40px;">
     &copy; 2025 Zia Property Management. All rights reserved.
