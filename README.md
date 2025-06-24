@@ -3,7 +3,7 @@
 A Django-based property management platform for handling real estate assets, agents, tenants leases, and rent payments.
 
 ## Features
-- Property listing bt agents
+- Property listing by agents
 - Lease and rent management
 - Agent-specific data visibility
 - Dynamic property types
