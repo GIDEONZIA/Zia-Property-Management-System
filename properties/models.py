@@ -3,6 +3,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from decimal import Decimal
+from django.db import models
+from django.utils import timezone
 
 # === GLOBAL CHOICES ===
 PROPERTY_TYPES = [
@@ -68,6 +70,49 @@ class Property(models.Model):
 
     def __str__(self):
         return self.property_name
+
+class BuyerLead(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    preferred_location = models.CharField(max_length=100)
+    budget = models.DecimalField(max_digits=12, decimal_places=2)
+    message = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class SellerLead(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    property_type = models.CharField(max_length=20, choices=PROPERTY_TYPES, default='house')
+    location = models.CharField(max_length=255, default='unknown')
+    asking_price = models.DecimalField(max_digits=12, decimal_places=2, default=1000000)    
+    estimated_value = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)  # ✅ Optional field
+    property_location = models.CharField(max_length=255, blank=True, null=True)  
+    notes = models.TextField(blank=True, null=True)
+    message = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+
+class BlogPost(models.Model):
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True)
+    author = models.CharField(max_length=100, default="Zia Team")
+    content = models.TextField()
+    featured_image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_published = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
 
 
 class PropertyImage(models.Model):
@@ -206,11 +251,9 @@ class Inspection(models.Model):
 
     def __str__(self):
         return f"{self.property} - {self.inspection_date} - {self.status}"
-    
-from django.db import models
+
+
 from properties.models import Tenant  # adjust if your Tenant model is elsewhere
-
-
 class Payment(models.Model):
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE, related_name='payments')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -229,3 +272,10 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"{self.tenant.property_name} - KES {self.amount} on {self.date_paid}"
+
+# models.py
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    message = models.TextField()
+    sent_at = models.DateTimeField(auto_now_add=True)

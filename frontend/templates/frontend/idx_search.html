@@ -21,6 +21,24 @@
       text-align: center;
     }
 
+    nav {
+      background: #333;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 1rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
     .search-container {
       max-width: 900px;
       margin: 2rem auto;
@@ -101,28 +119,68 @@
   </style>
 </head>
 <body>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/listings/">Listings</a>
+    <a href="/idx_search/">IDX Search</a>
+  </nav>
+
   <header>
     <h1>Search Properties</h1>
     <p>Find the perfect property by location, price, and type</p>
   </header>
-<div class="results">
-  {% if properties %}
-    {% for property in properties %}
-      <div class="property-card">
-        <img src="{% if property.image %}{{ property.image.url }}{% else %}https://via.placeholder.com/150{% endif %}" alt="property image">
-        <div class="property-details">
-          <h3>{{ property.property_name }}</h3>
-          <p>{{ property.description|truncatechars:100 }}</p>
-          <p>Location: {{ property.location }}</p>
-          <p>Type: {{ property.property_type }}</p>
-          <p>Price: KES {{ property.price }}</p>
+
+  <div class="search-container">
+    <form id="searchForm">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input type="text" id="location" name="location" placeholder="e.g. Nairobi, Mombasa">
+        </div>
+
+        <div class="form-group">
+          <label for="type">Property Type</label>
+          <select id="type" name="type">
+            <option value="">-- Select --</option>
+            <option value="apartment">Apartment</option>
+            <option value="house">House</option>
+            <option value="land">Land</option>
+            <option value="shop">Shop</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="price">Max Price (KES)</label>
+          <input type="number" id="price" name="price" placeholder="e.g. 1000000">
         </div>
       </div>
-    {% endfor %}
-  {% else %}
-    <p>No properties found for your search.</p>
-  {% endif %}
+
+      <div class="form-group">
+        <button type="submit"><i class="fas fa-search"></i> Search</button>
+      </div>
+    </form>
+
+    <div class="results">
+      {% for property in properties %}
+    <div class="property-card">
+      {% if property.image %}
+        <img src="{{ property.image.url }}" alt="{{ property.property_name }}">
+      {% else %}
+        <img src="https://via.placeholder.com/150" alt="No image">
+      {% endif %}
+      <div class="property-details">
+        <h3>{{ property.property_name }}</h3>
+        <p>Location: {{ property.location }}</p>
+        <p>Type: {{ property.property_type }}</p>
+        <p>Price: KES {{ property.price }}</p>
+      </div>
+    </div>
+  {% empty %}
+    <p>No properties found matching your criteria.</p>
+  {% endfor %}
 </div>
 
 </body>
+    <script src="{% static 'frontend/js/idx_search.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 </html>

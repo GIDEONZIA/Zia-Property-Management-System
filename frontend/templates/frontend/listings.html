@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +12,14 @@
             margin: 0;
             padding: 0;
         }
+
+        nav {
+            background: #333;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
         header {
             background: #003366;
             color: #fff;
@@ -107,45 +116,28 @@
     </header>
     <div class="container">
         <div class="listings">
-            <!-- Property Card Example -->
-            <div class="property-card">
-                <img class="property-image" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Modern Apartment">
-                <div class="property-details">
-                    <div class="property-title">Modern 2 Bedroom Apartment</div>
-                    <div class="property-location">Downtown, Cityville</div>
-                    <div class="property-price">$1,200 / month</div>
-                    <div class="property-description">
-                        Spacious apartment with open-plan living, modern kitchen, and balcony views. Close to shops and public transport.
-                    </div>
-                    <a href="mailto:gideonkahindi9329@gmail.com" class="contact-btn">Contact Agent</a>
-                </div>
-            </div>
-            <div class="property-card">
-                <img class="property-image" src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=80" alt="Family Home">
-                <div class="property-details">
-                    <div class="property-title">Family Home with Garden</div>
-                    <div class="property-location">Greenfield Suburb</div>
-                    <div class="property-price">$350,000</div>
-                    <div class="property-description">
-                        4 bedroom, 2 bathroom home with large backyard, double garage, and updated interiors. Perfect for families.
-                    </div>
-                    <a href="mailto:gideonkahindi9329@gmail.com" class="contact-btn">Contact Agent</a>
-                </div>
-            </div>
-            <div class="property-card">
-                <img class="property-image" src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=600&q=80" alt="Luxury Condo">
-                <div class="property-details">
-                    <div class="property-title">Luxury Downtown Condo</div>
-                    <div class="property-location">Central Business District</div>
-                    <div class="property-price">$2,500 / month</div>
-                    <div class="property-description">
-                        High-rise condo with city views, gym access, and 24/7 security. Walking distance to restaurants and offices.
-                    </div>
-                    <a href="mailto:gideonkahindi9329@gmail.com" class="contact-btn">Contact Agent</a>
-                </div>
-            </div>
-            <!-- Add more property cards as needed -->
-        </div>
+  {% for property in properties %}
+    <div class="property-card">
+      {% if property.image %}
+        <img class="property-image" src="{{ property.image.url }}" alt="{{ property.property_name }}">
+      {% else %}
+        <img class="property-image" src="https://via.placeholder.com/300x200" alt="No image">
+      {% endif %}
+      <div class="property-details">
+        <div class="property-title">{{ property.property_name }}</div>
+        <div class="property-location">{{ property.location }}</div>
+        <div class="property-price">KES {{ property.price }}</div>
+        <div class="property-description">{{ property.description|truncatewords:20 }}</div>
+        <a href="mailto:{{ property.agent.email|default:'info@example.com' }}" class="contact-btn">Contact Agent</a>
+      </div>
     </div>
+  {% empty %}
+    <p>No properties available at the moment.</p>
+  {% endfor %}
+</div>
+
+    </div>                                  
 </body>
+
+<script scr="{% static 'frontend/js/nav.js' %}"></script>
 </html>

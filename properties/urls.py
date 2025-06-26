@@ -13,6 +13,7 @@ from .views import DashboardView
 from rest_framework_simplejwt import views as jwt_views  # Import JWT views
 from .views import analytics_view
 from .views import tenant_dashboard_view
+from .views import blog_list_view
 
 urlpatterns = [
     
@@ -56,5 +57,8 @@ urlpatterns = [
     path('dashboard/tenants/', tenant_dashboard_view, name='tenants'),
     
     path('accounts/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+
+    # Other routes
+    path('blog/', blog_list_view, name='blog'),
 
 ]

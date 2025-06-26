@@ -4,7 +4,7 @@ from rest_framework import generics
 from properties.models import Property, Tenant, Lease, RentPayment, MaintenanceRequest, Inspection
 from rest_framework.permissions import IsAuthenticated
 from properties.serializers import PropertySerializer, TenantSerializer, LeaseSerializer, RentPaymentSerializer
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Tenant, Lease
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
@@ -12,6 +12,10 @@ from django.views.generic import TemplateView
 from django.utils import timezone
 from django.db.models.functions import TruncMonth
 from django.db.models import Count, Sum
+from .forms import BuyerLeadForm, SellerLeadForm
+from django.contrib import messages
+from .models import BlogPost
+
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -233,3 +237,32 @@ class RentPaymentRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView
         if user.is_superuser:
             return RentPayment.objects.all()
         return RentPayment.objects.filter(agent__user=user)
+
+
+def buyer_lead_view(request):
+    if request.method == 'POST':
+        form = BuyerLeadForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Thank you for your interest! We’ll get back to you.")
+            return redirect('thank_you')
+    else:
+        form = BuyerLeadForm()
+    return render(request, 'frontend/buyer.html', {'form': form})
+
+def seller_lead_view(request):
+    if request.method == 'POST':
+        form = SellerLeadForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your property info has been submitted. Our agent will contact you.")
+            return redirect('sell')
+    else:
+        form = SellerLeadForm()
+    return render(request, 'frontend/seller.html', {'form': form})
+
+
+
+def blog_list_view(request):
+    posts = BlogPost.objects.order_by('-created_at')
+    return render(request, 'frontend/blog.html', {'posts': posts})

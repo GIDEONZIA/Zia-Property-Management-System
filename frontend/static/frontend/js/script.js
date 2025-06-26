@@ -34,11 +34,6 @@ document.querySelectorAll('.category-card').forEach(card => {
     });
 });
 
-// ========== Mobile Menu Toggle ==========
-function toggleMenu() {
-    const navLinks = document.getElementById("navLinks");
-    navLinks.classList.toggle("active");
-}
 
 // ========== Toast Notification ==========
 function showToast(message) {
@@ -61,3 +56,32 @@ function showToast(message) {
         setTimeout(() => document.body.removeChild(toast), 500);
     }, 3000);
 }
+
+'use strict';
+
+/**
+ *  navbar toggle in mobile
+ */
+
+const /** {NodeElement} */ $navbar = document.querySelector("[data-navbar]");
+const /** {NodeElement} */ $navToggler = document.querySelector("[data-nav-toggler]");
+const /** {NodeElement} */ $navLinks = document.querySelectorAll("[data-nav-link]");
+$navToggler.addEventListener("click", () => {
+  $navbar.classList.toggle("active");
+});
+$navLinks.forEach($link => {
+  $link.addEventListener("click", () => {
+    $navbar.classList.remove("active");
+  });
+});
+/**
+ *  header active on scroll
+ */
+const /** {NodeElement} */ $header = document.querySelector("[data-header]");
+window.addEventListener("scroll", e => {
+  if (window.scrollY > 50) {
+    $header.classList.add("active");
+  } else {
+    $header.classList.remove("active");
+  }
+});

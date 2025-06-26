@@ -5,10 +5,6 @@
     <meta charset="UTF-8">
     <title>About Us - Zia Property Management System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!---custom css--->
-    <link rel="stylesheet" href="{% static 'frontend/css/style.css' %}">
-
     <style>
         body { 
             font-family: Arial, sans-serif; 
@@ -61,6 +57,70 @@
             font-weight: bold;
             display: inline-block;
         }
+        @media (max-width: 768px) {
+            body {
+                padding: 0 10px;
+            }
+            .navbar {
+                text-align: center;
+                padding: 12px 10px;
+            }
+  
+            .navbar .logo,
+            .header-section .logo,
+            .cta-section .logo,
+            .footer .logo {
+                height: 30px;
+            }
+  
+            .hero h1 {
+                font-size: 1.5rem;
+                padding: 0 10px;
+            }
+
+  .container {
+    padding: 20px 16px;
+    margin: 20px auto;
+    border-radius: 6px;
+  }
+
+  .cta-section {
+    padding: 30px 16px;
+  }
+
+  .cta-section h2 {
+    font-size: 1.4rem;
+  }
+
+  .cta-section p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .cta-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    display: inline-block;
+    margin-top: 10px;
+  }
+
+  footer {
+    padding: 16px 10px;
+    font-size: 0.9rem;
+  }
+
+  .footer-nav {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .footer-nav a {
+    display: inline-block;
+    margin: 6px 4px;
+    font-size: 0.95rem;
+  }
+}
+
     </style>
 </head>
 <body>
@@ -90,18 +150,28 @@
     </div>
 
     <!-- CTA Section -->
-   <section class="cta-section">
-        <h2>Ready to get started?</h2>
-        <p>Sign up and start browsing Properties today.</p>
-        <a href="{% url 'login' %}" class="cta-button">Join Now</a>
+    <section class="cta-section" style="background:#f0f4ff; padding: 40px 20px; text-align: center;">
+        <h2 style="color:#2a7ae2;">Partner With Zia for Smarter Property Management</h2>
+        <p style="margin: 10px 0 20px; color:#333;">Discover how Zia simplifies leasing, communication, and tenant experiences.</p>
+        <a href="{% url 'services' %}" class="cta-button">Explore Our Services</a>
     </section>
+
         
     <script src="{% static 'frontend/js/nav.js' %}"></script>
     <script src="{% static 'frontend/js/script.js' %}"></script>
 
-    <footer>
+    <footer style="background:#2a7ae2; color:#fff; text-align:center; padding: 24px 16px; font-size:0.95rem;">
+        <div style="max-width:900px; margin: 0 auto;">
         <p>&copy; 2025 Zia Property Management. All rights reserved.</p>
+            <div class="footer-nav" style="margin-top:12px;">
+                <a href="{% url 'about' %}" style="color:#fff; margin: 0 10px; text-decoration:none;">About</a> |
+                <a href="{% url 'services' %}" style="color:#fff; margin: 0 10px; text-decoration:none;">Services</a> |
+                <a href="{% url 'contact' %}" style="color:#fff; margin: 0 10px; text-decoration:none;">Contact</a> |
+                <a href="{% url 'home' %}" style="color:#fff; margin: 0 10px; text-decoration:none;">Home</a>
+            </div>
+        </div>
     </footer>
+
     </div>
 </body>
 </html>

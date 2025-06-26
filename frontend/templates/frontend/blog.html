@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog | Zia Property</title>
+  <link rel="stylesheet" href="{% static 'frontend/css/blog.css' %}">
+
+</head>
+<body>
+
+<header>
+  <h1>Our Blog</h1>
+  <p>Latest updates, tips, and insights from Zia Property.</p>
+</header>
+
+<div class="blog-container">
+  {% for post in posts %}
+  
+    <div class="blog-post">
+      {% if post.image %}
+        <img src="{{ post.image.url }}" alt="{{ post.title }}">
+      {% endif %}
+      <h2>{{ post.title }}</h2>
+      <p><small>By {{ post.author }} | {{ post.created_at|date:"M d, Y" }}</small></p>
+      <p>{{ post.content|truncatewords:40 }} <a href="#">Read more</a></p>
+    </div>
+  {% empty %}
+    <p>No blog posts yet.</p>
+  {% endfor %}
+</div>
+
+<footer>
+  <p>&copy; 2025 Zia Property Management. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

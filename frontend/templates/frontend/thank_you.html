@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Thank You | Zia Property</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 5rem;
+      background: #f7f7f7;
+    }
+    .box {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #007bff;
+    }
+    a {
+      margin-top: 1rem;
+      display: inline-block;
+      color: #fff;
+      background: #007bff;
+      padding: 0.7rem 1.4rem;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>Thank You!</h1>
+    <p>Your buyer request has been received. We will contact you shortly.</p>
+    <a href="{% url 'home' %}">Back to Home</a>
+  </div>
+</body>
+</html>

@@ -1,6 +1,10 @@
+# properties/admin.py
+
 from django.contrib import admin
 from django.urls import path, include
-
+from .models import BuyerLead, SellerLead
+from .models import Property, Tenant, Lease, RentPayment, PropertyImage, Agent
+from .models import BlogPost
 # Customize admin panel
 admin.site.site_header = "Zia Property Management"
 admin.site.site_title = "Zia Property Management Admin"
@@ -10,11 +14,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('properties.urls')),  # other routes
 ]
-
-# properties/admin.py
-
-from django.contrib import admin
-from .models import Property, Tenant, Lease, RentPayment, PropertyImage, Agent
 
 # Common function
 def filter_agent_queryset(request, qs):
@@ -135,4 +134,29 @@ class AgentAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return qs
         return qs.none()
+        
+    
+    
+class BuyerLeadAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'phone', 'preferred_location', 'budget', 'created_at')
+    search_fields = ('name', 'email', 'phone', 'preferred_location')
+    list_filter = ('preferred_location',)
+
+class SellerLeadAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'phone', 'property_type', 'location', 'asking_price', 'created_at')
+    search_fields = ('name', 'email', 'phone', 'location', 'property_type')
+    list_filter = ('property_type',)
+
+
+
+@admin.register(BlogPost)
+class BlogPostAdmin(admin.ModelAdmin):
+    list_display = ('title', 'author', 'created_at', 'is_published')
+    prepopulated_fields = {'slug': ('title',)}
+    search_fields = ('title', 'content')
+    list_filter = ('is_published', 'created_at')
+
+
+admin.site.register(BuyerLead, BuyerLeadAdmin)
+admin.site.register(SellerLead, SellerLeadAdmin)
 

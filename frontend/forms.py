@@ -38,3 +38,30 @@ class CustomLoginForm(AuthenticationForm):
             'class': 'signup-input',
             'placeholder': 'Enter your password'
         })
+
+from django.core.mail import send_mail
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.conf import settings
+
+def contact_view(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        subject = f"New Contact Message from {name}"
+        full_message = f"Name: {name}\nEmail: {email}\n\nMessage:\n{message}"
+
+        send_mail(
+            subject,
+            full_message,
+            settings.DEFAULT_FROM_EMAIL,
+            ['gwiternz@gmail.com'],  # Or your receiving email
+            fail_silently=False
+        )
+
+        messages.success(request, "Message sent successfully.")
+        return redirect('contact')  # Or wherever you want to go
+
+    return render(request, 'frontend/contact.html')

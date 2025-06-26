@@ -45,14 +45,15 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.facebook',
-
-   
     
-     # Custom apps
-     'frontend',  # Frontend App for the Property Management System
+    
+    # Custom apps
+     
+    'frontend',  # Frontend App for the Property Management System
     'properties',  # Property Management App
     'transactions', # Transaction Management App
     'reports',  # Reporting App
+    
     # Third-party apps
     'rest_framework',  # Django REST Framework
     'rest_framework_simplejwt', # JWT Authentication
@@ -137,6 +138,15 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'gwiternz@gmail.com'
+EMAIL_HOST_PASSWORD = '@#93Gwiternz29#@'  # use an app password if using Gmail
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 CSRF_TRUSTED_ORIGINS = [

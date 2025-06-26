@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buyer Lead | Zia Property</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #007bff;
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 700px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select, textarea {
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 0.8rem;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .success {
+      color: green;
+      margin-bottom: 1rem;
+    }
+  /* ========== CTA Section ========== */
+
+.cta-button {
+    padding: 12px 24px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    display: inline-block;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.cta-button:hover {
+    background: #0056b3;
+}
+.cta-section {
+    text-align: center;
+    padding: 20px;
+    background: #0f345c;
+    color: white;
+}
+
+/* ========== Footer ========== */
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #222;
+    color: #aaa;
+}
+
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+      header {
+        padding: 1.5rem 1rem;
+      }
+      form {
+        gap: 0.75rem;
+      }
+      input, textarea, button {
+        font-size: 0.95rem;
+        padding: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Looking for Property?</h1>
+    <p>Fill the form below and we'll help you find your dream property.</p>
+  </header>
+
+  <div class="container">
+    {% if messages %}
+      {% for message in messages %}
+        <p class="success">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+
+    <form method="POST" id="leadForm">
+      {% csrf_token %}
+      <label for="full_name">Full Name</label>
+      <input type="text" id="full_name" name="full_name" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="phone">Phone</label>
+      <input type="tel" id="phone" name="phone" required>
+
+      <label for="location">Preferred Location</label>
+      <input type="text" id="location" name="location" required>
+
+      <label for="budget">Estimated Budget (KES)</label>
+      <input type="number" id="budget" name="budget" required>
+
+      <label for="message">Additional Message</label>
+      <textarea id="message" name="message" rows="4"></textarea>
+
+      <button type="submit">Submit Lead</button>
+    </form>
+  </div>
+
+  <section class="cta-section">
+        <h2>Ready to get started?</h2>
+        <p>Sign up and start browsing Properties today.</p>
+        <a href="{% url 'signup' %}" class="cta-button">Join Now</a>
+    </section>
+
+    <script src="{% static 'frontend/js/nav.js' %}"></script>
+    <script src="{% static 'frontend/js/script.js' %}"></script>
+
+    <footer>
+        <p>&copy; 2025 Zia Property Management. All rights reserved.</p>
+    </footer>
+
+  <script>
+    // JavaScript to confirm form submission
+    document.getElementById("leadForm").addEventListener("submit", function(e) {
+      const name = document.getElementById("full_name").value;
+      if (!name.trim()) {
+        alert("Please enter your full name.");
+        e.preventDefault();
+      } else {
+        alert("Thank you, " + name + "! Your lead has been submitted.");
+      }
+    });
+  </script>
+  
+</body>
+</html>
