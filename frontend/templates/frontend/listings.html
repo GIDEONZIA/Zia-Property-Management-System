@@ -2,142 +2,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Property Listings | Zia Property Management</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #f7f7f7;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <title>Property Listings | Zia Property Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        nav {
-            background: #333;
-            padding: 1rem;
-            display: flex;
-            justify-content: center;
-        }
-
-        header {
-            background: #003366;
-            color: #fff;
-            padding: 1.5rem 2rem;
-            text-align: center;
-        }
-        .container {
-            max-width: 1100px;
-            margin: 2rem auto;
-            padding: 1rem;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-        }
-        h1 {
-            margin: 0;
-            font-size: 2.2rem;
-            letter-spacing: 1px;
-        }
-        .listings {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        .property-card {
-            background: #fafbfc;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            overflow: hidden;
-            transition: box-shadow 0.2s;
-        }
-        .property-card:hover {
-            box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-        }
-        .property-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background: #eaeaea;
-        }
-        .property-details {
-            padding: 1rem;
-        }
-        .property-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin: 0 0 0.5rem 0;
-        }
-        .property-location {
-            color: #666;
-            font-size: 0.98rem;
-            margin-bottom: 0.5rem;
-        }
-        .property-price {
-            color: #003366;
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        .property-description {
-            font-size: 0.97rem;
-            color: #444;
-            margin-bottom: 1rem;
-        }
-        .contact-btn {
-            display: inline-block;
-            background: #0072c6;
-            color: #fff;
-            padding: 0.5rem 1.2rem;
-            border: none;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: background 0.2s;
-        }
-        .contact-btn:hover {
-            background: #005fa3;
-        }
-        @media (max-width: 600px) {
-            .container {
-                padding: 0.5rem;
-            }
-            .property-card {
-                margin-bottom: 1.5rem;
-            }
-        }
-    </style>
+  <!---Custom css-->
+  <link rel="stylesheet" href="{% static 'frontend/css/listings.css' %}">
+  
 </head>
 <body>
-    <header>
-        <h1>Zia Property Management - Property Listings</h1>
-        <p>Find your next home or investment with our professional real estate listings.</p>
-    </header>
-    <div class="container">
-        <div class="listings">
+  <header>
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="logo">Zia Property Agency</div>
+          <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+            <ul class="nav-links">
+              <li><a href="{% url 'home' %}">Home</a></li>
+              <li><a href="{% url 'blog' %}">Blog</a></li>
+              <li><a href="{% url 'about' %}">About Us</a></li>
+              <li><a href="{% url 'contact' %}">Contact</a></li>
+            </ul>
+        </div>
+      </div> 
+    </nav>
+
+    <h1>Zia Property Management - Property Listings</h1>
+    <p>Find your next home or investment with our professional real estate listings.</p>
+    
+
+  <div class="container">
+    <div class="listings">
   {% for property in properties %}
-    <div class="property-card">
-      {% if property.image %}
-        <img class="property-image" src="{{ property.image.url }}" alt="{{ property.property_name }}">
-      {% else %}
-        <img class="property-image" src="https://via.placeholder.com/300x200" alt="No image">
-      {% endif %}
-      <div class="property-details">
-        <div class="property-title">{{ property.property_name }}</div>
-        <div class="property-location">{{ property.location }}</div>
-        <div class="property-price">KES {{ property.price }}</div>
-        <div class="property-description">{{ property.description|truncatewords:20 }}</div>
-        <a href="mailto:{{ property.agent.email|default:'info@example.com' }}" class="contact-btn">Contact Agent</a>
-      </div>
+  <div class="property-card">
+    {% if property.image %}
+    <img class="property-image" src="{{ property.image.url }}" alt="{{ property.property_name }}">
+    {% else %}
+    <img class="property-image" src="https://via.placeholder.com/300x200" alt="No image">
+    {% endif %}
+    <div class="property-details">
+    <div class="property-title">{{ property.property_name }}</div>
+    <div class="property-location">{{ property.location }}</div>
+    <div class="property-price">KES {{ property.price }}</div>
+    <div class="property-description">{{ property.description|truncatewords:20 }}</div>
+    <a href="mailto:{{ property.agent.email|default:'info@example.com' }}" class="contact-btn">Contact Agent</a>
     </div>
+  </div>
   {% empty %}
-    <p>No properties available at the moment.</p>
+  <p>No properties available at the moment.</p>
   {% endfor %}
 </div>
 
-    </div>                                  
+  </div> 
+  <script src="{% static 'frontend/js/listings.js' %}"></script>                                 
 </body>
-
-<script scr="{% static 'frontend/js/nav.js' %}"></script>
 </html>

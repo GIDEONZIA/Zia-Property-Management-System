@@ -5,37 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Testimonials - Zia Property Management</title>
+
+    <!----Custom css---->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-        body { margin: 0; font-family: Arial, sans-serif; background: #f9f9f9; color: #222; }
-        .navbar { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 1rem 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);}
-        .navbar .logo { display: flex; align-items: center; }
-        .navbar img { height: 40px; margin-right: 10px; }
-        .navbar nav a { margin: 0 1rem; text-decoration: none; color: #222; font-weight: 500;}
-        .hero { background: #e9f5ff; padding: 3rem 2rem 2rem 2rem; text-align: center;}
-        .hero h1 { margin: 0.5em 0 0.2em 0; font-size: 2.5em;}
-        .hero p { color: #555; font-size: 1.2em;}
-        .testimonials { max-width: 900px; margin: 2rem auto; display: flex; flex-wrap: wrap; gap: 2rem; }
-        .testimonial-card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 2rem; flex: 1 1 250px; min-width: 250px; }
-        .testimonial-card .user { display: flex; align-items: center; margin-bottom: 1rem;}
-        .testimonial-card img { border-radius: 50%; width: 48px; height: 48px; margin-right: 1rem;}
-        .testimonial-card .name { font-weight: bold; }
-        .testimonial-card .stars { color: #f5b301; margin-bottom: 0.5rem;}
-        .cta-section { background: #0077cc; color: #fff; text-align: center; padding: 2.5rem 1rem;}
-        .cta-section h2 { margin-bottom: 1rem;}
-        .cta-section a { background: #fff; color: #0077cc; padding: 0.8em 2em; border-radius: 5px; text-decoration: none; font-weight: bold;}
-        footer { background: #222; color: #fff; text-align: center; padding: 1.5rem 1rem; margin-top: 2rem;}
-        .footer-logo {
-            height: 32px;
-            vertical-align: middle;
-            margin-right: 8px;
-        }
-        @media (max-width: 700px) {
-            .testimonials { flex-direction: column; }
-            .navbar { flex-direction: column; align-items: flex-start;}
-            .navbar nav { margin-top: 1rem;}
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'frontend/css/testimonial.css' %}">
 </head>
 <body>
     <!-- Navbar -->
@@ -104,6 +77,8 @@
         <p>Contact Zia today and let us handle your property with care.</p>
         <img src="{% static 'frontend/images/logo.png' %}" alt="Zia Logo" class="footer-logo">
     </section>
+
+    <script src="{% static 'frontend/js/testimonial.js' %}"></script>
 
     <!-- Footer -->
     <footer>

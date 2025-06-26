@@ -14,8 +14,6 @@ from django.db.models.functions import TruncMonth
 from django.db.models import Count, Sum
 from .forms import BuyerLeadForm, SellerLeadForm
 from django.contrib import messages
-from .models import BlogPost
-
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -262,7 +260,3 @@ def seller_lead_view(request):
     return render(request, 'frontend/seller.html', {'form': form})
 
 
-
-def blog_list_view(request):
-    posts = BlogPost.objects.order_by('-created_at')
-    return render(request, 'frontend/blog.html', {'posts': posts})

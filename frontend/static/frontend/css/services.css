@@ -1,0 +1,88 @@
+/* services.css */
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f7f9fa;
+    margin: 0;
+    color: #222;
+}
+
+header {
+    background: #2c3e50;
+    color: #fff;
+    padding: 40px 0 24px 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0 0 10px 0;
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+}
+
+header p {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+main {
+    max-width: 1100px;
+    margin: 40px auto 0 auto;
+    padding: 0 20px;
+}
+
+.services-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 28px;
+}
+
+.service-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(44,62,80,0.07);
+    padding: 32px 24px 28px 24px;
+    transition: box-shadow 0.2s, transform 0.2s;
+    border-left: 5px solid #2980b9;
+}
+
+.service-card:hover {
+    box-shadow: 0 6px 24px rgba(44,62,80,0.13);
+    transform: translateY(-4px) scale(1.02);
+    border-left-color: #27ae60;
+}
+
+.service-card h2 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1.35rem;
+    color: #2980b9;
+    font-weight: 600;
+}
+
+.service-card p {
+    margin: 0;
+    color: #444;
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+footer {
+    margin-top: 40px;
+}
+
+@media (max-width: 700px) {
+    header h1 {
+        font-size: 2rem;
+    }
+    main {
+        padding: 0 8px;
+    }
+    .service-card {
+        padding: 22px 12px 18px 12px;
+    }
+    .services-list {
+        gap: 16px;
+    }
+}

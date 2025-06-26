@@ -107,7 +107,7 @@ class BlogPost(models.Model):
     slug = models.SlugField(unique=True)
     author = models.CharField(max_length=100, default="Zia Team")
     content = models.TextField()
-    featured_image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
+    image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_published = models.BooleanField(default=True)
 

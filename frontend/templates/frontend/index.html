@@ -6,7 +6,7 @@
     <title>Zia Property Agency - Find Your Space</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="{% static 'frontend/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/css/index.css' %}">
 </head>
 
 <body>
@@ -14,7 +14,7 @@
         <div class="navbar-container">
             <div class="logo">Zia Property Agency</div>
             <ul class="nav-links " id="navLinks">
-                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'blog' %}">Blog</a></li>
                 <li><a href="{% url 'about' %}">About</a></li>
                 <li><a href="{% url 'contact' %}">Contact</a></li>
             </ul>
@@ -71,9 +71,7 @@
         <p>Sign up and start browsing Properties today.</p>
         <a href="{% url 'signup' %}" class="cta-button">Join Now</a>
     </section>
-
-    <script src="{% static 'frontend/js/nav.js' %}"></script>
-    <script src="{% static 'frontend/js/script.js' %}"></script>
+    <script src="{% static 'frontend/js/index.js' %}"></script>
 
     <footer>
         <p>&copy; 2025 Zia Property Management. All rights reserved.</p>

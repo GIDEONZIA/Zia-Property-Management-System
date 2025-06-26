@@ -5,20 +5,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Blog Detail | Zia Property Management</title>
+
+  <!---CUSTOM CSS--->
+
   <link rel="stylesheet" href="{% static 'frontend/css/blog_detail.css' %}">
+  
+<!---FONT AWESOME--->
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
 </head>
 <body>
+  <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">Zia Property Agency</div>
+            <ul class="nav-links " id="navLinks">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+            </ul>
 
-  <nav>
-    <div>Zia Property Management</div>
-    <div>
-      <a href="{% url 'home' %}">Home</a>
-      <a href="{% url 'blog' %}">Blog</a>
-      <a href="{% url 'contact' %}">Contact</a>
-    </div>
-  </nav>
+            <div class="menu-toggle" onclick="toggleMenu()">&#9776;</div>
+            
+            </div>
+        </div>
 
   <div class="container">
     <h1 class="blog-title">Why Property Investment in Kenya is on the Rise</h1>
@@ -42,6 +53,8 @@
     <p>Stay informed with weekly insights from our experts.</p>
     <a href="{% url 'signup' %}" class="cta-button">Subscribe Now</a>
   </section>
+    <script src="{% static 'frontend/js/script.js' %}"></script>
+    <script src="{% static 'frontend/js/nav.js'}"></script>
 
   <footer>
     &copy; 2025 Zia Property Management. All rights reserved.

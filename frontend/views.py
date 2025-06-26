@@ -9,6 +9,7 @@ from properties.models import Property
 from django.shortcuts import render, get_object_or_404
 from properties.models import BlogPost 
 
+
 # sign up
 
 def signup_view(request):
@@ -81,9 +82,11 @@ def contact_view(request):
 
 
 
-def blog_list(request):
-    posts = BlogPost.objects.filter(is_published=True)
+
+def blog_list_view(request):
+    posts = BlogPost.objects.all().order_by('-created_at')  # or whatever field you use
     return render(request, 'frontend/blog.html', {'posts': posts})
+
 
 def blog_detail(request, slug):
     post = get_object_or_404(BlogPost, slug=slug, is_published=True)

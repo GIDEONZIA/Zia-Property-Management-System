@@ -5,7 +5,7 @@ from .views import (
 )
 from django.contrib.auth import views as auth_views
 from properties.views import buyer_lead_view, seller_lead_view
-from .views import blog_list, blog_detail
+from frontend.views import blog_list_view, blog_detail
 
 
 urlpatterns = [
@@ -22,7 +22,6 @@ urlpatterns = [
     path('contact/', TemplateView.as_view(template_name='frontend/contact.html'), name='contact'),
     path('services/', TemplateView.as_view(template_name='frontend/services.html'), name='services'),
     path('testimonial/', TemplateView.as_view(template_name='frontend/testimonial.html'), name='testimonial'),
-    path('blog/', TemplateView.as_view(template_name='frontend/blog.html'), name='blog'),
     path('blog_detail/', TemplateView.as_view(template_name='frontend/blog_detail.html'), name='blog_detail'),
     path('thank-you/', TemplateView.as_view(template_name='frontend/thank_you.html'), name='thank_you'),
 
@@ -34,11 +33,8 @@ urlpatterns = [
     path('buyer/', buyer_lead_view, name='buy'),
     path('sell/', seller_lead_view, name='sell'),
     path('sign-up/', signup_view, name='signup'),
-    path('blog/', blog_list, name='blog'),
+    path('blog/', blog_list_view, name='blog'),
     path('blog/<slug:slug>/', blog_detail, name='blog_detail'),
-
-
-    
 
 
     # AllAuth (optional)
