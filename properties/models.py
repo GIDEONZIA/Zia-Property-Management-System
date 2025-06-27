@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from decimal import Decimal
 from django.db import models
 from django.utils import timezone
+from django.db import models
+from django.contrib.auth.models import User
 
 # === GLOBAL CHOICES ===
 PROPERTY_TYPES = [
@@ -39,21 +41,54 @@ RENT_PAYMENT_STATUS_CHOICES = [
     ('failed', 'Failed'),
 ]
 
-# === MODELS ===
+# === Agent Models ===
 
 class Agent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='agent_profile')
+    
+    # Personal Info
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=15)
     email = models.EmailField(unique=True)
     profile_picture = models.ImageField(upload_to='agents/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
+
+    # Commission
     commission_rate = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, help_text="Commission rate percentage")
     commission_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, help_text="Commission amount earned by the agent for this tenant")
+    
+    # Status
     is_active = models.BooleanField(default=True)
+
+    # Premium Subscription Fields
+    is_premium = models.BooleanField(default=False)
+    subscription_plan = models.CharField(
+        max_length=20,
+        choices=[('monthly', 'Monthly'), ('annual', 'Annual')],
+        blank=True,
+        null=True
+    )
+    subscribed_at = models.DateTimeField(null=True, blank=True)
+    trial_used = models.BooleanField(default=False)  # Optional
+
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+    
+class AgentSubscription(models.Model):
+    agent = models.OneToOneField(Agent, on_delete=models.CASCADE)
+    plan = models.CharField(max_length=10, choices=[('monthly', 'Monthly'), ('annual', 'Annual')])
+    is_active = models.BooleanField(default=False)
+    start_date = models.DateField(auto_now_add=True)
+    end_date = models.DateField(null=True, blank=True)
+    payment_method = models.CharField(max_length=50)
+    transanction_id = models.CharField(max_length=100, blank=True, null=True)
+    verified = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.agent.user.username} - {self.plan}"
+
 
 
 class Property(models.Model):
@@ -279,3 +314,4 @@ class ContactMessage(models.Model):
     email = models.EmailField()
     message = models.TextField()
     sent_at = models.DateTimeField(auto_now_add=True)
+

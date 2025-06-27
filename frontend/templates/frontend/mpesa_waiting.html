@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Processing Payment | Zia Premium</title>
+    <link rel="stylesheet" href="{% static 'frontend/css/mpesa_waiting.css' %}">
+</head>
+<body>
+    <div class="mpesa-waiting-container">
+        <h1>Payment In Progress</h1>
+        <div class="mpesa-loader"></div>
+        <p>An STK Push has been sent to your phone number.</p>
+        <p><strong>Please check your phone</strong> and enter your MPesa PIN to complete the payment.</p>
+        <p>If you don’t receive the prompt within 30 seconds, please try again.</p>
+        <a href="{% url 'premium_agent' %}" class="back-button">Back to Subscription Page</a>
+    </div>
+</body>
+<script src="{% static 'frontend/js/mpesa_waiting.js' %}"></script>
+</html>

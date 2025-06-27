@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.facebook',
+    'django_extensions',
     
     
     # Custom apps
@@ -139,7 +140,18 @@ DATABASES = {
     }
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# Mpesa Daraja API Settings
+MPESA_CONSUMER_KEY = 'jG8krQFuzcdYn9EFwwlvMdyC9nLxufKTzJOnHAUYKrFoPUer'
+MPESA_CONSUMER_SECRET = 'sNIS1DYt5jl1P1tdsD3oY1kle10nsgGCROyG5aFy8GNIkU28elfZgmqCXX2iMeoP'
+MPESA_SHORTCODE = '174379'
+MPESA_PASSKEY = 'your_passkey'
+MPESA_BASE_URL = 'https://sandbox.safaricom.co.ke'
+
+# My Ngrok/Public callback base
+MPESA_CALLBACK_URL = 'https://baec-129-222-187-16.ngrok-free.app'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

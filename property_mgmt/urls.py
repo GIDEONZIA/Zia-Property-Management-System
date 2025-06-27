@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from properties.views import CustomLoginView, dashboard, admin_dashboard
 from django.contrib.auth import views as auth_views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
+from frontend.views import mpesa_callback
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -44,6 +44,9 @@ urlpatterns = [
     # JWT API Auth
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    # Mpesa callback
+    path("api/mpesa-callback/", mpesa_callback, name="mpesa_callback"),
 ]
 
 # Static/media files in development

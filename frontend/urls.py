@@ -1,11 +1,16 @@
 from django.urls import path, include
 from django.views.generic import TemplateView
 from .views import (
-    signup_view, CustomLoginView, idx_search_view, listings_view, contact_view
+    signup_view, CustomLoginView, idx_search_view, listings_view, contact_view, thank_you_view
 )
 from django.contrib.auth import views as auth_views
 from properties.views import buyer_lead_view, seller_lead_view
-from frontend.views import blog_list_view, blog_detail
+from .views import blog_list_view, blog_detail
+from . import views
+from .views import start_premium_subscription, subscription_status_view
+from utils.mpesa_callback import mpesa_callback
+
+
 
 
 urlpatterns = [
@@ -19,11 +24,13 @@ urlpatterns = [
 
     # Static Pages
     path('about/', TemplateView.as_view(template_name='frontend/about.html'), name='about'),
-    path('contact/', TemplateView.as_view(template_name='frontend/contact.html'), name='contact'),
     path('services/', TemplateView.as_view(template_name='frontend/services.html'), name='services'),
     path('testimonial/', TemplateView.as_view(template_name='frontend/testimonial.html'), name='testimonial'),
     path('blog_detail/', TemplateView.as_view(template_name='frontend/blog_detail.html'), name='blog_detail'),
-    path('thank-you/', TemplateView.as_view(template_name='frontend/thank_you.html'), name='thank_you'),
+    path('premium_agent/', TemplateView.as_view(template_name='frontend/premium_agent.html'), name='premium_agent'),
+
+
+    
 
 
     # Dynamic Search & Listings Views
@@ -35,8 +42,15 @@ urlpatterns = [
     path('sign-up/', signup_view, name='signup'),
     path('blog/', blog_list_view, name='blog'),
     path('blog/<slug:slug>/', blog_detail, name='blog_detail'),
+    path('thank-you', thank_you_view, name='thank_you'),
+    
 
+    path('subscribe/', start_premium_subscription, name='subscribe'),
+    path('subscription/', subscription_status_view, name='subscription_status'),  # optional
+    
+    path('api/mpesa-callback/', mpesa_callback, name='mpesa_callback'),
 
+    
     # AllAuth (optional)
     path('accounts/', include('allauth.urls')),
 ]

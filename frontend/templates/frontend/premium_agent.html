@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="eng">
+    <head>
+        <meta charset="UTF-8">
+        <title>Become a premium agent | Zia Property Agency</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!---Custom css---->
+        <link rel="stylesheet" href="{% static 'frontend/css/premium_agent.css' %}">
+
+    </head>
+    <body>
+
+        <header>
+            <hi>Become a Premium Agent</hi>
+            <p>Start your <strong>14-day free trial</strong>and unlock premium features to grow your real estate business.</p>
+        </header>
+
+        <main class="premium-container">
+            <form method="post" action="{% url 'subscribe' %}">
+            {% csrf_token %}
+                <label>Phone Number (07XXXXXXXX):</label>
+                    <input type="text" name="phone" required>
+
+                <label>
+                    <input type="radio" name="plan" value="monthly" checked>
+                    Monthly - $29
+                </label>
+                <label>
+                    <input type="radio" name="plan" value="annual">
+                    Annual - $299
+                </label>
+
+                    <button type="submit">Start Premium via M-Pesa</button>
+            </form>
+
+
+            <section class="benefits">
+                <h2>Premium Agent Benefits</h2>
+                <ul>
+                    <li>List <strong>Unlimited properties</strong></li>
+                    <li><strong>Priority</strong>customer support</li>
+                    <li>Get a <strong>Featured Agent Badge</strong></li>
+                </ul>
+            </section>
+        </main>
+
+        <script src="{% static 'frontend/js/premium_agent.js' %}"></script>
+    </body>
+</html>

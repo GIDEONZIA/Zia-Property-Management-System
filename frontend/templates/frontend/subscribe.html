@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Processing Subscription</title>
+
+    <!---Custom css--->
+    <link rel="stylesheet" href="{% static 'frontend/css/subscribe.css' %}">
+</head>
+<body>
+    <h1>Subscription In Progress</h1>
+    <p>Your Mpesa STK Push has been initiated. Please check your phone to complete the payment.</p>
+
+    {% if response %}
+        <h2>Payment Details:</h2>
+        <ul>
+            <li><strong>Merchant Request ID:</strong> {{ response.MerchantRequestID }}</li>
+            <li><strong>Checkout Request ID:</strong> {{ response.CheckoutRequestID }}</li>
+            <li><strong>Message:</strong> {{ response.CustomerMessage }}</li>
+        </ul>
+    {% else %}
+        <p>No payment response was received. Please retry or contact support.</p>
+    {% endif %}
+</body>
+<script src="{% static 'frontend/js/subscribe.js' %}"></script>
+</html>

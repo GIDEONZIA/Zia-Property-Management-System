@@ -1,0 +1,129 @@
+/* premium_agent.css */
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f7f9fb;
+    margin: 0;
+    padding: 0;
+    color: #222;
+}
+
+header {
+    background: #1a237e;
+    color: #fff;
+    padding: 2rem 1rem 1rem 1rem;
+    text-align: center;
+}
+
+header hi, header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: 1px;
+    display: block;
+}
+
+header p {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.premium-container {
+    max-width: 400px;
+    background: #fff;
+    margin: 2rem auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 16px rgba(30, 42, 90, 0.08);
+    padding: 2rem 2rem 1.5rem 2rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+form label {
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+    color: #1a237e;
+}
+
+form input[type="text"] {
+    padding: 0.6rem;
+    border: 1px solid #bfc7d1;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+}
+
+form input[type="text"]:focus {
+    border: 1.5px solid #3949ab;
+}
+
+form input[type="radio"] {
+    margin-right: 0.5rem;
+    accent-color: #3949ab;
+}
+
+form button {
+    background: linear-gradient(90deg, #3949ab 60%, #1a237e 100%);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.8rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+}
+
+form button:hover {
+    background: linear-gradient(90deg, #1a237e 60%, #3949ab 100%);
+}
+
+.benefits {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e3e7ef;
+}
+
+.benefits h2 {
+    font-size: 1.3rem;
+    color: #3949ab;
+    margin-bottom: 0.7rem;
+    font-weight: 700;
+}
+
+.benefits ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.benefits li {
+    margin-bottom: 0.7rem;
+    font-size: 1.05rem;
+    padding-left: 1.2rem;
+    position: relative;
+}
+
+.benefits li:before {
+    content: "✔";
+    color: #43a047;
+    position: absolute;
+    left: 0;
+    font-size: 1rem;
+}
+
+@media (max-width: 500px) {
+    .premium-container {
+        padding: 1rem 0.5rem;
+        max-width: 98vw;
+    }
+    header {
+        padding: 1.2rem 0.5rem 0.7rem 0.5rem;
+    }
+}
