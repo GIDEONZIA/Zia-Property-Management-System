@@ -141,11 +141,11 @@ DATABASES = {
 }
 
 # Mpesa Daraja API Settings
-MPESA_CONSUMER_KEY = 'jG8krQFuzcdYn9EFwwlvMdyC9nLxufKTzJOnHAUYKrFoPUer'
-MPESA_CONSUMER_SECRET = 'sNIS1DYt5jl1P1tdsD3oY1kle10nsgGCROyG5aFy8GNIkU28elfZgmqCXX2iMeoP'
-MPESA_SHORTCODE = '174379'
-MPESA_PASSKEY = 'your_passkey'
-MPESA_BASE_URL = 'https://sandbox.safaricom.co.ke'
+MPESA_CONSUMER_KEY = "jG8krQFuzcdYn9EFwwlvMdyC9nLxufKTzJOnHAUYKrFoPUer"
+MPESA_CONSUMER_SECRET = "sNIS1DYt5jl1P1tdsD3oY1kle10nsgGCROyG5aFy8GNIkU28elfZgmqCXX2iMeoP"
+MPESA_BASE_URL = "https://sandbox.safaricom.co.ke"
+MPESA_SHORTCODE = "174379"
+MPESA_PASSKEY = "<your-lipa-na-mpesa-passkey>"  # Still required
 
 # My Ngrok/Public callback base
 MPESA_CALLBACK_URL = 'https://baec-129-222-187-16.ngrok-free.app'

@@ -5,9 +5,9 @@ from .models import (
 )
 
 # Admin Panel Branding
-admin.site.site_header = "Zia Property Management"
-admin.site.site_title = "Zia Property Admin"
-admin.site.index_title = "Welcome to Zia Management Portal"
+admin.site.site_header = "Zia Properties Ltd"
+admin.site.site_title = "Zia Properties Admin"
+admin.site.index_title = "Welcome to Zia Properties Portal"
 
 # Utility: Filter queryset per agent
 def filter_agent_queryset(request, qs):
@@ -51,7 +51,7 @@ class AgentRestrictedAdmin(admin.ModelAdmin):
 # Property Admin
 @admin.register(Property)
 class PropertyAdmin(AgentRestrictedAdmin):
-    list_display = ('property_name', 'property_type', 'price', 'is_available', 'created_at')
+    list_display = ('property_name', 'property_type', 'price', 'currency', 'is_available', 'created_at')
     search_fields = ('property_name', 'address', 'location')
     list_filter = ('property_type', 'is_available')
 

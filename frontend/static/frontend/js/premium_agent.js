@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!phonePattern.test(phoneValue)) {
             e.preventDefault();
-            alert('Please enter a valid phone number in the format 07XXXXXXXX.');
+            alert('Please enter a valid phone number in the format 07XXXXXXXXX');
             phoneInput.focus();
         }
     });

@@ -3,18 +3,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Processing Payment | Zia Premium</title>
+    <title>Mpesa Payment Processing | Zia Properties Ltd</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'frontend/css/mpesa_waiting.css' %}">
 </head>
 <body>
-    <div class="mpesa-waiting-container">
-        <h1>Payment In Progress</h1>
-        <div class="mpesa-loader"></div>
-        <p>An STK Push has been sent to your phone number.</p>
-        <p><strong>Please check your phone</strong> and enter your MPesa PIN to complete the payment.</p>
-        <p>If you don’t receive the prompt within 30 seconds, please try again.</p>
-        <a href="{% url 'premium_agent' %}" class="back-button">Back to Subscription Page</a>
-    </div>
+    <h1>Payment Request Sent</h1>
+    <p>Please check your phone and enter your Mpesa PIN to complete the subscription payment.</p>
+
+    {% if response %}
+        <h2>Payment Details</h2>
+        <ul>
+            <li><strong>Merchant Request ID:</strong> {{ response.MerchantRequestID }}</li>
+            <li><strong>Checkout Request ID:</strong> {{ response.CheckoutRequestID }}</li>
+            <li><strong>Message:</strong> {{ response.CustomerMessage }}</li>
+        </ul>
+    {% else %}
+        <p><strong>No response received from Mpesa.</strong> Please try again or contact support.</p>
+    {% endif %}
+    <p>If you have not received any STK Push, you can 
+        <form action="{% url 'premium_agent' %}" method="get" style="display:inline;">
+            <button type="submit">go back to Premium Agent</button>
+        </form>
+    </p>
+    <script src="{% static 'frontend/js/mpesa_waiting.js' %}"></script>
 </body>
-<script src="{% static 'frontend/js/mpesa_waiting.js' %}"></script>
 </html>

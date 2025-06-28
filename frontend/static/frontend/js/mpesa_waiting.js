@@ -28,3 +28,17 @@ document.addEventListener('DOMContentLoaded', function () {
     //         });
     // }, 3000);
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const backButtonForm = document.querySelector('.mpesa-waiting-container form');
+    if (backButtonForm) {
+        backButtonForm.addEventListener('submit', function (e) {
+            // Optionally, show a loading state or disable the button to prevent double submits
+            const button = backButtonForm.querySelector('button[type="submit"]');
+            if (button) {
+                button.disabled = true;
+                button.textContent = 'Redirecting...';
+            }
+        });
+    }
+});

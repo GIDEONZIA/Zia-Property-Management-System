@@ -8,7 +8,7 @@ def get_access_token():
     response = requests.get(url, auth=(settings.MPESA_CONSUMER_KEY, settings.MPESA_CONSUMER_SECRET))
     return response.json().get('access_token')
 
-def initiate_stk_push(phone_number, amount, account_reference, transaction_desc):
+def initiate_stk_push(phone_number, amount, account_reference, transaction_desc):           
     access_token = get_access_token()
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
     password = base64.b64encode(
@@ -20,7 +20,7 @@ def initiate_stk_push(phone_number, amount, account_reference, transaction_desc)
         "Content-Type": "application/json"
     }
 
-    callback_url = f"{settings.MPESA_BASE_URL}/api/mpesa-callback/".replace(" ", "")
+    callback_url = f"{settings.MPESA_BASE_URL}/api/mpesa-callback/"
 
     payload = {
         "BusinessShortCode": settings.MPESA_SHORTCODE,
@@ -31,7 +31,7 @@ def initiate_stk_push(phone_number, amount, account_reference, transaction_desc)
         "PartyA": phone_number,
         "PartyB": settings.MPESA_SHORTCODE,
         "PhoneNumber": phone_number,
-        "CallBackURL": callback_url,
+        "CallBackURL": settings.MPESA_CALLBACK_URL,
         "AccountReference": account_reference,
         "TransactionDesc": transaction_desc
     }

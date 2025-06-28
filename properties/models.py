@@ -91,6 +91,31 @@ class AgentSubscription(models.Model):
 
 
 
+CURRENCY_CHOICES = [
+    ('KES', 'Kenyan Shilling'),
+    ('USD', 'US Dollar'),
+    ('EUR', 'Euro'),
+    ('GBP', 'British Pound'),
+    ('TSH','Tanzanian Shilling'),
+    ('UGX','Ugandan Shilling'),
+    ('RWF','Rwandan Franc'),
+    ('ZAR','South African Rand'),
+    ('TZS','Tanzanian Shilling'),
+    ('KWD','Kuwaiti Dinar'),
+    ('AED','United Arab Emirates Dirham'),
+    ('CAD','Canadian Dollar'),
+    ('AUD','Australian Dollar'),
+    ('NZD','New Zealand Dollar'),
+    ('CHF','Swiss Franc'),
+    ('JPY','Japanese Yen'),
+    ('CNY','Chinese Yuan'),
+    ('INR','Indian Rupee'),
+    ('SGD','Singapore Dollar'),
+    ('MYR','Malaysian Ringgit'),
+    ('THB','Thai Baht'),
+    ('PHP','Philippine Peso'),
+    ('IDR','Indonesian Rupiah'),
+]
 class Property(models.Model):
     property_name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
@@ -99,6 +124,7 @@ class Property(models.Model):
     agent = models.ForeignKey(Agent, on_delete=models.SET_NULL, null=True, blank=True)
     location = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES)  # 🏦 currency field
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='property_images/', null=True, blank=True)

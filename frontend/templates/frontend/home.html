@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zia Property Agency - Home</title>
+    <title>Zia Properties Ltd - Home</title>
 
     <!---Custom css-->
     <link rel="stylesheet" href="{% static 'frontend/css/home.css' %}">
@@ -16,12 +16,13 @@
 <body>
     <nav class="navbar">
         <div class="navbar-container">
-            <div class="logo">Zia Property Agency</div>
+            <div class="logo">Zia Property Ltd</div>
             <ul class="social-icons">
-                <li><a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-                <li><a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a></li>
-                <li><a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a></li>
-                <li><a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a></li>
+                <li><a href="https://facebook.com/propertiesmalindi" target="_blank" rel="noopener" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+                <li><a href="https://twitter.com" target="_blank" rel="noopener" title="twitter"><i class="fab fa-twitter"></i></a></li>
+                <li><a href="https://instagram.com" target="_blank" rel="noopener" title="instagram"><i class="fab fa-instagram"></i></a></li>
+                <li><a href="https://linkedin.com" target="_blank" rel="noopener" title="linkedin"><i class="fab fa-linkedin-in"></i></a></li>
+                
             </ul>
         </div>    
     </nav>
@@ -72,20 +73,10 @@
         <a href="{% url 'contact' %}" class="cta-button">Contact us</a>
     </section>
     
-    <script>
-        // Mobile Menu Toggle (if needed)
-        const navToggle = document.querySelector('.menu-toggle');
-        const socialIcons = document.querySelector('.social-icons');
-
-        if (navToggle && socialIcons) {
-            navToggle.addEventListener('click', () => {
-                socialIcons.classList.toggle('open');
-            });
-        }
-    </script>
+    
 </body>
 
 <footer>
-    <p>&copy; 2025 Zia Property Management. All rights reserved.</p>
+    <p>&copy; 2025 Zia Property Ltd. All rights reserved.</p>
 </footer>
 </html>
