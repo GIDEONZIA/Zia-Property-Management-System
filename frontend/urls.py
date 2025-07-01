@@ -5,10 +5,10 @@ from .views import (
 )
 from django.contrib.auth import views as auth_views
 from properties.views import buyer_lead_view, seller_lead_view
-from .views import blog_list_view, blog_detail
-from . import views
+from .views import blog_list_view, blog_detail 
 from .views import start_premium_subscription, subscription_status_view
 from utils.mpesa_callback import mpesa_callback
+from frontend.views import home_view
 
 
 
@@ -16,8 +16,6 @@ from utils.mpesa_callback import mpesa_callback
 urlpatterns = [
     # Home / Landing
     path('', TemplateView.as_view(template_name='frontend/index.html'), name='landing_page'),
-    path('home/', TemplateView.as_view(template_name='frontend/home.html'), name='home'),
-
     # Auth
     path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
@@ -43,7 +41,7 @@ urlpatterns = [
     path('blog/', blog_list_view, name='blog'),
     path('blog/<slug:slug>/', blog_detail, name='blog_detail'),
     path('thank-you', thank_you_view, name='thank_you'),
-    
+    path('home/', home_view, name='home'),
 
     path('subscribe/', start_premium_subscription, name='subscribe'),
     path('subscription/', subscription_status_view, name='subscription_status'),  # optional

@@ -21,6 +21,7 @@ from django.http import JsonResponse
 
 
 
+
 # sign up
 
 def signup_view(request):
@@ -38,6 +39,14 @@ def signup_view(request):
 class CustomLoginView(LoginView):
     template_name = 'frontend/login.html'
     authentication_form = AuthenticationForm
+
+# home
+def home_view(request):
+    featured_properties = Property.objects.filter(is_featured=True, is_available=True).order_by('created_at')[:3]
+    print("Featured properties:", featured_properties)
+    return render(request, 'frontend/home.html', {
+        'featured_properties': featured_properties
+    })
 
 # idx_search
 
@@ -91,8 +100,6 @@ def contact_view(request):
             return redirect('contact')
     
     return render(request, 'frontend/contact.html')  # this handles GET
-
-
 
 
 

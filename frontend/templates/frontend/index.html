@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>Zia Properties Ltd - Find Your Space</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="stylesheet" href="{% static 'frontend/css/index.css' %}">
 </head>
 
@@ -13,40 +12,26 @@
     <nav class="navbar">
         <div class="navbar-container">
             <div class="logo">Zia Properties Ltd</div>
-            <ul class="nav-links " id="navLinks">
-                <li><a href="{% url 'blog' %}">Blog</a></li>
-                <li><a href="{% url 'about' %}">About</a></li>
-                <li><a href="{% url 'contact' %}">Contact</a></li>
-            </ul>
-
             <div class="auth-actions">
                 <a href="{% url 'login' %}" class="login-btn">Log in</a>
                 <a href="{% url 'signup' %}" class="register-btn">Register</a>
-                <button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
             </div>
+    </nav>
 
-            <div class="menu-toggle" onclick="toggleMenu()">&#9776;</div>
-            
+    <header class="hero">
+        <div class="hero-container">
+            <div class="hero-text">
+                <h1>Discover Your<br>Suitable<br>Home</h1>
+                <p>Buy / Sell<br>Rent<br>Manage properties with ease.</p>
+                <a href="{% url 'signup' %}" class="cta-button">Get Started</a>
+            </div>
+            <div class="hero-right">
+                <div class="image-container">
+                    <img src="{% static 'frontend/images/hero-image.png' %}" alt="hero-image">
+                </div>
             </div>
         </div>
-    </nav>
-       
-    <header class="hero">
-  <div class="hero-container">
-    <div class="hero-text">
-      <h1>Discover Your<br>Suitable<br>Home</h1>
-      <p>Buy<br>Rent<br>Manage properties with ease.</p>
-      <a href="{% url 'signup' %}" class="cta-button">Get Started</a>
-    </div>
-
-    <div class="hero-right">
-      <div class="image-container">
-        <img src="{% static 'frontend/images/hero-image.png' %}" alt="hero-image">
-      </div>
-    </div>
-  </div>
-</header>
-
+    </header>
 
     <section class="features">
         <h2>Why choose Zia Properties Ltd?</h2>
@@ -71,10 +56,11 @@
         <p>Sign up and start browsing Properties today.</p>
         <a href="{% url 'signup' %}" class="cta-button">Join Now</a>
     </section>
-    <script src="{% static 'frontend/js/index.js' %}"></script>
 
     <footer>
         <p>&copy; 2025 Zia Properties Ltd. All rights reserved.</p>
     </footer>
+
+    <script src="{% static 'frontend/js/index.js' %}"></script>
 </body>
 </html>

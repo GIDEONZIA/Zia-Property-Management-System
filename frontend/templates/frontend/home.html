@@ -47,24 +47,22 @@
     </section>
 
     <section class="features">
-        <h2>Featured Properties</h2>
-        <div class="feature-grid">
-            <div class="feature-card">
-                <img src="{% static 'frontend/images/house1.jpg' %}" alt="House1"/>
-                <h3>3 Bedroom in Malindi</h3>
-                <p>Ksh 65,000/mo • Modern finishes</p>
-            </div>
-            <div class="feature-card">
-                <img src="{% static 'frontend/images/beach2.jpg' %}" alt="Beach2"/>
-                <h3>Beachfront Land - Diani</h3>
-                <p>Ksh 2.4M • 0.2 acres • Sea view</p>
-            </div>
-            <div class="feature-card">
-                <img src="{% static 'frontend/images/apartment1.jpg' %}" alt="Apartment1"/>
-                <h3>1 Bedroom Apartment - Westlands</h3>
-                <p>Ksh 35,000/mo • Secure estate</p>
-            </div>
+    <h2>Featured Properties</h2>
+    <div class="feature-grid">
+        {% for property in featured_properties %}
+        <div class="feature-card">
+            {% if property.image %}
+                <img src="{{ property.image.url }}" alt="{{ property.property_name }}">
+            {% else %}
+                <img src="{% static 'frontend/images/default-property.jpg' %}" alt="No Image">
+            {% endif %}
+            <h3>{{ property.property_name }}</h3>
+            <p>{{ property.currency }} {{ property.price|floatformat }} • {{ property.location }}</p>
         </div>
+        {% empty %}
+        <p>No featured properties currently available.</p>
+        {% endfor %}
+    </div>
     </section>
 
     <section class="cta-section">

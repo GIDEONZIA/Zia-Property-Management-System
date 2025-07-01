@@ -128,6 +128,7 @@ class Property(models.Model):
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='property_images/', null=True, blank=True)
+    is_featured = models.BooleanField(default=False)
 
     def __str__(self):
         return self.property_name

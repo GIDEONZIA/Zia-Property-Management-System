@@ -38,23 +38,6 @@ body {
     letter-spacing: 1px;
 }
 
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 2rem;
-}
-
-.nav-links li a {
-    text-decoration: none;
-    color: #222;
-    font-weight: 500;
-    transition: color 0.2s;
-}
-
-.nav-links li a:hover {
-    color: #2b6cb0;
-}
-
 .auth-actions {
     display: flex;
     align-items: center;
@@ -91,16 +74,8 @@ body {
     background: #234e7d;
 }
 
-.dark-toggle {
-    background: none;
-    border: none;
-    font-size: 1.3rem;
-    cursor: pointer;
-    margin-left: 0.5rem;
-}
-
 .menu-toggle {
-    display: none;
+    display: none; /* Hidden by default, shown on small screens */
     font-size: 2rem;
     cursor: pointer;
     margin-left: 1rem;
