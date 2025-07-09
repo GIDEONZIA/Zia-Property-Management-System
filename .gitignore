@@ -1,43 +1,30 @@
-# Python
-
-
-## Environment
-
-.env
-venv/
-env/
-
-## Django
-
-db.postgresql
-staticfiles/
+# Django
+*.pyc
+*.pyo
+__pycache__/
+db.sqlite3
 media/
-
-## Logs
-
 *.log
 
-## OS
+# Environments
+.env
+venv/
+.venv/
+env/
 
+# Ngrok
+*.tgz
+*.ngrok
+ngrok.log
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
 .DS_Store
 Thumbs.db
 
-## VS Code
-
-.vscode/
-
-## Python compiled files
-
-__pycache__/
-*.pyc
-
-## OS or IDE-specific
-
-.DS_Store
-*.log
-*.sqlite3
-
-## Static build artifacts (if needed)
-
-staticfiles/
-
+# Git
+*.orig
+*.bak
