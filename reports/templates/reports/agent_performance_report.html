@@ -2,4 +2,6 @@
 {% block content %}
   <h2>{{ title }}</h2>
   <p>This page will show the {{ title|lower }}.</p>
+  <a href="{% url 'report_dashboard' %}">⬅ Back to Reports Dashboard</a>
+
 {% endblock %}

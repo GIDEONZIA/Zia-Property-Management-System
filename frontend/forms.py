@@ -3,6 +3,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 
+from django.core.mail import send_mail
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.conf import settings
 
 class CustomSignupForm(UserCreationForm):
     phone = forms.CharField(max_length=15, required=True)
@@ -39,10 +43,6 @@ class CustomLoginForm(AuthenticationForm):
             'placeholder': 'Enter your password'
         })
 
-from django.core.mail import send_mail
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.conf import settings
 
 def contact_view(request):
     if request.method == 'POST':

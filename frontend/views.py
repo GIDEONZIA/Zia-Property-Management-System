@@ -13,11 +13,11 @@ from django.contrib.auth.views import LoginView
 from properties.models import Property 
 from django.shortcuts import render, get_object_or_404
 from properties.models import BlogPost 
-from django.shortcuts import render, redirect
 from properties.models import AgentSubscription
 from utils.mpesa import initiate_stk_push
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from transactions.models import MpesaTransaction
 
 
 
@@ -47,6 +47,7 @@ def home_view(request):
     return render(request, 'frontend/home.html', {
         'featured_properties': featured_properties
     })
+
 
 # idx_search
 
@@ -164,9 +165,6 @@ def start_premium_subscription(request):
     return redirect('premium_agent')
 
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from properties.models import AgentSubscription
 
 @login_required
 def subscription_status_view(request):

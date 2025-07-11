@@ -19,4 +19,6 @@
 {% if total_income %}
   <a href="?{% if form.data %}{{ form.data.urlencode }}&{% endif %}format=csv">Download CSV</a> |
   <a href="?{% if form.data %}{{ form.data.urlencode }}&{% endif %}format=pdf">Download PDF</a>
+  <a href="{% url 'dashboard' %}">⬅ Back to Reports Dashboard</a>
+
 {% endif %}

@@ -17,8 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
+from django.contrib.auth.views import LoginView
 from django.conf.urls.static import static
-from properties.views import CustomLoginView, dashboard, admin_dashboard
+from properties.views import admin_dashboard
 from django.contrib.auth import views as auth_views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from frontend.views import mpesa_callback
@@ -30,15 +31,16 @@ urlpatterns = [
 
     # App-specific URLs
     path('properties/', include('properties.urls')),
+    path('testimonials/', include('testimonial.urls')),
     path('transactions/', include('transactions.urls')),
     path('reports/', include('reports.urls')),
 
     # Authentication
-    path('login/', CustomLoginView.as_view(), name='login'),
+    path('login/', LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
 
     # Dashboards
-    path('dashboard/', dashboard, name='dashboard'),
+    path('dashboard/', admin_dashboard, name='dashboard'),
     path('admin_dashboard/', admin_dashboard, name='admin_dashboard'),
 
     # JWT API Auth

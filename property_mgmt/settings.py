@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'properties',  # Property Management App
     'transactions', # Transaction Management App
     'reports',  # Reporting App
-    
+    'testimonial',  # Testimonials App
     # Third-party apps
     'rest_framework',  # Django REST Framework
     'rest_framework_simplejwt', # JWT Authentication
@@ -211,8 +211,8 @@ import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
   
-LOGIN_REDIRECT_URL = '/home/'
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/login/'
 
 
 # Removed invalid pytest configuration from settings.py.

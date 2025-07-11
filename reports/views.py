@@ -5,10 +5,14 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from io import BytesIO
 import csv
+from xhtml2pdf import pisa
 
 from .forms import IncomeReportFilterForm
 from properties.models import Payment
 
+
+def report_dashboard(request):
+    return render(request, 'reports/dashboard.html')
 
 # 📊 Main Income Report View (With Filtering)
 def income_report_view(request):

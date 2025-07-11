@@ -41,3 +41,4 @@ def update_transaction_status(request, transaction_id):
         transaction.save()
         return redirect('transactions:transaction_list')
     return render(request, 'transactions/update_transaction_status.html', {'transaction': transaction})
+

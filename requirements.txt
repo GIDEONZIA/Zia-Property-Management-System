@@ -11,10 +11,7 @@ colorama==0.4.6
 cryptography==44.0.2
 cssselect2==0.8.0
 defusedxml==0.7.1
-
-# ✅ Use ONLY one compatible version
 dj-database-url==2.3.0
-
 Django==5.1.6
 django-admin-interface==0.29.4
 django-admin-tools==0.9.3
@@ -22,14 +19,13 @@ django-allauth==65.5.0
 django-colorfield @ git+https://github.com/fabiocaccamo/django-colorfield.git@ff121f6ff3ef577d79c7b25ac2f24120539c6d77
 django-cors-headers==4.7.0
 django-environ==0.12.0
+django-extensions==4.1
 django-grappelli==4.0.1
 djangorestframework==3.15.2
 djangorestframework_simplejwt==5.5.0
-
 Flask==3.1.0
 flask-marshmallow==1.3.0
 Flask-SQLAlchemy==3.1.1
-
 greenlet==3.1.1
 html5lib==1.1
 idna==3.10
@@ -43,8 +39,7 @@ optional-django==0.1.0
 oscrypto==1.3.0
 packaging==24.2
 pillow==11.1.0
-psycopg2-binary==2.9.10  # ✅ Keep this only
-
+psycopg2-binary==2.9.10
 pycparser==2.22
 pyHanko==0.26.0
 pyhanko-certvalidator==0.26.8
@@ -53,8 +48,7 @@ pypdf==5.4.0
 python-bidi==0.6.6
 python-decouple==3.8
 python-slugify==8.0.4
-pyttsx3==2.98  # ✅ Can keep if it works on Ubuntu
-
+pyttsx3==2.98
 PyYAML==6.0.2
 qrcode==8.0
 reportlab==4.3.1
@@ -73,4 +67,3 @@ urllib3==2.3.0
 webencodings==0.5.1
 Werkzeug==3.1.3
 xhtml2pdf==0.2.17
-

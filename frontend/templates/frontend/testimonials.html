@@ -31,45 +31,31 @@
         <p>Real stories from property owners and tenants who trust Zia Property Management.</p>
     </section>
 
+   
     <!-- Testimonials Section -->
     <section class="testimonials">
+        {% for t in testimonials %}
         <div class="testimonial-card">
             <div class="user">
-                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                {% if t.photo %}
+                    <img src="{{ t.photo.url }}" alt="{{ t.name }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/100" alt="User">
+                {% endif %}
                 <div>
-                    <div class="name">John D.</div>
-                    <div class="stars">
-                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-alt"></i>
-                    </div>
+                    <div class="name">{{ t.name }}</div>
+                    {% if t.role %}
+                    <div class="stars">{{ t.role }}</div>
+                    {% endif %}
                 </div>
             </div>
-            <p>"Zia made managing my rental property effortless. Their team is responsive and professional."</p>
+            <p>"{{ t.message }}"</p>
         </div>
-        <div class="testimonial-card">
-            <div class="user">
-                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User">
-                <div>
-                    <div class="name">Sarah K.</div>
-                    <div class="stars">
-                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
-                    </div>
-                </div>
-            </div>
-            <p>"As a tenant, I appreciate how easy it is to communicate with Zia. Maintenance requests are handled quickly!"</p>
-        </div>
-        <div class="testimonial-card">
-            <div class="user">
-                <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="User">
-                <div>
-                    <div class="name">Michael B.</div>
-                    <div class="stars">
-                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
-                    </div>
-                </div>
-            </div>
-            <p>"Highly recommend Zia for property management. They take care of everything so I can relax."</p>
-        </div>
+        {% empty %}
+        <p>No testimonials available yet. Be the first to share your experience!</p>
+        {% endfor %}
     </section>
+
 
     <!-- CTA Section -->
     <section class="cta-section">

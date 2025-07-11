@@ -56,11 +56,10 @@ class Transaction(models.Model):
         ('PEN','Peruvian Sol'),  # 🏦 currency field
         # Add more currencies if needed
     ]
-    agent = models.ForeignKey('properties.Agent', on_delete=models.SET_NULL, null=True, blank=True, related_name='transactions')
+    agent = models.ForeignKey(Agent, related_name='transactions', on_delete=models.CASCADE, null=True, blank=True)  # New field for linking transaction to an agent
     transaction_type = models.CharField(max_length=20, choices=TRANSACTION_TYPES, default=PAYMENT)
     tenant = models.ForeignKey(Tenant, related_name='transactions', on_delete=models.CASCADE, null=True, blank=True)
     property = models.ForeignKey(Property, related_name='transactions', on_delete=models.CASCADE, null=True, blank=True)
-    agent = models.ForeignKey(Agent, related_name='transactions', on_delete=models.CASCADE, null=True, blank=True)  # New field for linking transaction to an agent
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='KES')  # 🏦 currency field
     date = models.DateTimeField(default=timezone.now)
@@ -78,3 +77,22 @@ class Transaction(models.Model):
         if self.agent and self.property and self.property.agent != self.agent:
             raise ValueError("This transaction cannot be associated with a property managed by another agent.")
         super().save(*args, **kwargs)
+
+
+
+class MpesaTransaction(models.Model):
+    phone_numder = models.CharField(max_length=20)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    mpesa_reference = models.CharField(max_length=100, unique=True)
+    checkout_request_id = models.CharField(max_length=100)
+    merchant_request_id = models.CharField(max_length=100)
+    result_code = models.IntegerField()
+    statues = models.CharField(max_length=20, choices=[
+        ('success', 'Success'),
+        ('failed', 'Failed'),
+        ('pending', 'Pending'),
+    ], default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.mpesa_reference} - {self.status}"

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Reports Dashboard</h1>
+<ul>
+  <li><a href="{% url 'income_report' %}">📊 Income Report</a></li>
+  <li><a href="{% url 'expense_report' %}">💸 Expense Report</a></li>
+  <li><a href="{% url 'occupancy_report' %}">🏠 Occupancy Report</a></li>
+  <li><a href="{% url 'maintenance_report' %}">🛠️ Maintenance Report</a></li>
+  <li><a href="{% url 'agent_performance_report' %}">👤 Agent Performance Report</a></li>
+</ul>
+
+{% endblock %}

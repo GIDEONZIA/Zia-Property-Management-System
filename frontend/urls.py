@@ -5,7 +5,7 @@ from .views import (
 )
 from django.contrib.auth import views as auth_views
 from properties.views import buyer_lead_view, seller_lead_view
-from .views import blog_list_view, blog_detail 
+from .views import blog_list_view, blog_detail
 from .views import start_premium_subscription, subscription_status_view
 from utils.mpesa_callback import mpesa_callback
 from frontend.views import home_view
@@ -23,8 +23,6 @@ urlpatterns = [
     # Static Pages
     path('about/', TemplateView.as_view(template_name='frontend/about.html'), name='about'),
     path('services/', TemplateView.as_view(template_name='frontend/services.html'), name='services'),
-    path('testimonial/', TemplateView.as_view(template_name='frontend/testimonial.html'), name='testimonial'),
-    path('blog_detail/', TemplateView.as_view(template_name='frontend/blog_detail.html'), name='blog_detail'),
     path('premium_agent/', TemplateView.as_view(template_name='frontend/premium_agent.html'), name='premium_agent'),
 
 
@@ -42,7 +40,6 @@ urlpatterns = [
     path('blog/<slug:slug>/', blog_detail, name='blog_detail'),
     path('thank-you', thank_you_view, name='thank_you'),
     path('home/', home_view, name='home'),
-
     path('subscribe/', start_premium_subscription, name='subscribe'),
     path('subscription/', subscription_status_view, name='subscription_status'),  # optional
     

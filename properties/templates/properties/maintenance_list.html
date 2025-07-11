@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Maintenance Requests</h2>
+    <ul>
+        {% for request in requests %}
+            <li>{{ request.property.name }} - {{ request.status }}</li>
+        {% empty %}
+            <li>No maintenance requests found.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
