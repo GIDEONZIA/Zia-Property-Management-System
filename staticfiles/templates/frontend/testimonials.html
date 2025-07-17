@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Testimonials - Zia Property Management</title>
+
+    <!----Custom css---->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'frontend/css/testimonial.css' %}">
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">
+            <span>Zia Property Management</span>
+        </div>
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'services' %}">Services</a>
+            <a href="{% url 'contact' %}">Contact</a>
+        </nav>
+    </div>
+
+    <!-- Hero/Header Section -->
+    <section class="hero">
+        <img src="{% static 'frontend/images/logo.png' %}" alt="Zia Logo" style="height:60px;">
+        <h1>What Our Clients Say</h1>
+        <p>Real stories from property owners and tenants who trust Zia Property Management.</p>
+    </section>
+
+   
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        {% for t in testimonials %}
+        <div class="testimonial-card">
+            <div class="user">
+                {% if t.photo %}
+                    <img src="{{ t.photo.url }}" alt="{{ t.name }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/100" alt="User">
+                {% endif %}
+                <div>
+                    <div class="name">{{ t.name }}</div>
+                    {% if t.role %}
+                    <div class="stars">{{ t.role }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <p>"{{ t.message }}"</p>
+        </div>
+        {% empty %}
+        <p>No testimonials available yet. Be the first to share your experience!</p>
+        {% endfor %}
+    </section>
+
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Ready to Experience Stress-Free Property Management?</h2>
+        <p>Contact Zia today and let us handle your property with care.</p>
+        <img src="{% static 'frontend/images/logo.png' %}" alt="Zia Logo" class="footer-logo">
+    </section>
+
+    <script src="{% static 'frontend/js/testimonial.js' %}"></script>
+
+    <!-- Footer -->
+    <footer>
+        <img src="{% static 'frontend/images/logo.png' %}" alt="Zia Logo" style="height:32px; vertical-align:middle; margin-right:8px;">
+        &copy; 2025 Zia Property Management. All rights reserved.
+    </footer>
+</body>
+</html>
