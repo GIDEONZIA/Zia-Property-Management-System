@@ -24,12 +24,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-tj6t^#(83bs9=k$2on9_jvr0!u0z4*rm4ku(oit+-skg2r9l2@'
+import os
+
+SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-key-for-dev-only')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['.onrender.com']
 
 DJANGO_SETTINGS_MODULE = "property_mgmt.settings"
 
@@ -212,8 +214,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-ALLOWED_HOSTS = ['*']
 
 import os
 

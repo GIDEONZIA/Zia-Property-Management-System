@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: zia-property-ltd
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn property_mgmt.wsgi:application"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: property_mgmt.settings
+      - key: SECRET_KEY
+        value: your-secret-key-here
