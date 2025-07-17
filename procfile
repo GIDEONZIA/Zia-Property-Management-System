@@ -1,1 +1,1 @@
-web: gunicorn property_mgmt_backend.wsgi
+web: gunicorn Zia_Property_Management_System.wsgi
