@@ -13,9 +13,6 @@ from decouple import config
 
 from pathlib import Path
 
-import os
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,14 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-import os
-
-SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-key-for-dev-only')
+SECRET_KEY = 'django-insecure-tj6t^#(83bs9=k$2on9_jvr0!u0z4*rm4ku(oit+-skg2r9l2@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['.onrender.com']
+ALLOWED_HOSTS = []
 
 DJANGO_SETTINGS_MODULE = "property_mgmt.settings"
 
@@ -71,14 +66,8 @@ INSTALLED_APPS = [
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = 'static/'
 
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-]
 
 # Optional: collect all static files into one folder (e.g. for deployment)
 STATICFILES_DIRS = [
@@ -214,6 +203,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ALLOWED_HOSTS = ['*']
 
 import os
 

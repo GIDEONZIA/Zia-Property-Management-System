@@ -34,11 +34,13 @@ def signup_view(request):
         form = CustomSignupForm()
     
     return render(request, 'frontend/sign_up.html', {'form': form})
+from django.urls import reverse_lazy
 
-# login
 class CustomLoginView(LoginView):
     template_name = 'frontend/login.html'
     authentication_form = AuthenticationForm
+    success_url = reverse_lazy('home')  # This ensures redirection to /home/
+    redirect_authenticated_user = True
 
 # home
 def home_view(request):
@@ -201,5 +203,4 @@ def mpesa_callback(request):
     )
 
     return JsonResponse({"ResultCode": 0, "ResultDesc": "Success"})
-
 
