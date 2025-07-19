@@ -132,11 +132,11 @@ WSGI_APPLICATION = 'property_mgmt.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'property_management_system',
-        'USER': 'gwiternz',
-        'PASSWORD': '@#93Gwiternz29#@',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': config('property_management_system'),
+        'USER': config('gwiternz'),
+        'PASSWORD': config('@#93Gwiternz29#@'),
+        'HOST': config('127.0.0.1'), # <-- NOT 'localhost'
+        'PORT': config('5432'),
     }
 }
 
