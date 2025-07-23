@@ -9,8 +9,6 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-from decouple import config
-
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -132,11 +130,11 @@ WSGI_APPLICATION = 'property_mgmt.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('property_management_system'),
-        'USER': config('gwiternz'),
-        'PASSWORD': config('@#93Gwiternz29#@'),
-        'HOST': config('127.0.0.1'), # <-- NOT 'localhost'
-        'PORT': config('5432'),
+        'NAME': 'property_management_system',
+        'USER': 'gwiternz',
+        'PASSWORD': '@#93Gwiternz29#@',
+        'HOST': '127.0.0.1', # <-- NOT 'localhost'
+        'PORT': '5432',
     }
 }
 

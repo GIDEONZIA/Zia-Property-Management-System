@@ -51,7 +51,7 @@ class AgentRestrictedAdmin(admin.ModelAdmin):
 # Property Admin
 @admin.register(Property)
 class PropertyAdmin(admin.ModelAdmin):
-    list_display = ("property_name", "price", "location", "is_featured", "is_available")
+    list_display = ("property_name", "price", "currency", "location", "is_featured", "is_available")
     list_filter = ("is_featured", "property_type", "is_available")
     search_fields = ("property_name", "location", "address")
 
@@ -96,7 +96,7 @@ class LeaseAdmin(AgentRestrictedAdmin):
 # RentPayment Admin
 @admin.register(RentPayment)
 class RentPaymentAdmin(AgentRestrictedAdmin):
-    list_display = ('tenant', 'lease', 'amount_paid', 'payment_date')
+    list_display = ('tenant', 'lease', 'amount_paid', 'currency', 'payment_date')
     search_fields = ('tenant__property_name', 'lease__property__property_name')
     list_filter = ('payment_method',)
 
@@ -119,14 +119,14 @@ class AgentAdmin(admin.ModelAdmin):
 # BuyerLead Admin
 @admin.register(BuyerLead)
 class BuyerLeadAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'phone', 'preferred_location', 'budget', 'created_at')
+    list_display = ('name', 'email', 'phone', 'preferred_location', 'budget', 'currency', 'created_at')
     search_fields = ('name', 'email', 'phone', 'preferred_location')
     list_filter = ('preferred_location',)
 
 # SellerLead Admin
 @admin.register(SellerLead)
 class SellerLeadAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'phone', 'property_type', 'location', 'asking_price', 'created_at')
+    list_display = ('name', 'email', 'phone', 'property_type', 'location', 'asking_price', 'currency', 'created_at')
     search_fields = ('name', 'email', 'phone', 'location', 'property_type')
     list_filter = ('property_type',)
 

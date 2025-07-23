@@ -99,21 +99,7 @@ CURRENCY_CHOICES = [
     ('UGX','Ugandan Shilling'),
     ('RWF','Rwandan Franc'),
     ('ZAR','South African Rand'),
-    ('TZS','Tanzanian Shilling'),
-    ('KWD','Kuwaiti Dinar'),
-    ('AED','United Arab Emirates Dirham'),
-    ('CAD','Canadian Dollar'),
-    ('AUD','Australian Dollar'),
-    ('NZD','New Zealand Dollar'),
-    ('CHF','Swiss Franc'),
-    ('JPY','Japanese Yen'),
-    ('CNY','Chinese Yuan'),
-    ('INR','Indian Rupee'),
-    ('SGD','Singapore Dollar'),
-    ('MYR','Malaysian Ringgit'),
-    ('THB','Thai Baht'),
-    ('PHP','Philippine Peso'),
-    ('IDR','Indonesian Rupiah'),
+
 ]
 class Property(models.Model):
     property_name = models.CharField(max_length=255)
@@ -138,6 +124,7 @@ class BuyerLead(models.Model):
     phone = models.CharField(max_length=20)
     preferred_location = models.CharField(max_length=100)
     budget = models.DecimalField(max_digits=12, decimal_places=2)
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES)  # 🏦 currency field 
     message = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -153,6 +140,7 @@ class SellerLead(models.Model):
     location = models.CharField(max_length=255, default='unknown')
     asking_price = models.DecimalField(max_digits=12, decimal_places=2, default=1000000)    
     estimated_value = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)  # ✅ Optional field
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default=0)  # 🏦 currency field
     property_location = models.CharField(max_length=255, blank=True, null=True)  
     notes = models.TextField(blank=True, null=True)
     message = models.TextField(blank=True, null=True)
@@ -216,6 +204,7 @@ class Lease(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     rent_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES)  # 🏦 currency field
     lease_terms = models.TextField()
     security_deposit = models.DecimalField(max_digits=10, decimal_places=2)
     payment_frequency = models.CharField(max_length=20, choices=PAYMENT_FREQUENCY_CHOICES)
@@ -230,6 +219,7 @@ class Lease(models.Model):
     renewal_date = models.DateTimeField(blank=True, null=True)
     renewal_terms = models.TextField(blank=True, null=True)
     renewal_fee = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES)  # 🏦 currency field
     renewal_fee_paid = models.BooleanField(default=False)
     renewal_fee_paid_date = models.DateTimeField(blank=True, null=True)
 
@@ -238,6 +228,7 @@ class Lease(models.Model):
     termination_date = models.DateTimeField(blank=True, null=True)
     termination_reason = models.TextField(blank=True, null=True)
     termination_fee = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES)  # 🏦 currency field 
     termination_fee_paid = models.BooleanField(default=False)
     termination_fee_paid_date = models.DateTimeField(blank=True, null=True)
     is_terminated_by_tenant = models.BooleanField(default=False)
@@ -275,6 +266,7 @@ class RentPayment(models.Model):
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
     lease = models.ForeignKey(Lease, on_delete=models.CASCADE)
     amount_paid = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES)  # 🏦 currency field
     payment_date = models.DateTimeField(auto_now_add=True)
     payment_method = models.CharField(max_length=100, choices=PAYMENT_METHOD_CHOICES)
     receipt_number = models.CharField(max_length=50, unique=True)
@@ -318,6 +310,7 @@ from properties.models import Tenant  # adjust if your Tenant model is elsewhere
 class Payment(models.Model):
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE, related_name='payments')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES)  # 🏦 currency field
     payment_method = models.CharField(max_length=50, choices=[
         ('cash', 'Cash'),
         ('mpesa', 'M-Pesa'),
