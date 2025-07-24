@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, TemplateView
 from django.shortcuts import render, redirect
@@ -7,7 +8,6 @@ from django.db.models.functions import TruncMonth
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
-from django.contrib.auth.views import LoginView
 from django.contrib import messages
 
 from .models import Tenant, Lease

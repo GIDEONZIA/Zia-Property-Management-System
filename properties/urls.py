@@ -87,7 +87,7 @@ urlpatterns = [
     path('settings/notifications/', views.update_notifications, name='update_notifications'),
     path('settings/system/', views.update_system_settings, name='update_system_settings'),
 
-
+    
 
 
 ]
