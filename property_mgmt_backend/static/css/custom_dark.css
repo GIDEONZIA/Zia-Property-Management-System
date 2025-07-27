@@ -1,0 +1,90 @@
+/* === Custom Dark Mode for Jazzmin Admin === */
+
+body,
+.wrapper,
+.main-sidebar,
+.content-wrapper,
+.content,
+.navbar,
+.sidebar,
+.brand-link {
+    background-color: #121212 !important;
+    color: #f0f0f0 !important;
+}
+
+/* Headings, paragraphs, nav text */
+h1, h2, h3, h4, h5, h6,
+p, span, small,
+.sidebar a, .nav-link,
+.navbar a, .brand-link,
+.card-title {
+    color: #f0f0f0 !important;
+}
+
+/* Sidebar menu */
+.sidebar-menu .nav-item > .nav-link {
+    color: #ccc !important;
+}
+
+.sidebar-menu .nav-item > .nav-link:hover {
+    background-color: #1e1e1e !important;
+    color: #fff !important;
+}
+
+/* Cards and content boxes */
+.card, .box, .modal-content,
+.table, .content, .tab-pane,
+.alert, .timeline, .timeline-item,
+.callout, .timeline-header {
+    background-color: #1e1e1e !important;
+    color: #ddd !important;
+    border-color: #333 !important;
+}
+
+/* Tables */
+table, th, td {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    border-color: #333 !important;
+}
+
+/* Form controls */
+input, select, textarea,
+.form-control, .custom-select {
+    background-color: #1f1f1f !important;
+    color: #f0f0f0 !important;
+    border-color: #444 !important;
+}
+
+/* Buttons */
+.btn, .btn-primary, .btn-success, .btn-info, .btn-danger, .btn-warning {
+    background-color: #333 !important;
+    color: #f0f0f0 !important;
+    border-color: #555 !important;
+}
+
+.btn:hover {
+    background-color: #444 !important;
+    border-color: #666 !important;
+}
+
+/* Login page adjustments */
+.login-box, .login-card-body {
+    background-color: #1e1e1e !important;
+    color: #f0f0f0 !important;
+    border: 1px solid #333 !important;
+}
+
+/* Scrollbar (optional) */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+::-webkit-scrollbar-thumb {
+    background: #444;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

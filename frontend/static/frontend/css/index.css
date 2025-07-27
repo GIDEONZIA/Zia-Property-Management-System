@@ -1,296 +1,220 @@
-/* Reset some default styles */
+/* 🧼 Reset */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Body and global styles */
+/* 🌐 Global Styles */
 body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: #f7f8fa;
-    color: #222;
-    line-height: 1.6;
+  font-family: 'Segoe UI', sans-serif;
+  color: #222;
+  background: #f9f9f9;
+  line-height: 1.6;
 }
 
-/* Navbar styles */
-.navbar {
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+/* 🧭 Navbar */
+.overlay-nav {
+  background: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
 }
 
-.navbar-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.overlay-nav .navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.overlay-nav .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.overlay-nav .auth-actions a {
+  margin-left: 1rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 4px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: 0.3s ease;
+  color: #fff;
+  border: 1px solid #fff;
+}
+
+.overlay-nav .auth-actions a:hover {
+  background: #fff;
+  color: #2b6cb0;
 }
 
 .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #2b6cb0;
-    letter-spacing: 1px;
-}
-
-.auth-actions {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.login-btn,
-.register-btn {
-    text-decoration: none;
-    padding: 0.5rem 1.2rem;
-    border-radius: 4px;
-    font-weight: 500;
-    transition: background 0.2s, color 0.2s;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2b6cb0;
 }
 
 .login-btn {
-    background: none;
-    color: #2b6cb0;
-    border: 1px solid #2b6cb0;
+  background: none;
+  color: #2b6cb0;
+  border: 1px solid #2b6cb0;
 }
-
 .login-btn:hover {
-    background: #2b6cb0;
-    color: #fff;
+  background: #2b6cb0;
+  color: #fff;
 }
-
 .register-btn {
-    background: #2b6cb0;
-    color: #fff;
-    border: none;
+  background: #2b6cb0;
+  color: #fff;
+  border: none;
 }
-
 .register-btn:hover {
-    background: #234e7d;
+  background: #234e7d;
 }
 
-.menu-toggle {
-    display: none; /* Hidden by default, shown on small screens */
-    font-size: 2rem;
-    cursor: pointer;
-    margin-left: 1rem;
-}
-
-/* Hero section */
+/* 🏡 Hero Section */
 .hero {
-    background: linear-gradient(90deg, #e3f0ff 60%, #fff 100%);
-    padding: 3rem 0 2rem 0;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
-.hero-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-    flex-wrap: wrap;
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4); /* optional */
+  z-index: 1;
+}
+.hero-centered-content {
+  position: relative;
+  z-index: 2;
 }
 
-.hero-text {
-    flex: 1 1 350px;
+.hero-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.hero-text h1 {
-    font-size: 2.8rem;
-    color: #2b6cb0;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    line-height: 1.1;
+.hero-centered-content h1 {
+  font-size: 3rem;
+  line-height: 1.2;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: white;
 }
-
-.hero-text p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-    color: #444;
+.hero-centered-content p {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  color:white;
 }
-
 .cta-button {
-    display: inline-block;
-    background: #2b6cb0;
-    color: #fff;
-    padding: 0.8rem 2rem;
-    border-radius: 4px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background 0.2s;
+  display: inline-block;
+  background: #2b6cb0;
+  color: #fff;
+  padding: 0.8rem 2rem;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.3s;
 }
-
 .cta-button:hover {
-    background: #234e7d;
+  background: #234e7d;
 }
 
-.hero-right {
-    flex: 1 1 350px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.image-container img {
-    max-width: 350px;
-    width: 100%;
-    border-radius: 12px;
-    box-shadow: 0 4px 24px rgba(43, 108, 176, 0.08);
-}
-
-/* Features section */
+/* ⭐ Features Section */
 .features {
-    background: #fff;
-    padding: 3rem 0;
-    text-align: center;
+  background: #fff;
+  padding: 3rem 1rem;
+  text-align: center;
 }
-
 .features h2 {
-    font-size: 2rem;
-    color: #2b6cb0;
-    margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #2b6cb0;
+  margin-bottom: 2rem;
 }
-
 .feature-grid {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
 }
-
 .feature-card {
-    background: #f7f8fa;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(43, 108, 176, 0.04);
-    padding: 2rem 1.5rem;
-    flex: 1 1 250px;
-    max-width: 320px;
-    min-width: 220px;
-    margin: 0.5rem 0;
+  background: #f7f8fa;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(43, 108, 176, 0.05);
+  max-width: 300px;
+  flex: 1 1 260px;
 }
-
 .feature-card h3 {
-    color: #234e7d;
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
+  color: #234e7d;
+  margin-bottom: 1rem;
 }
-
 .feature-card p {
-    color: #444;
-    font-size: 1rem;
+  color: #444;
 }
 
-/* CTA Section */
+/* 🚀 CTA Section */
 .cta-section {
-    background: #2b6cb0;
-    color: #fff;
-    text-align: center;
-    padding: 3rem 1rem;
+  background: #2b6cb0;
+  color: #fff;
+  text-align: center;
+  padding: 3rem 1rem;
 }
-
 .cta-section h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+  font-size: 2rem;
+  margin-bottom: 1rem;
 }
-
 .cta-section p {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
 }
-
 .cta-section .cta-button {
-    background: #fff;
-    color: #2b6cb0;
-    font-weight: 700;
-    border: none;
+  background: #fff;
+  color: #2b6cb0;
 }
-
 .cta-section .cta-button:hover {
-    background: #e3f0ff;
-    color: #234e7d;
+  background: #e3f0ff;
+  color: #234e7d;
 }
 
-/* Footer */
+/* 🦶 Footer */
 footer {
-    background: #234e7d;
-    color: #fff;
-    text-align: center;
-    padding: 1.2rem 0;
-    font-size: 1rem;
-    margin-top: 0;
+  background: #234e7d;
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem;
+  font-size: 1rem;
 }
 
-/* Responsive Styles */
-@media (max-width: 900px) {
-    .hero-container {
-        flex-direction: column-reverse;
-        text-align: center;
-        gap: 1.5rem;
-    }
-    .hero-text, .hero-right {
-        flex: 1 1 100%;
-    }
-    .feature-grid {
-        flex-direction: column;
-        gap: 1.5rem;
-        align-items: center; 
-    }
-}
-
-@media (max-width: 700px) {
-    .navbar-container {
-        flex-wrap: wrap;
-        padding: 1rem;
-    }
-    .nav-links {
-        display: none;
-        flex-direction: column;
-        background: #fff;
-        position: absolute;
-        top: 60px;
-        right: 1rem;
-        width: 180px;
-        box-shadow: 0 2px 8px rgba(43, 108, 176, 0.08);
-        border-radius: 8px;
-        z-index: 200;
-    }
-    .nav-links.open {
-        display: block;
-    }
-
-    .login-btn,
-    .register-btn {
-        display:none;
-        
-}
-    .menu-toggle {
-        display: block;
-    }
-    .auth-actions {
-        gap: 0.5rem;
-        display: none
-    }
-}
-
-@media (max-width: 500px) {
-    .hero-text h1 {
-        font-size: 2rem;
-    }
-    .features h2,
-    .cta-section h2 {
-        font-size: 1.3rem;
-    }
-    .feature-card {
-        padding: 10px;
-        
-
-    }
-    
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .hero-centered-content h1 {
+    font-size: 2.2rem;
+  }
+  .hero-centered-content p {
+    font-size: 1.1rem;
+  }
+  .feature-grid {
+    flex-direction: column;
+    align-items: center;
+  }
 }

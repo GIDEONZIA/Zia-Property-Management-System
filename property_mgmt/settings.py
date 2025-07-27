@@ -31,6 +31,7 @@ DJANGO_SETTINGS_MODULE = "property_mgmt.settings"
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.facebook',
     'django_extensions',
+
     
     
     # Custom apps
@@ -56,15 +58,70 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',  # Django REST Framework
     'rest_framework_simplejwt', # JWT Authentication
-    
-   
+      
     
 ]
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Zia Property Admin",
+    "site_header": "Zia Property Dashboard",
+    "site_brand": "Zia Properties Ltd",
+    "welcome_sign": "Welcome to Zia Admin",
+    "copyright": "Zia Properties Ltd",
+    "search_model": ["properties.Property"],  # optional
+    "order_with_respect_to": ["properties", "accounts"],
+    "icons": {
+        # 🔐 Built-in apps
+        "auth.Group": "fas fa-user-shield",
+        "auth.User": "fas fa-user",
+
+        # 📧 Email (django-allauth)
+        "account.EmailAddress": "fas fa-envelope",
+        "account.EmailConfirmation": "fas fa-envelope-open-text",
+
+        # 🌐 Social Auth
+        "socialaccount.SocialApp": "fas fa-cogs",
+        "socialaccount.SocialAccount": "fab fa-facebook-square",
+        "socialaccount.SocialToken": "fas fa-key",
+
+        # 🏘️ Property System (properties app)
+        "properties.Agent": "fas fa-user-tie",
+        "properties.AgentSubscription": "fas fa-id-badge",
+        "properties.Property": "fas fa-home",
+        "properties.PropertyImage": "fas fa-image",
+        "properties.BuyerLead": "fas fa-user-plus",
+        "properties.SellerLead": "fas fa-user-minus",
+        "properties.BlogPost": "fas fa-blog",
+        "properties.Tenant": "fas fa-users",
+        "properties.Lease": "fas fa-file-contract",
+        "properties.RentPayment": "fas fa-money-check-alt",
+        "properties.MaintenanceRequest": "fas fa-tools",
+        "properties.Inspection": "fas fa-search",
+        "properties.Payment": "fas fa-money-bill-wave",
+        "properties.ContactMessage": "fas fa-envelope-open",
+
+        # 📈 Reports
+        "reports.IncomeReport": "fas fa-chart-line",
+
+        # 💳 Transactions
+        "transactions.Transaction": "fas fa-credit-card",
+        "transactions.MpesaTransaction": "fas fa-mobile-alt",
+
+        # 💬 Testimonials
+        "testimonial.Testimonial": "fas fa-comment-dots",
+    },
+}
+
+
+JAZZMIN_UI_TWEAKS = {
+    "css": "css/custom_dark.css"
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 
 # Optional: collect all static files into one folder (e.g. for deployment)

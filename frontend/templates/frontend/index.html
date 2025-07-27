@@ -9,26 +9,22 @@
 </head>
 
 <body>
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="logo">Zia Properties Ltd</div>
-            <div class="auth-actions">
-                <a href="{% url 'login' %}" class="login-btn">Log in</a>
-                <a href="{% url 'signup' %}" class="register-btn">Register</a>
+    <header class="hero" style="background-image: url('{% static 'frontend/images/beauty.png' %}');">
+        <nav class="navbar overlay-nav">
+            <div class="navbar-container">
+                <div class="logo">Zia Properties Ltd</div>
+                <div class="auth-actions">
+                    <a href="{% url 'login' %}" class="login-btn">Log in</a>
+                    <a href="{% url 'signup' %}" class="register-btn">Register</a>
+                </div>
             </div>
-    </nav>
+        </nav>
 
-    <header class="hero">
-        <div class="hero-container">
-            <div class="hero-text">
+        <div class="hero-overlay">
+            <div class="hero-centered-content">
                 <h1>Discover Your<br>Suitable<br>Home</h1>
                 <p>Buy / Sell<br>Rent<br>Manage properties with ease.</p>
                 <a href="{% url 'signup' %}" class="cta-button">Get Started</a>
-            </div>
-            <div class="hero-right">
-                <div class="image-container">
-                    <img src="{% static 'frontend/images/hero-image.png' %}" alt="hero-image">
-                </div>
             </div>
         </div>
     </header>
