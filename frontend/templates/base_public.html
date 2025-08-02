@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Zia Properties Ltd - Real estate solutions in Kenya including property listings, tenant management, and investment advisory.">
+    <meta name="author" content="Zia Properties Ltd">
+    <meta name="keywords" content="Kenya real estate, property management, rent, buy, sell, Zia Properties, investment">
+
+    <!-- Title Block -->
+    <title>{% block title %}Zia Properties Ltd{% endblock %}</title>
+
+    <!-- Bootstrap 5 CSS (local) -->
+    <link rel="stylesheet" href="{% static 'frontend/bootstrap/css/bootstrap.min.css' %}">
+
+    <!-- Font Awesome (for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    
+    {% block extra_styles %}{% endblock %}
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<!-- 🔝 Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="{% url 'frontend:home' %}">Zia Properties</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="{% url 'frontend:home' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'frontend:about' %}">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'frontend:services' %}">Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'frontend:contact' %}">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'frontend:blog' %}">Blog</a></li>
+        <li class="nav-item"><a class="btn btn-outline-primary btn-sm ms-2" href="{% url 'public_login' %}">Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- 📦 Page Content -->
+<main class="flex-grow-1">
+  {% block content %}
+  <!-- Page-specific content goes here -->
+  {% endblock %}
+</main>
+
+<!-- 🦶 Footer -->
+<footer class="bg-dark text-white py-4 mt-5">
+  <div class="container text-center">
+    <p class="mb-1">&copy; 2025 Zia Properties Ltd. All rights reserved.</p>
+    <ul class="list-inline mb-2">
+      <li class="list-inline-item"><a class="text-white text-decoration-none" href="{% url 'frontend:about' %}">About</a></li>
+      <li class="list-inline-item"><a class="text-white text-decoration-none" href="{% url 'frontend:services' %}">Services</a></li>
+      <li class="list-inline-item"><a class="text-white text-decoration-none" href="{% url 'frontend:contact' %}">Contact</a></li>
+      <li class="list-inline-item"><a class="text-white text-decoration-none" href="{% url 'frontend:home' %}">Home</a></li>
+    </ul>
+    <small>Developed by Mr Gwiternz Developer</small>
+  </div>
+</footer>
+
+<!-- 🧠 Bootstrap JS (local) -->
+<script src="{% static 'frontend/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Custom JS -->
+<script src="{% static 'frontend/js/main.js' %}"></script>
+
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

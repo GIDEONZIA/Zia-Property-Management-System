@@ -1,42 +1,59 @@
+{% extends "base_public.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Blog | Zia Properties LTD</title>
-  <link rel="stylesheet" href="{% static 'frontend/css/blog.css' %}">
-</head>
-<body>
 
-<header>
-  <h1>Our Blog</h1>
-  <p>Latest updates, tips, and insights from Zia Property.</p>
-</header>
+{% block title %}Our Blog - Zia Properties Ltd{% endblock %}
 
-<section class="blog-section">
-  <h2>Latest Blog Posts</h2>
-  <div class="blog-grid">
+{% block extra_styles %}
+    <!-- Bootstrap 5 CSS (local) -->
+    <link rel="stylesheet" href="{% static 'frontend/css/bootstrap.min.css' %}">
+
+    <!-- Font Awesome (for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+{% endblock %}
+
+{% block content %}
+<section class="container my-5" aria-labelledby="blog-heading">
+  <div class="text-center mb-4">
+    <h1 id="blog-heading" class="fw-bold">Our Blog</h1>
+    <p class="text-muted">Latest updates, tips, and insights from Zia Properties.</p>
+  </div>
+
+  <div class="row g-4">
     {% for post in posts %}
-      <div class="blog-card">
-        {% if post.image %}
-          <img src="{{ post.image.url }}" alt="{{ post.title }}">
-        {% else %}
-          <img src="https://via.placeholder.com/300x180?text=No+Image" alt="No image available">
-        {% endif %}
-        <h3>{{ post.title }}</h3>
-        <p>{{ post.content|truncatewords:25 }}</p>
-        <a href="{% url 'blog_detail' slug=post.slug %}">Read More</a>
-      </div>
+      <article class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm">
+          {% if post.image %}
+            <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title|escape }}">
+          {% else %}
+            <img src="https://via.placeholder.com/600x300?text=No+Image" class="card-img-top" alt="No image available">
+          {% endif %}
+
+          <div class="card-body">
+            <h2 class="card-title h5">
+              <a href="{% url 'frontend:blog_detail' slug=post.slug %}" class="text-decoration-none text-dark">{{ post.title }}</a>
+            </h2>
+            <p class="card-text text-muted">{{ post.content|truncatewords:25 }}</p>
+          </div>
+
+          <div class="card-footer bg-white border-0">
+            <a href="{% url 'frontend:blog_detail' slug=post.slug %}" class="btn btn-outline-primary btn-sm" aria-label="Read more about {{ post.title|escape }}">Read More</a>
+          </div>
+        </div>
+      </article>
     {% empty %}
-      <p style="text-align: center;">No blog posts available.</p>
+      <div class="col-12 text-center">
+        <p class="text-muted">No blog posts available.</p>
+      </div>
     {% endfor %}
   </div>
 </section>
 
-<footer>
-  <p>&copy; 2025 Zia Properties Ltd. All rights reserved.</p>
-</footer>
+{% endblock %}
 
-</body>
-</html>
+{% block extra_scripts %}
+  <!-- Bootstrap Bundle JS (Local) -->
+  <script src="{% static 'frontend/js/bootstrap.bundle.min.js' %}"></script>
+  <!-- Font Awesome JS (Optional, CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+{% endblock %}

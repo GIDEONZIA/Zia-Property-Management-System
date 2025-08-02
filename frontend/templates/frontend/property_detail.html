@@ -1,12 +1,64 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ property.property_name }} | Property Details{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h2>{{ property.property_name }}</h2>
-    <img src="{{ property.image.url }}" alt="{{ property.property_name }}" style="max-width: 100%; height: auto;">
-    <p><strong>Location:</strong> {{ property.location }}</p>
-    <p><strong>Price:</strong> {{ property.currency }} {{ property.price }}</p>
-    <p><strong>Description:</strong> {{ property.description }}</p>
-    <p><strong>Type:</strong> {{ property.property_type }}</p>
-    <p><strong>Address:</strong> {{ property.address }}</p>
+<div class="container my-5">
+    <div class="row g-4">
+        <!-- Image Column with Carousel -->
+        <div class="col-md-6">
+        {% if property.images.all %}
+            <div id="propertyCarousel" class="carousel slide rounded shadow-sm" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for img in property.images.all %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <img src="{{ img.image.url }}" class="d-block w-100 rounded" alt="Image {{ forloop.counter }}">
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if property.images.count > 1 %}
+                <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+                </button>
+            {% endif %}
+            </div>
+        {% else %}
+            <img src="{{ property.image.url }}" class="img-fluid rounded shadow-sm" alt="{{ property.property_name }}">
+        {% endif %}
+        </div>
+
+
+        <!-- Details Column -->
+        <div class="col-md-6">
+            <h2 class="mb-3">{{ property.property_name }}</h2>
+
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Location:</strong> {{ property.location }}</li>
+                <li class="list-group-item"><strong>Type:</strong> {{ property.property_type }}</li>
+                <li class="list-group-item"><strong>Address:</strong> {{ property.address }}</li>
+                <li class="list-group-item"><strong>Price:</strong> {{ property.currency }} {{ property.price|floatformat:2 }}</li>
+                <li class="list-group-item"><strong>Description:</strong><br>{{ property.description }}</li>
+            </ul>
+
+            <div class="mt-4">
+                <a href="mailto:{{ property.agent.email|default:'info@example.com' }}" class="btn btn-primary">
+                    <i class="fas fa-envelope"></i> Contact Agent
+                </a>
+                <a href="{% url 'listings' %}" class="btn btn-outline-secondary ms-2">Back to Listings</a>
+            </div>
+        </div>
+    </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<!-- Font Awesome (optional, if not already included globally) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 {% endblock %}

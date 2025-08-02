@@ -1,23 +1,31 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, TemplateView
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
+from django.contrib import messages
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
-from django.contrib import messages
 
-from .models import Tenant, Lease
-from properties.models import Property, RentPayment, MaintenanceRequest, Inspection
-from properties.serializers import PropertySerializer, TenantSerializer, LeaseSerializer, RentPaymentSerializer
-from .forms import BuyerLeadForm, SellerLeadForm
-from .forms import LeaseForm
-from .forms import TenantForm
-from .forms import RentPaymentForm  # make sure this exists
+from .models import (
+    BlogPost, Tenant, Lease, MaintenanceRequest, Inspection
+)
+from properties.models import Property, RentPayment
+from properties.serializers import (
+    PropertySerializer, TenantSerializer, LeaseSerializer, RentPaymentSerializer
+)
+from .forms import (
+    BuyerLeadForm, SellerLeadForm, LeaseForm, TenantForm, RentPaymentForm
+)
 
+class InternalLoginView(LoginView):
+    template_name = 'properties/internal_login.html'
+
+    def get_success_url(self):
+        return '/dashboard/'
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -79,7 +87,6 @@ def analytics_view(request):
     return render(request, 'properties/analytics.html', context)
 
 
-# --- PROPERTY VIEWS ---
 class PropertyListView(LoginRequiredMixin, ListView):
     model = Property
     template_name = 'properties/property_list.html'
@@ -100,15 +107,15 @@ class PropertyCreateView(LoginRequiredMixin, CreateView):
             form.instance.is_featured = False
         form.instance.agent = self.request.user.agent_profile
         return super().form_valid(form)
-    
+
+
 class PropertyRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Property.objects.all()
     serializer_class = PropertySerializer
     permission_classes = [IsAuthenticated]
-    lookup_field = 'pk'    
+    lookup_field = 'pk'
 
 
-# --- TENANT VIEWS ---
 class TenantListCreateView(generics.ListCreateAPIView):
     serializer_class = TenantSerializer
     permission_classes = [IsAuthenticated]
@@ -128,7 +135,6 @@ class TenantRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
         return Tenant.objects.all() if self.request.user.is_superuser else Tenant.objects.filter(agent__user=self.request.user)
 
 
-# --- LEASE VIEWS ---
 class LeaseListCreateView(generics.ListCreateAPIView):
     serializer_class = LeaseSerializer
     permission_classes = [IsAuthenticated]
@@ -154,7 +160,6 @@ class LeaseRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
         return Lease.objects.all() if self.request.user.is_superuser else Lease.objects.filter(agent__user=self.request.user)
 
 
-# --- RENT PAYMENT VIEWS ---
 class RentPaymentListCreateView(generics.ListCreateAPIView):
     serializer_class = RentPaymentSerializer
     permission_classes = [IsAuthenticated]
@@ -174,7 +179,6 @@ class RentPaymentRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView
         return RentPayment.objects.all() if self.request.user.is_superuser else RentPayment.objects.filter(agent__user=self.request.user)
 
 
-# --- LEADS ---
 @login_required
 def buyer_lead_view(request):
     form = BuyerLeadForm(request.POST or None)
@@ -197,42 +201,27 @@ def seller_lead_view(request):
 
 @login_required
 def create_lease_view(request):
-    if request.method == 'POST':
-        form = LeaseForm(request.POST, request.FILES)
-        if form.is_valid():
-            lease = form.save(commit=False)
-            if hasattr(request.user, 'agent_profile'):
-                lease.agent = request.user.agent_profile
-            lease.save()
-            return redirect('dashboard')  # or any other success page
-    else:
-        form = LeaseForm()
+    form = LeaseForm(request.POST or None, request.FILES or None)
+    if request.method == 'POST' and form.is_valid():
+        lease = form.save(commit=False)
+        if hasattr(request.user, 'agent_profile'):
+            lease.agent = request.user.agent_profile
+        lease.save()
+        return redirect('dashboard')
     return render(request, 'properties/create_lease.html', {'form': form})
 
 
 @login_required
 def lease_list_view(request):
     user = request.user
-    if user.is_superuser:
-        leases = Lease.objects.all()
-    elif hasattr(user, 'agent_profile'):
-        leases = Lease.objects.filter(agent=user.agent_profile)
-    else:
-        leases = Lease.objects.none()
-        
+    leases = Lease.objects.all() if user.is_superuser else Lease.objects.filter(agent=user.agent_profile)
     return render(request, 'properties/lease_list.html', {'leases': leases})
 
 
 @login_required
 def tenant_list_view(request):
     user = request.user
-    if user.is_superuser:
-        tenants = Tenant.objects.all()
-    elif hasattr(user, 'agent_profile'):
-        tenants = Tenant.objects.filter(agent=user.agent_profile)
-    else:
-        tenants = Tenant.objects.none()
-
+    tenants = Tenant.objects.all() if user.is_superuser else Tenant.objects.filter(agent=user.agent_profile)
     return render(request, 'properties/tenant_list.html', {'tenants': tenants})
 
 
@@ -249,66 +238,55 @@ def create_tenant_view(request):
 
 @login_required
 def create_rent_payment_view(request):
-    if request.method == 'POST':
-        form = RentPaymentForm(request.POST, request.FILES)
-        if form.is_valid():
-            rent_payment = form.save(commit=False)
-
-            # Set agent only if agent_profile exists
-            if hasattr(request.user, 'agent_profile'):
-                rent_payment.agent = request.user.agent_profile
-
-            rent_payment.save()
-            messages.success(request, "✅ Rent payment recorded successfully.")
-            return redirect('dashboard')  # or another page
-    else:
-        form = RentPaymentForm()
-
+    form = RentPaymentForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        rent_payment = form.save(commit=False)
+        if hasattr(request.user, 'agent_profile'):
+            rent_payment.agent = request.user.agent_profile
+        rent_payment.save()
+        messages.success(request, "✅ Rent payment recorded successfully.")
+        return redirect('dashboard')
     return render(request, 'properties/rent_payment_form.html', {'form': form})
 
-from .models import MaintenanceRequest
 
 @login_required
 def maintenance_request_list_view(request):
-    if request.user.is_superuser:
-        requests = MaintenanceRequest.objects.all()
-    else:
-        requests = MaintenanceRequest.objects.filter(agent=request.user.agent_profile)
-
+    requests = MaintenanceRequest.objects.all() if request.user.is_superuser else MaintenanceRequest.objects.filter(agent=request.user.agent_profile)
     return render(request, 'properties/maintenance_list.html', {'requests': requests})
 
-from .models import Inspection
 
 @login_required
 def inspection_list_view(request):
     inspections = Inspection.objects.all()
     return render(request, 'properties/inspection_list.html', {'inspections': inspections})
 
+
 @login_required
 def settings_view(request):
     return render(request, 'properties/settings.html')
 
+
 @login_required
 def update_account_settings(request):
     if request.method == 'POST':
-        # process settings update logic here
-        pass
-    return redirect('settings')  # or return to dashboard
+        pass  # Implement settings update logic
+    return redirect('settings')
+
 
 @login_required
 def update_notifications(request):
     if request.method == 'POST':
-        # Handle toggle preferences or notification settings logic
-        # Example: request.user.profile.receive_email_notifications = ...
-        # request.user.profile.save()
-        pass
-    return redirect('settings')  # or wherever you want
+        pass  # Handle notification preference logic
+    return redirect('settings')
+
 
 @login_required
 def update_system_settings(request):
     if request.method == 'POST':
-        # Handle POSTed form data here
-        # For now, you can just print to debug or pass
         print("System settings form submitted:", request.POST)
-        return redirect('settings')  # redirect to settings page
     return redirect('settings')
+
+
+def blog_detail(request, slug):
+    blog = get_object_or_404(BlogPost, slug=slug)
+    return render(request, 'frontend/blog_detail.html', {'blog': blog})

@@ -1,41 +1,67 @@
-# utils/mpesa_callback.py
-
-import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.timezone import now
-import logging
+import json
+from subscriptions.models import PremiumSubscription, MpesaAuditLog
 
-# Optional: configure a logger for M-Pesa
-logger = logging.getLogger(__name__)
+
+def process_mpesa_callback(data):
+    try:
+        callback = data['Body']['stkCallback']
+        result_code = callback['ResultCode']
+        metadata = callback.get('CallbackMetadata', {}).get('Item', [])
+
+        if result_code == 0:
+            phone = next((i['Value'] for i in metadata if i['Name'] == 'PhoneNumber'), None)
+            amount = next((i['Value'] for i in metadata if i['Name'] == 'Amount'), None)
+            receipt = next((i['Value'] for i in metadata if i['Name'] == 'MpesaReceiptNumber'), None)
+
+            subscription = PremiumSubscription.objects.filter(phone=str(phone), paid=False).last()
+            if subscription:
+                subscription.paid = True
+                subscription.mpesa_receipt = receipt
+                subscription.save()
+
+        return {"ResultCode": 0, "ResultDesc": "Processed"}
+    except Exception as e:
+        print("M-PESA callback processing error:", e)
+        return {"ResultCode": 1, "ResultDesc": "Error"}
+
+
+def log_audit(phone, event_type, payload):
+    MpesaAuditLog.objects.create(
+        phone=phone,
+        event_type=event_type,
+        payload=payload
+    )
+
 
 @csrf_exempt
 def mpesa_callback(request):
-    if request.method != 'POST':
-        return JsonResponse({'message': 'Only POST requests allowed'}, status=405)
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
 
-    try:
-        data = json.loads(request.body.decode('utf-8'))
-        logger.info("✅ M-Pesa Callback received: %s", json.dumps(data, indent=2))
+            # Try to get phone number from callback
+            phone = ''
+            try:
+                metadata = data['Body']['stkCallback'].get('CallbackMetadata', {}).get('Item', [])
+                phone_item = next((i for i in metadata if i['Name'] == 'PhoneNumber'), None)
+                if phone_item:
+                    phone = phone_item.get('Value', '')
+            except Exception:
+                pass
 
-        # Optionally: extract relevant details (safe structure assumed)
-        callback = data.get("Body", {}).get("stkCallback", {})
-        result_code = callback.get("ResultCode")
-        result_desc = callback.get("ResultDesc")
+            log_audit(
+                phone=phone,
+                event_type='stk_callback',
+                payload=json.dumps(data)
+            )
 
-        metadata = callback.get("CallbackMetadata", {}).get("Item", [])
-        parsed_data = {item['Name']: item.get('Value') for item in metadata if 'Value' in item}
+            response = process_mpesa_callback(data)
+            return JsonResponse(response)
 
-        # Placeholder to store or process parsed_data
-        # Example:
-        # phone = parsed_data.get("PhoneNumber")
-        # amount = parsed_data.get("Amount")
+        except Exception as e:
+            print("Error in mpesa_callback view:", e)
+            return JsonResponse({"ResultCode": 1, "ResultDesc": "Failed to process"}, status=500)
 
-        # Optional: Log to DB or audit file
-        # MpesaTransaction.objects.create(...)
-
-        return JsonResponse({"ResultCode": 0, "ResultDesc": "Success"}, status=200)
-
-    except Exception as e:
-        logger.error("❌ Error in M-Pesa callback: %s", str(e), exc_info=True)
-        return JsonResponse({'error': 'Invalid callback structure or processing failed.'}, status=400)
+    return JsonResponse({"error": "Invalid request method"}, status=400)

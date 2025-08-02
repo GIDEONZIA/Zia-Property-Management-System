@@ -26,47 +26,44 @@ header p {
     color: #e0e0e0;
 }
 
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #ec6a00;
-    letter-spacing: 1px;
-}
-
+/* Navbar */
 .navbar {
-  background: #16213e;
-  padding: 0.7rem 1rem;
+    background: #1a2238;
+    color: #fff;
+    padding: 0.5rem 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
 .navbar-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between; /* space between logo and toggle */
-  align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
 }
 
-.menu-toggle {
-  font-size: 1.5rem;
-  color: #fff;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: none; /* show only on small screens */
+.logo {
+    font-size: 1.6rem;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
-.nav-links {
-  display: flex;
-  gap: 1.5rem;
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.social-icons {
+    list-style: none;
+    display: flex;
+    gap: 1.2rem;
 }
 
+.social-icons li a {
+    color: #fff;
+    font-size: 1.2rem;
+    transition: color 0.2s;
+}
 
-.nav-links li {
-    margin: 0;
-}   
+.social-icons li a:hover {
+    color: #e94560;
+}  
 
 .container {
     max-width: 1200px;
@@ -147,6 +144,39 @@ header p {
 .contact-btn:hover {
     background: #fca311;
     color: #1a2238;
+}
+
+.cta-section {
+  background: #2b6cb0;
+  color: #fff;
+  text-align: center;
+  padding: 3rem 1rem;
+}
+.cta-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+.cta-section p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+.cta-section .cta-button {
+  background: #fff;
+  color: #2b6cb0;
+  border-radius: 5px;
+}
+.cta-section .cta-button:hover {
+  background: #e3f0ff;
+  color: #234e7d;
+}
+
+/* 🦶 Footer */
+footer {
+  background: #234e7d;
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem;
+  font-size: 1rem;
 }
 
 @media (max-width: 768px) {

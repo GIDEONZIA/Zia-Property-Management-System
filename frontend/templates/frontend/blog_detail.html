@@ -1,64 +1,48 @@
+{% extends "base_public.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Blog Detail | Zia Properties LTD</title>
 
-  <!---CUSTOM CSS--->
+{% block title %}{{ blog.title }} | Blog | Zia Properties Ltd{% endblock %}
 
-  <link rel="stylesheet" href="{% static 'frontend/css/blog_detail.css' %}">
-  
-<!---FONT AWESOME--->
-
+{% block extra_styles %}
+  <link rel="stylesheet" href="{% static 'frontend/css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
 
+{% block content %}
+<main class="container my-5" role="main" aria-labelledby="blog-title">
+  <div class="row justify-content-center">
+    <article class="col-lg-10">
+      <h1 id="blog-title" class="fw-bold text-center mb-3">{{ blog.title }}</h1>
 
-</head>
-<body>
-  <nav class="navbar">
-        <div class="navbar-container">
-            <div class="logo">Zia Property Ltd</div>
-            <ul class="nav-links " id="navLinks">
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'about' %}">About</a></li>
-                <li><a href="{% url 'contact' %}">Contact</a></li>
-            </ul>
+      <p class="text-muted text-center mb-4" aria-label="Published date and author">
+        Published on <time datetime="{{ blog.date_published|date:'Y-m-d' }}">{{ blog.date_published|date:"F j, Y" }}</time>
+        by <strong>{{ blog.author|default:"Zia Property Insights" }}</strong>
+      </p>
 
-            <div class="menu-toggle" onclick="toggleMenu()">&#9776;</div>
-            
-            </div>
-        </div>
+      {% if blog.image %}
+        <figure class="text-center mb-4">
+          <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="img-fluid rounded shadow" />
+        </figure>
+      {% endif %}
 
-  <div class="container">
-    <h1 class="blog-title">Why Property Investment in Kenya is on the Rise</h1>
-    <div class="blog-meta">Published on June 26, 2025 by Zia Property Insights</div>
-
-    <img src="{% static 'frontend/images/blog_placeholder.jpg' %}" alt="Blog Image" class="blog-image">
-
-    <div class="blog-content">
-      <p>In recent years, Kenya's real estate market has experienced a noticeable uptrend. From urban expansion to infrastructure investments, many factors contribute to the growth of this sector.</p>
-
-      <p>Property investors are particularly attracted to areas like Nairobi, Mombasa, Kisumu, and the coastal belt. The demand for residential units, office space, and serviced apartments continues to grow, offering profitable returns for stakeholders.</p>
-
-      <p>At Zia Property Ltd, we stay ahead of market trends and help our clients identify opportunities that align with their investment goals.</p>
-
-      <p>Stay connected with us to receive updates, tips, and property news tailored for smart investors like you.</p>
-    </div>
+      <section class="blog-content fs-5" aria-describedby="blog-description">
+        <p id="blog-description">{{ blog.summary }}</p>
+        {{ blog.content|safe }}
+      </section>
+    </article>
   </div>
+</main>
 
-  <section class="cta-section">
-    <h2>Enjoyed the Read?</h2>
-    <p>Stay informed with weekly insights from our experts.</p>
-    <a href="{% url 'signup' %}" class="cta-button">Subscribe Now</a>
-  </section>
-    <script src="{% static 'frontend/js/script.js' %}"></script>
-    <script src="{% static 'frontend/js/nav.js'}"></script>
+<section class="bg-light py-5 text-center" role="complementary" aria-label="Subscription call to action">
+  <div class="container">
+    <h2 class="mb-3">Enjoyed the Read?</h2>
+    <p class="mb-4 text-muted">Stay informed with weekly insights from our experts.</p>
+    <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">Subscribe Now</a>
+  </div>
+</section>
+{% endblock %}
 
-  <footer>
-    &copy; 2025 Zia Property Ltd. All rights reserved.
-  </footer>
-
-</body>
-</html>
+{% block extra_scripts %}
+  <script src="{% static 'frontend/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+{% endblock %}

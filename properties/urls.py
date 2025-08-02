@@ -12,7 +12,7 @@ from .views import (
     RentPaymentListCreateView, RentPaymentRetrieveUpdateDestroyView,
     admin_dashboard, agent_dashboard, DashboardView, analytics_view,
     tenant_dashboard_view, lease_list_view, create_lease_view,
-    tenant_list_view, maintenance_request_list_view, inspection_list_view # HTML version
+    tenant_list_view, maintenance_request_list_view, inspection_list_view, blog_detail # HTML version
 )
 
 
@@ -43,6 +43,8 @@ urlpatterns = [
     path('properties/', PropertyListView.as_view(), name='property-list'),
     path('properties/create/', PropertyCreateView.as_view(), name='property-create'),
     path('properties/<int:pk>/', PropertyRetrieveUpdateDestroyView.as_view(), name='property-detail'),
+
+    path('blog/<slug:slug>/', blog_detail, name='blog_detail'),
 
     # Tenant HTML View
     path('tenants/', tenant_list_view, name='tenant_list'),

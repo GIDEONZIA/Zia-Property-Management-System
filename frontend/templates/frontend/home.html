@@ -1,84 +1,71 @@
+{% extends "base_public.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zia Properties Ltd - Home</title>
 
-    <!---Custom css-->
-    <link rel="stylesheet" href="{% static 'frontend/css/home.css' %}">
+{% block title %}Home - Zia Properties Ltd{% endblock %}
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
- 
-</head>
-<body>
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="logo">Zia Property Ltd</div>
-            <ul class="social-icons">
-                <li><a href="https://facebook.com/propertiesmalindi" target="_blank" rel="noopener" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
-                <li><a href="https://twitter.com" target="_blank" rel="noopener" title="twitter"><i class="fab fa-twitter"></i></a></li>
-                <li><a href="https://instagram.com" target="_blank" rel="noopener" title="instagram"><i class="fab fa-instagram"></i></a></li>
-                <li><a href="https://linkedin.com" target="_blank" rel="noopener" title="linkedin"><i class="fab fa-linkedin-in"></i></a></li>
-            </ul>
-        </div>    
-    </nav>
+{% block extra_styles %}
+  <!-- Bootstrap 5 CSS (Local) -->
+  <link rel="stylesheet" href="{% static 'frontend/css/bootstrap.min.css' %}">
+  <!-- Font Awesome CSS (CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
 
-    <header class="hero">
-        <div class="hero-text">
-            <h1>Helping<br>You Find Next<br>Property</h1>
-            <p>Browse verified properties for rent, lease, or purchase from anywhere in Kenya.</p>
-            <a href="{% url 'listings' %}" class="cta-button">Explore Listings</a>
-        </div>
-    </header>
+{% block content %}
 
-    <section class="features">
-  <h2>Featured Properties</h2>
-  <div class="feature-grid">
+<!-- Hero Section -->
+<header class="bg-primary text-white py-5 mb-5" role="banner" aria-label="Homepage hero section">
+  <div class="container text-center">
+    <h1 class="display-4 fw-bold">Helping You Find Your Next Property</h1>
+    <p class="lead">Browse verified properties for rent, lease, or purchase anywhere in Kenya.</p>
+    <a href="{% url 'frontend:listings' %}" class="btn btn-light btn-lg mt-3" aria-label="Explore available property listings">Explore Listings</a>
+  </div>
+</header>
+
+<!-- Featured Properties -->
+<section class="container mb-5" aria-labelledby="featured-properties-heading" role="region">
+  <h2 id="featured-properties-heading" class="text-center mb-4">Featured Properties</h2>
+  <div class="row row-cols-1 row-cols-md-3 g-4">
     {% for property in featured_properties %}
-      <div class="feature-card">
-        <div class="feature-image">
+      <div class="col">
+        <article class="card h-100 shadow-sm" aria-label="Featured property: {{ property.property_name }}">
           {% if property.image %}
-            <img src="{{ property.image.url }}" alt="{{ property.property_name }}">
+            <img src="{{ property.image.url }}" class="card-img-top" alt="{{ property.property_name }}">
           {% else %}
+            <img src="https://via.placeholder.com/400x250?text=No+Image" class="card-img-top" alt="No image available">
           {% endif %}
-        </div>
-        <div class="feature-info">
-        <div style="margin-top: 15px;">
-        </div>
-            <div class="feature-meta">
-                <div class="price">
-                    {{ property.currency }} {{ property.price|floatformat }}
-                </div>
-                <div class="location">
-                <i class="fas fa-map-marker-alt"></i> {{ property.location }}
-                </div>
-                <div class="details">
-                <i class="fas fa-bed"></i> {{ property.bedrooms }} Beds
-                <i class="fas fa-bath" style="margin-left: 15px;"></i> {{ property.bathrooms }} Baths
-                <i class="fas fa-ruler-combined" style="margin-left: 15px;"></i> {{ property.size }} sqft
-                </div>
-            </div>
-        </div>
+          <div class="card-body">
+            <h3 class="card-title h5">{{ property.property_name }}</h3>
+            <p class="card-text small mb-0">
+              <strong>{{ property.currency }} {{ property.price|floatformat }}</strong><br>
+              <i class="fas fa-map-marker-alt text-muted me-1" aria-hidden="true"></i> {{ property.location }}<br>
+              <i class="fas fa-bed me-1" aria-hidden="true"></i> {{ property.bedrooms }} Beds
+              <i class="fas fa-bath ms-3 me-1" aria-hidden="true"></i> {{ property.bathrooms }} Baths
+              <i class="fas fa-ruler-combined ms-3 me-1" aria-hidden="true"></i> {{ property.size }} sqft
+            </p>
+          </div>
+        </article>
       </div>
     {% empty %}
-      <p>No featured properties currently available.</p>
+      <p class="text-center text-muted">No featured properties currently available.</p>
     {% endfor %}
   </div>
 </section>
 
-    <section class="cta-section">
-        <h2>Start Your Search Today</h2>
-        <p>Sign up for updates or contact our support for personalized help.</p>
-        <a href="{% url 'contact' %}" class="cta-button">Contact us</a>
-    </section>
-    
-    
-</body>
+<!-- CTA Section -->
+<section class="py-5 bg-light text-center" role="complementary" aria-label="Call to action section">
+  <div class="container">
+    <h2 class="mb-3">Start Your Search Today</h2>
+    <p class="mb-4 text-muted">Sign up for updates or contact our support for personalized help.</p>
+    <a href="{% url 'frontend:contact' %}" class="btn btn-outline-primary btn-lg" aria-label="Contact Zia Properties support">Contact Us</a>
+  </div>
+</section>
 
-<footer>
-    <p>&copy; 2025 Zia Property Ltd. All rights reserved.</p>
-</footer>
-</html>
+{% endblock %}
+
+
+{% block extra_scripts %}
+  <!-- Bootstrap Bundle JS (Local) -->
+  <script src="{% static 'frontend/js/bootstrap.bundle.min.js' %}"></script>
+  <!-- Font Awesome JS (Optional, CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+{% endblock %}

@@ -11,5 +11,6 @@ if __name__ == "__main__":
     django.setup()  # Initialize Django before accessing models
     execute_from_command_line(sys.argv)
 
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # The main entry point is already handled above

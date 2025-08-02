@@ -6,6 +6,8 @@ from decimal import Decimal
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
+from django.contrib.auth import get_user_model
 
 # === GLOBAL CHOICES ===
 PROPERTY_TYPES = [
@@ -154,18 +156,34 @@ class SellerLead(models.Model):
         return self.name
 
 
+User = get_user_model()
 
 class BlogPost(models.Model):
     title = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True)
-    author = models.CharField(max_length=100, default="Zia Team")
+    slug = models.SlugField(unique=True, blank=True)
+    summary = models.TextField(blank=True)
     content = models.TextField()
     image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='blog_posts')
     created_at = models.DateTimeField(auto_now_add=True)
     is_published = models.BooleanField(default=True)
 
+    def save(self, *args, **kwargs):
+        # Automatically generate slug from title if not provided
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ['-created_at']  # Most recent first
+        verbose_name = 'Blog Post'
+        verbose_name_plural = 'Blog Posts'
+
+
+
 
 
 class PropertyImage(models.Model):

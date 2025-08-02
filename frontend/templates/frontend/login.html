@@ -1,140 +1,83 @@
+{% extends "base_public.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Zia Property Properties Ltd - Login</title>
-    <meta http-equiv="Cache-Control" content="no-store">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background: #f5f7fa;
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .login-container {
-            background: #fff;
-            padding: 2.5rem 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-            width: 100%;
-            max-width: 370px;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-        }
-        .logo img {
-            height: 48px;
-            margin-right: 10px;
-        }
-        .logo span {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #2a4365;
-        }
-        h2 {
-            text-align: center;
-            color: #2a4365;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-        }
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-        label {
-            display: block;
-            margin-bottom: 0.4rem;
-            color: #4a5568;
-            font-weight: 500;
-        }
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 1rem;
-            background: #f9fafb;
-            transition: border 0.2s;
-        }
-        input[type="text"]:focus,
-        input[type="password"]:focus {
-            border-color: #3182ce;
-            outline: none;
-        }
-        .login-btn {
-            width: 100%;
-            padding: 12px;
-            background: #2b6cb0;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .login-btn:hover {
-            background: #2a4365;
-        }
-        .forgot-link {
-            display: block;
-            text-align: right;
-            margin-top: 0.5rem;
-            color: #3182ce;
-            text-decoration: none;
-            font-size: 0.95rem;
-        }
-        .forgot-link:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="login-container">
-        <div class="logo">
-            <img src="https://img.icons8.com/ios-filled/50/2a4365/home.png" alt="Zia Logo">
-            <span>Zia Property Ltd.</span>
-        </div>
-        <h2>Sign In</h2>
-        
-        <form method="POST" action="{% url 'login' %}">
+{% load socialaccount %}
+
+{% block title %}Login - Zia Properties Ltd{% endblock %}
+
+{% block extra_styles %}
+  <link rel="stylesheet" href="{% static 'frontend/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<section class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+          <div class="text-center mb-4">
+            <img src="https://img.icons8.com/ios-filled/50/2a4365/home.png" alt="Zia Properties Logo" height="40" class="me-2" />
+            <h1 class="h4 fw-bold text-primary mt-2">Sign In</h1>
+            <p class="text-muted">Access your account to manage or view listings.</p>
+          </div>
+
+          {% if form.errors %}
+            <div class="alert alert-danger" role="alert" aria-live="assertive">
+              {% if form.errors|length > 1 %}
+                Please correct the errors below.
+              {% else %}
+                Please correct the error below.
+              {% endif %}
+            </div>
+          {% endif %}
+
+          <form method="POST" novalidate>
             {% csrf_token %}
-            <div class="form-group">
-                <label for="id_username">Username</label>
-                <input type="text" name="username" id="id_username" required>
-            </div>
-            <div class="form-group">
-                <label for="id_password">Password</label>
-                <input type="password" name="password" id="id_password" required>
+
+            <div class="mb-3">
+              <label for="id_username" class="form-label">Username</label>
+              <input type="text" name="username" id="id_username" class="form-control" required placeholder="Enter your username">
             </div>
 
-            <button type="submit" class="login-btn">Login</button>
+            <div class="mb-3">
+              <label for="id_password" class="form-label">Password</label>
+              <input type="password" name="password" id="id_password" class="form-control" required placeholder="Enter your password">
+            </div>
 
-            <a href="#" class="forgot-link">Forgot password?</a>
-            <a href="{% url 'signup' %}" class="sign_up-link">Don't have an account? Sign up</a>
-        </form>
+            <div class="d-grid mb-3">
+              <button type="submit" class="btn btn-primary">Login</button>
+            </div>
 
-        <div style="text-align:center;margin:24px 0 12px;color:#888;font-size:0.97rem;">or sign in with</div>
-        <div style="display:flex;flex-direction:column;gap:12px;">
-            <a href="#" style="display:flex;align-items:center;justify-content:center;padding:10px 0;background:#fff;border:1px solid #d1d5db;border-radius:5px;text-decoration:none;color:#444;font-weight:500;">
-                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style="width:22px;height:22px;margin-right:10px;">Sign in with Google
+            <div class="d-flex justify-content-between small">
+              <a href="{% url 'frontend/password_reset' %}" class="text-muted text-decoration-none">Forgot password?</a>
+              <a href="{% url 'frontend:signup' %}" class="text-muted text-decoration-none">Sign up</a>
+            </div>
+          </form>
+
+          <div class="text-center my-4 text-muted">OR</div>
+
+          <!-- Social Logins -->
+          <div class="d-grid gap-2">
+            <a href="{% provider_login_url 'google' %}" class="btn btn-outline-secondary">
+              <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google Logo" width="20" class="me-2"> Sign in with Google
             </a>
-            <a href="#" style="display:flex;align-items:center;justify-content:center;padding:10px 0;background:#1877f2;border:1px solid #1877f2;border-radius:5px;text-decoration:none;color:#fff;font-weight:500;">
-                <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" style="width:22px;height:22px;margin-right:10px;">Sign in with Facebook
+            <a href="{% provider_login_url 'facebook' %}" class="btn btn-outline-primary">
+              <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook Logo" width="20" class="me-2"> Sign in with Facebook
             </a>
-            <a href="#" style="display:flex;align-items:center;justify-content:center;padding:10px 0;background:#24292f;border:1px solid #24292f;border-radius:5px;text-decoration:none;color:#fff;font-weight:500;">
-                <img src="https://www.svgrepo.com/show/475654/github-color.svg" alt="GitHub" style="width:22px;height:22px;margin-right:10px;">Sign in with GitHub
+            <a href="{% provider_login_url 'github' %}" class="btn btn-dark">
+              <img src="https://www.svgrepo.com/show/475654/github-color.svg" alt="GitHub Logo" width="20" class="me-2"> Sign in with GitHub
             </a>
+          </div>
+
         </div>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script src="{% static 'frontend/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+{% endblock %}

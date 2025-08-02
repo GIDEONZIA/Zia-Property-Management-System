@@ -2,78 +2,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zia Properties Ltd - Property Listings</title>
-  <link rel="icon" href="{% static 'frontend/images/.ico' %}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Property Listings | Zia Properties Ltd</title>
+  <meta name="description" content="Browse verified real estate listings from Zia Properties Ltd. Find houses, apartments, land, and investment opportunities across Kenya." />
+  <meta name="keywords" content="real estate Kenya, houses for sale Mombasa, apartments Nairobi, buy land Kenya" />
+  <meta name="author" content="Zia Properties Ltd" />
+
+  <link rel="icon" href="{% static 'frontend/images/favicon.ico' %}" type="image/x-icon" />
   
-  <!---Custom css-->
-  <link rel="stylesheet" href="{% static 'frontend/css/listings.css' %}">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'frontend/css/listings.css' %}" />
 </head>
+
 <body>
-  <header>
-    <nav class="navbar">
-      <div class="navbar-container">
-        <div class="logo">Zia Properties Ltd</div>
-          <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
-            <ul class="nav-links">
-              <li><a href="{% url 'home' %}">Home</a></li>
-              <li><a href="{% url 'blog' %}">Blog</a></li>
-              <li><a href="{% url 'about' %}">About Us</a></li>
-              <li><a href="{% url 'contact' %}">Contact</a></li>
-            </ul>
-        </div>
-      </div> 
-    </nav>
 
-    <h1>Zia Properties Ltd - Property Listings</h1>
-    <p>Find your next home or investment with our professional real estate listings.</p>
-    
-
-  <div class="container">
-  <div class="listings">
-    {% for property in properties %}
-      <div class="property-card">
-        {% if property.image %}
-          <img class="property-image" src="{{ property.image.url }}" alt="{{ property.property_name }}">
-        {% else %}
-          <img class="property-image" src="https://via.placeholder.com/300x200" alt="No image">
-        {% endif %}
-
-        <div class="property-details">
-          <div class="property-title">{{ property.property_name }}</div>
-          <div class="property-location">{{ property.location }}</div>
-          
-          <div class="property-price">
-            {% if property.currency == "KES" %}
-              KES {{ property.price }}
-            {% elif property.currency == "USD" %}
-              ${{ property.price }}
-            {% elif property.currency == "EUR" %}
-              €{{ property.price }}
-            {% else %}
-              {{ property.price }}
-            {% endif %}
-          </div>
-
-          <div class="property-description">
-            {{ property.description|truncatewords:20 }}
-          </div>
-
-          <a href="mailto:{{ property.agent.email|default:'info@example.com' }}" class="contact-btn">
-            Contact Agent
-          </a>
-        </div>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="{% url 'home' %}">Zia Property Ltd</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="https://facebook.com/propertiesmalindi" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          </li>
+        </ul>
       </div>
-    {% empty %}
-      <p>No properties available at the moment.</p>
-    {% endfor %}
-  </div>
-</div>
+    </div>
+  </nav>
 
+  <!-- Hero -->
+  <header class="bg-light text-center py-5 mb-4 border-bottom">
+    <div class="container">
+      <h1 class="display-5 fw-bold">Explore Our Property Listings</h1>
+      <p class="lead text-muted">Find your next home or investment with Zia Properties Ltd.</p>
+    </div>
+  </header>
 
-  </div> 
-  <script src="{% static 'frontend/js/listings.js' %}"></script>                                 
+  <!-- Listings -->
+  <main class="container mb-5" role="main" aria-label="Property Listings">
+    <div class="row g-4">
+      {% for property in properties %}
+        <article class="col-md-4" itemscope itemtype="https://schema.org/Residence">
+          <div class="card h-100 shadow-sm">
+            {% if property.image %}
+              <img src="{{ property.image.url }}" class="card-img-top" alt="{{ property.property_name }}" itemprop="image" />
+            {% else %}
+              <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="No image available" />
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title" itemprop="name">{{ property.property_name }}</h5>
+              <p class="text-muted mb-1"><i class="fas fa-map-marker-alt"></i> <span itemprop="address">{{ property.location }}</span></p>
+              <p class="mb-2">
+                <strong itemprop="priceCurrency" content="{{ property.currency }}">
+                  {% if property.currency == "KES" %}KES{% elif property.currency == "USD" %}$ {% elif property.currency == "EUR" %}€ {% else %}{{ property.currency }} {% endif %}
+                </strong>
+                <span itemprop="price">{{ property.price }}</span>
+              </p>
+              <p class="card-text text-truncate" itemprop="description">
+                {{ property.description|truncatewords:20 }}
+              </p>
+            </div>
+            <footer class="card-footer bg-white border-0 text-end">
+              <a href="mailto:{{ property.agent.email|default:'info@example.com' }}" class="btn btn-outline-primary btn-sm" aria-label="Contact agent for {{ property.property_name }}">Contact Agent</a>
+            </footer>
+          </div>
+        </article>
+      {% empty %}
+        <div class="col-12 text-center">
+          <p class="text-muted">No properties available at the moment.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </main>
+
+  <!-- CTA Section -->
+  <section class="py-5 bg-primary text-white text-center">
+    <div class="container">
+      <h2 class="mb-3">Ready to get started?</h2>
+      <p class="mb-4">Sign up and start browsing properties today.</p>
+      <a href="{% url 'signup' %}" class="btn btn-outline-light btn-lg">Join Now</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4">
+    <p class="mb-0">&copy; 2025 Zia Properties Ltd. All rights reserved.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'frontend/js/listings.js' %}"></script>
 </body>
 </html>

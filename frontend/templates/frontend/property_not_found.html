@@ -2,17 +2,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Property Not Found</title>
-    <link rel="stylesheet" href="{% static 'frontend/css/property_not_found.css' %}">
+  <meta charset="UTF-8">
+  <title>Property Not Found | Zia Properties Ltd</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Optional: Bootstrap for consistency -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{% static 'frontend/css/property_not_found.css' %}">
 </head>
-<body>
+<body class="d-flex align-items-center justify-content-center" style="min-height: 100vh; background: #f8f9fa;">
 
-    <div class="not-found-container">
-        <h1>Oops! Property Not Found</h1>
-        <p>The property you're looking for doesn't exist or may have been removed.</p>
-        <a href="{% url 'listings' %}" class="back-btn">Back to Listings</a>
-    </div>
+  <div class="text-center p-4 shadow-sm bg-white rounded" style="max-width: 500px;">
+    <img src="{% static 'frontend/images/404_property.svg' %}" alt="Not Found" class="img-fluid mb-4" style="max-height: 200px;">
 
+    <h1 class="h3 mb-3 text-danger">Oops! Property Not Found</h1>
+    <p class="text-muted">The property you're looking for doesn't exist or has been removed.</p>
+
+    <a href="{% url 'listings' %}" class="btn btn-primary mt-3">
+      <i class="fas fa-arrow-left me-2"></i>Back to Listings
+    </a>
+  </div>
+
+  <!-- Optional: FontAwesome for icons -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 </body>
 </html>

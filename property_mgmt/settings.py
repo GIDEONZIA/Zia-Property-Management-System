@@ -32,6 +32,7 @@ DJANGO_SETTINGS_MODULE = "property_mgmt.settings"
 
 INSTALLED_APPS = [
     'jazzmin',
+    'django_q',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,6 +46,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.facebook',
     'django_extensions',
+    'widget_tweaks',
+   
 
     
     
@@ -55,12 +58,22 @@ INSTALLED_APPS = [
     'transactions', # Transaction Management App
     'reports',  # Reporting App
     'testimonial',  # Testimonials App
+    'subscriptions',  # Subscription Management App
     # Third-party apps
     'rest_framework',  # Django REST Framework
     'rest_framework_simplejwt', # JWT Authentication
       
     
 ]
+
+Q_CLUSTER = {
+    'name': 'ZiaQ',
+    'workers': 4,
+    'timeout': 60,
+    'retry': 90,
+    'queue_limit': 50,
+    'orm': 'default',
+}
 
 JAZZMIN_SETTINGS = {
     "site_title": "Zia Property Admin",
@@ -103,18 +116,41 @@ JAZZMIN_SETTINGS = {
         # 📈 Reports
         "reports.IncomeReport": "fas fa-chart-line",
 
+        "subscriptions.PremiumSubscription": "fas fa-crown",  # 👑 Crown icon for premium
+        "subscriptions.MpesaAuditLog": "fas fa-file-invoice-dollar",  # 💵 Payment log icon
+
         # 💳 Transactions
         "transactions.Transaction": "fas fa-credit-card",
         "transactions.MpesaTransaction": "fas fa-mobile-alt",
 
         # 💬 Testimonials
         "testimonial.Testimonial": "fas fa-comment-dots",
+
+                # Django Q core models
+        "django_q.Failure": "fas fa-times-circle",         # ❌ Failed tasks
+        "django_q.Task": "fas fa-hourglass-half",          # ⏳ Queued / running tasks
+        "django_q.Schedule": "fas fa-calendar-alt",        # 📅 Scheduled tasks
+        "django_q.Success": "fas fa-check-circle",         # ✅ Successful tasks
+
+        # Bonus suggestion for overall tasks:
+        "django_q.QueuedTask": "fas fa-tasks",             # 🧾 QueuedTask (if you define it)
+
     },
+
+    "custom_links": {
+    "django_q": [{
+        "name": "View Q Cluster Logs",
+        "url": "/admin/django_q/task/",
+        "icon": "fas fa-tasks",
+        "permissions": ["django_q.view_task"]
+    }],
+},
+
 }
 
 
 JAZZMIN_UI_TWEAKS = {
-    "css": "css/custom_dark.css"
+    "css": "frontend/custom_dark.css"
 }
 
 # Static files (CSS, JavaScript, Images)
@@ -182,6 +218,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'property_mgmt.wsgi.application'
 
 DATABASES = {
@@ -213,7 +250,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'gwiternz@gmail.com'
 EMAIL_HOST_PASSWORD = '@#93Gwiternz29#@'  # use an app password if using Gmail
 
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = 'noreply@zia-properties.com'
 
 
 CSRF_TRUSTED_ORIGINS = [
@@ -247,7 +284,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 
@@ -265,9 +302,11 @@ import os
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+LOGIN_URL = 'dashboard/login/'
   
 LOGIN_REDIRECT_URL = '/home/'
-LOGOUT_REDIRECT_URL = '/login/'
+LOGOUT_REDIRECT_URL = '/'
 
 
 # Removed invalid pytest configuration from settings.py.

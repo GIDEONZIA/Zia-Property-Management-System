@@ -9,9 +9,9 @@ from .views import blog_list_view, blog_detail
 from .views import start_premium_subscription, subscription_status_view
 from utils.mpesa_callback import mpesa_callback
 from frontend.views import home_view
+from subscriptions.views import premium_agent_page  
 
-
-
+app_name = 'frontend'
 
 urlpatterns = [
     # Home / Landing
@@ -24,8 +24,7 @@ urlpatterns = [
     path('about/', TemplateView.as_view(template_name='frontend/about.html'), name='about'),
     path('services/', TemplateView.as_view(template_name='frontend/services.html'), name='services'),
     path('premium_agent/', TemplateView.as_view(template_name='frontend/premium_agent.html'), name='premium_agent'),
-
-
+    
     
 
 
@@ -42,7 +41,8 @@ urlpatterns = [
     path('home/', home_view, name='home'),
     path('subscribe/', start_premium_subscription, name='subscribe'),
     path('subscription/', subscription_status_view, name='subscription_status'),  # optional
-    
+    path('premium-agent/', premium_agent_page, name='premium-agent-page'),
+
     path('api/mpesa-callback/', mpesa_callback, name='mpesa_callback'),
 
     

@@ -18,9 +18,11 @@ from utils.mpesa import initiate_stk_push
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from transactions.models import MpesaTransaction
-
-
-
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from subscriptions.models import PremiumSubscription  # ✅ import from subscriptions
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.urls import reverse_lazy
 
 # sign up
 
@@ -37,10 +39,14 @@ def signup_view(request):
 from django.urls import reverse_lazy
 
 class CustomLoginView(LoginView):
-    template_name = 'frontend/login.html'
-    authentication_form = AuthenticationForm
-    success_url = reverse_lazy('home')  # This ensures redirection to /home/
-    redirect_authenticated_user = True
+    template_name = 'frontend/agent_login.html'  # adjust as needed
+
+    def get_success_url(self):
+        next_url = self.request.GET.get('next')
+        if next_url and url_has_allowed_host_and_scheme(next_url, self.request.get_host()):
+            return next_url
+        return reverse_lazy('agent_dashboard')  # or wherever agents go
+
 
 # home
 def home_view(request):
@@ -204,3 +210,33 @@ def mpesa_callback(request):
 
     return JsonResponse({"ResultCode": 0, "ResultDesc": "Success"})
 
+
+@login_required
+def premium_agent_page(request):
+    user = request.user
+
+    # Check for paid subscription tied to this user
+    has_paid = PremiumSubscription.objects.filter(user=user, paid=True).exists()
+
+    if not has_paid:
+        return redirect('subscription_status')  # Or 'subscribe' if you prefer
+
+    return render(request, 'frontend/premium_agent.html')
+
+class PublicLoginView(LoginView):
+    template_name = 'frontend/public_login.html'
+
+    def get_success_url(self):
+        next_url = self.request.GET.get('next')
+        if next_url and url_has_allowed_host_and_scheme(next_url, self.request.get_host()):
+            return next_url
+        return reverse_lazy('frontend:home')  # or '/'# or wherever public users land
+
+class AgentLoginView(LoginView):
+    template_name = 'frontend/agent_login.html'
+
+    def get_success_url(self):
+        next_url = self.request.GET.get('next')
+        if next_url and url_has_allowed_host_and_scheme(next_url, self.request.get_host()):
+            return next_url
+        return reverse_lazy('agent_dashboard')  # Make sure this URL name exists
