@@ -1,30 +1,3 @@
-# Core Framework
-Django==5.2.4
-djangorestframework==3.16.0
-django-allauth==65.10.0
-django-crispy-forms==2.4
-django-jazzmin==3.0.1
-
-# Async Task Queue
-django-q==1.4.0  # For background tasks
-
-# M-Pesa, HTTP Requests, and Utilities
-requests==2.32.3  # Required for Safaricom Daraja API
-python-decouple==3.8  # Optional: safer env config
-
-# Image Processing
-pillow==11.3.0
-
-# Django Internals
 asgiref==3.9.1
+Django==5.2.5
 sqlparse==0.5.3
-
-# Compatibility fix
-setuptools<81  # Prevent pkg_resources deprecation issues
-
-# Optional (add only if using PostgreSQL)
-psycopg2-binary==2.9.9
-
-# Optional (testing & debugging)
-pytest-django==4.8.0
-coverage==7.5.3
