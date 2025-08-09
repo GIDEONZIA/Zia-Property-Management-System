@@ -17,7 +17,6 @@ urlpatterns = [
     # Home / Landing
     path('', TemplateView.as_view(template_name='frontend/index.html'), name='landing_page'),
     # Auth
-    path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
 
     # Static Pages
@@ -25,7 +24,8 @@ urlpatterns = [
     path('services/', TemplateView.as_view(template_name='frontend/services.html'), name='services'),
     path('premium_agent/', TemplateView.as_view(template_name='frontend/premium_agent.html'), name='premium_agent'),
     
-    
+    path('agent/login/', CustomLoginView.as_view(), name='agent_login'),
+
 
 
     # Dynamic Search & Listings Views
