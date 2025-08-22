@@ -1,0 +1,25 @@
+{
+  "name": "zia-property-management-system",
+  "version": "1.0.0",
+  "description": "A Django-based property management platform for handling real estate assets, agents, tenants leases, and rent payments.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GIDEONZIA/Zia-Property-Management-System.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GIDEONZIA/Zia-Property-Management-System/issues"
+  },
+  "homepage": "https://github.com/GIDEONZIA/Zia-Property-Management-System#readme",
+  "dependencies": {
+    "@openai/agents": "^0.0.17",
+    "node-fetch": "^3.3.2",
+    "zod": "^3.25.76"
+  }
+}

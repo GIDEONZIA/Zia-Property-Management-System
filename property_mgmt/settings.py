@@ -28,6 +28,14 @@ ALLOWED_HOSTS = []
 
 DJANGO_SETTINGS_MODULE = "property_mgmt.settings"
 
+# openai
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -61,6 +69,8 @@ INSTALLED_APPS = [
     'subscriptions',  # Subscription Management App
     # Third-party apps
     'rest_framework',  # Django REST Framework
+    'chat',
+    'openai',
     'rest_framework_simplejwt', # JWT Authentication
       
     
@@ -83,6 +93,9 @@ JAZZMIN_SETTINGS = {
     "copyright": "Zia Properties Ltd",
     "search_model": ["properties.Property"],  # optional
     "order_with_respect_to": ["properties", "accounts"],
+
+    # -*- coding: utf-8 -*-
+
     "icons": {
         # 🔐 Built-in apps
         "auth.Group": "fas fa-user-shield",
@@ -96,6 +109,9 @@ JAZZMIN_SETTINGS = {
         "socialaccount.SocialApp": "fas fa-cogs",
         "socialaccount.SocialAccount": "fab fa-facebook-square",
         "socialaccount.SocialToken": "fas fa-key",
+
+        #AI chat
+        "chat.ChatMessage": "fas fa-comments",
 
         # 🏘️ Property System (properties app)
         "properties.Agent": "fas fa-user-tie",
@@ -128,8 +144,8 @@ JAZZMIN_SETTINGS = {
 
                 # Django Q core models
         "django_q.Failure": "fas fa-times-circle",         # ❌ Failed tasks
-        "django_q.Task": "fas fa-hourglass-half",          # ⏳ Queued / running tasks
-        "django_q.Schedule": "fas fa-calendar-alt",        # 📅 Scheduled tasks
+        "django_q.Task": "fas fa-hourglass-alt",          #  Queued / running tasks
+        "django_q.Schedule": "fas fa-calendar-alt  ",        # 📅 Scheduled tasks
         "django_q.Success": "fas fa-check-circle",         # ✅ Successful tasks
 
         # Bonus suggestion for overall tasks:

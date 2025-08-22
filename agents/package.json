@@ -1,0 +1,11 @@
+{
+  "name": "agents",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@openai/agents": "^0.0.17",
+    "express": "^5.1.0",
+    "node-fetch": "^3.3.2",
+    "zod": "^3.25.67"
+  }
+}

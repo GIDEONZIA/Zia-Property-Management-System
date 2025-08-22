@@ -23,6 +23,7 @@ from django.shortcuts import render, redirect
 from subscriptions.models import PremiumSubscription  # ✅ import from subscriptions
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.urls import reverse_lazy
+from django.views.generic import TemplateView
 
 # sign up
 
@@ -82,6 +83,12 @@ def listings_view(request):
     properties = Property.objects.filter(is_available=True).order_by('-created_at')
     return render(request, 'frontend/listings.html', {'properties': properties})
 
+
+class PrivacyPolicyView(TemplateView):
+    template_name = "frontend/privacy_policy.html"
+
+class TermsAndConditionsView(TemplateView):
+    template_name = "frontend/terms_and_conditions.html"
 
 
 # contacts
@@ -240,3 +247,7 @@ class AgentLoginView(LoginView):
         if next_url and url_has_allowed_host_and_scheme(next_url, self.request.get_host()):
             return next_url
         return reverse_lazy('agent_dashboard')  # Make sure this URL name exists
+
+def property_detail_view(request, pk):
+    property_obj = get_object_or_404(Property, pk=pk)
+    return render(request, 'frontend/property_detail.html', {'property': property_obj})

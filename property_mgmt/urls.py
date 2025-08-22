@@ -50,6 +50,9 @@ urlpatterns = [
 
     # Premium agent landing page
     path('premium-agent/', premium_agent_page, name='premium-agent-page'),
+
+    path("api/", include("chat.urls")),
+
 ]
 
 # Static/media files in development

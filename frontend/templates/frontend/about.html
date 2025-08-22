@@ -3,28 +3,21 @@
 
 {% block title %}About Us - Zia Properties Ltd{% endblock %}
 
-{% block extra_styles %}
-  <!-- Bootstrap 5 CSS (Local) -->
-  <link rel="stylesheet" href="{% static 'frontend/css/bootstrap.min.css' %}">
-  <!-- Font Awesome CSS (CDN) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-{% endblock %}
-
 {% block content %}
 
 <!-- Hero Section -->
-<section class="text-center py-5 bg-light border-bottom" role="banner" aria-label="About Us introduction">
+<section class="bg-primary text-white text-center py-5 mb-5" role="banner">
   <div class="container">
-    <h1 class="mb-3 fw-bold">About Zia Properties Ltd</h1>
-    <h2 class="h5 text-muted">Who We Are</h2>
+    <h1 class="display-5 fw-bold mb-2">About Zia Properties Ltd</h1>
+    <p class="lead mb-0">Simplifying Property Management Across Kenya</p>
   </div>
 </section>
 
 <!-- About Content -->
-<section class="py-5" role="main" aria-label="About Us detailed description">
+<section class="py-5" role="main">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-md-10 fs-5">
+      <div class="col-lg-8 fs-5">
         <p>
           Zia Properties Ltd is a comprehensive platform designed to simplify and streamline property management tasks. 
           Our mission is to empower property owners, managers, and tenants with intuitive tools for managing properties, 
@@ -41,28 +34,21 @@
           <a href="mailto:ziaproagency@yahoo.com" class="text-decoration-none">ziaproagency@yahoo.com</a>
         </p>
 
-        <a href="{% url 'frontend:contact' %}" class="btn btn-primary mt-3" aria-label="Contact Zia Properties Ltd">Contact Us</a>
+        <a href="{% url 'frontend:contact' %}" class="btn btn-primary mt-3">Contact Us</a>
       </div>
     </div>
   </div>
 </section>
 
 <!-- CTA Section -->
-<section class="py-5 text-center" style="background:#f0f4ff;" role="complementary" aria-label="Partnership call to action">
+<section class="py-5 text-center bg-light">
   <div class="container">
     <h2 class="mb-3 text-primary">Partner With Zia Properties Ltd for Smarter Property Management</h2>
     <p class="mb-4 text-muted">
       Discover how Zia Properties Ltd simplifies leasing, communication, and tenant experiences.
     </p>
-    <a href="{% url 'frontend:services' %}" class="btn btn-outline-primary" aria-label="Explore Zia Properties Ltd services">Explore Our Services</a>
+    <a href="{% url 'frontend:services' %}" class="btn btn-outline-primary">Explore Our Services</a>
   </div>
 </section>
 
-{% endblock %}
-
-{% block extra_scripts %}
-  <!-- Bootstrap Bundle JS (Local) -->
-  <script src="{% static 'frontend/js/bootstrap.bundle.min.js' %}"></script>
-  <!-- Font Awesome JS (Optional, CDN) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 {% endblock %}

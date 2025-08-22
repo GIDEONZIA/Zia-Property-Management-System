@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_public.html" %}
 {% load static %}
 
 {% block title %}{{ property.property_name }} | Property Details{% endblock %}
@@ -51,7 +51,7 @@
                 <a href="mailto:{{ property.agent.email|default:'info@example.com' }}" class="btn btn-primary">
                     <i class="fas fa-envelope"></i> Contact Agent
                 </a>
-                <a href="{% url 'listings' %}" class="btn btn-outline-secondary ms-2">Back to Listings</a>
+                <a href="{% url 'frontend:listings' %}" class="btn btn-outline-secondary ms-2">Back to Listings</a>
             </div>
         </div>
     </div>
