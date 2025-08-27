@@ -14,6 +14,7 @@ PROPERTY_TYPES = [
     ('house', 'House'),
     ('apartment', 'Apartment'),
     ('commercial', 'Commercial'),
+    ('resort', 'Resort'),
     ('land', 'Land'),
     ('office', 'Office'),
     ('warehouse', 'Warehouse'),

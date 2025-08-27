@@ -52,8 +52,11 @@
           <p class="text-truncate mb-0">{{ property.description|truncatewords:20 }}</p>
         </div>
         <div class="card-footer bg-white border-0 d-flex justify-content-between">
-          <a href="{% url 'frontend:blog_detail' property.id %}" class="btn btn-outline-primary btn-sm">View Details</a>
-          <a href="mailto:{{ property.agent.email|default:'info@example.com' }}" class="btn btn-primary btn-sm">Contact Agent</a>
+            <a href="{% url 'frontend:property_detail' property.id %}" class="btn btn-outline-primary btn-sm">View Details</a>
+            <a href="mailto:{{ property.agent.email|default:'info@example.com' }}?subject=Property%20Inquiry&body=Hello,%20I%20am%20interested%20in%20property%20{{ property.title }}."
+              class="btn btn-primary btn-sm">
+              Contact Agent
+            </a>
         </div>
       </div>
     </article>

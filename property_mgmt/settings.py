@@ -70,7 +70,6 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',  # Django REST Framework
     'chat',
-    'openai',
     'rest_framework_simplejwt', # JWT Authentication
       
     
@@ -189,13 +188,12 @@ AUTHENTICATION_BACKENDS = [
 
 # Authentication settings for DRF
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    
         'rest_framework.authentication.SessionAuthentication',
     ],
+
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
