@@ -1,0 +1,23 @@
+<div id="chat-log"></div>
+<input id="chat-message-input" type="text">
+<button id="chat-message-submit">Send</button>
+
+<script>
+    const roomName = "support"; // could be dynamic per user/agent
+    const chatSocket = new WebSocket(
+        "ws://" + window.location.host + "/ws/chat/" + roomName + "/"
+    );
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        document.querySelector("#chat-log").innerHTML += ("<div>" + data.message + "</div>");
+    };
+
+    document.querySelector("#chat-message-submit").onclick = function() {
+        const messageInput = document.querySelector("#chat-message-input");
+        chatSocket.send(JSON.stringify({
+            "message": messageInput.value
+        }));
+        messageInput.value = "";
+    };
+</script>

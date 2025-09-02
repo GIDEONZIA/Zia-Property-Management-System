@@ -1,21 +1,31 @@
-# chat/models.py
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
-class ChatMessage(models.Model):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        null=True,      # allow guest users
-        blank=True
+User = get_user_model()
+
+
+class ChatSession(models.Model):
+    """Represents a chat between a user and an agent/bot."""
+    user = models.ForeignKey(User, related_name="chat_sessions", on_delete=models.CASCADE)
+    agent = models.ForeignKey(
+        User, related_name="agent_sessions", on_delete=models.SET_NULL, null=True, blank=True
     )
-    sender_name = models.CharField(max_length=100, default="Unkown")  # name displayed in chat
-    message = models.TextField()                    # user message
-    response = models.TextField(blank=True, null=True)  # bot/agent reply
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ["created_at"]
+    created_at = models.DateTimeField(auto_now_add=True)  # 👈 Add this
+    updated_at = models.DateTimeField(auto_now=True)      # 👈 for edits
+    started_at = models.DateTimeField(auto_now_add=True)
+    ended_at = models.DateTimeField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.sender_name}: {self.message[:50]}"
+        return f"Session {self.id} ({self.user.username})"
+
+
+class ChatMessage(models.Model):
+    """Stores messages inside a session."""
+    session = models.ForeignKey(ChatSession, related_name="messages", on_delete=models.CASCADE, null=True, blank=True)
+    sender = models.ForeignKey(User, related_name="sent_messages", on_delete=models.CASCADE)
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.sender.username}: {self.content[:30]}"

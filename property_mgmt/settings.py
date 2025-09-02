@@ -10,8 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 from pathlib import Path
+from dotenv import load_dotenv
+from decouple import config
+
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Load environment variables
+load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -57,8 +63,6 @@ INSTALLED_APPS = [
     'widget_tweaks',
    
 
-    
-    
     # Custom apps
      
     'frontend',  # Frontend App for the Property Management System
@@ -67,9 +71,11 @@ INSTALLED_APPS = [
     'reports',  # Reporting App
     'testimonial',  # Testimonials App
     'subscriptions',  # Subscription Management App
+    
     # Third-party apps
     'rest_framework',  # Django REST Framework
     'chat',
+    'channels',
     'rest_framework_simplejwt', # JWT Authentication
       
     
@@ -235,6 +241,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'property_mgmt.wsgi.application'
 
+ASGI_APPLICATION = "property_mgmt.asgi.application"
+
+# Redis for real-time communication
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],  # make sure Redis is running
+        },
+    },
+}
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -257,12 +275,13 @@ MPESA_PASSKEY = "<your-lipa-na-mpesa-passkey>"  # Still required
 MPESA_CALLBACK_URL = 'https://baec-129-222-187-16.ngrok-free.app'
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'gwiternz@gmail.com'
-EMAIL_HOST_PASSWORD = '@#93Gwiternz29#@'  # use an app password if using Gmail
+# Email
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
 
 DEFAULT_FROM_EMAIL = 'noreply@zia-properties.com'
 
