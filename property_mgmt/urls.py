@@ -55,6 +55,14 @@ urlpatterns = [
 
 ]
 
+from django.urls import re_path
+from chat import consumers
+
+websocket_urlpatterns = [
+    re_path(r"ws/chat/(?P<room_name>\w+)/$", consumers.ChatConsumer.as_asgi()),
+]
+
+
 # Static/media files in development
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -24,6 +24,7 @@ from subscriptions.models import PremiumSubscription  # ✅ import from subscrip
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
+from django.urls import reverse_lazy
 
 # sign up
 
@@ -32,12 +33,11 @@ def signup_view(request):
         form = CustomSignupForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login')
+            return redirect('frontend:login')
     else:
         form = CustomSignupForm()
     
     return render(request, 'frontend/sign_up.html', {'form': form})
-from django.urls import reverse_lazy
 
 class CustomLoginView(LoginView):
     template_name = 'frontend/agent_login.html'  # adjust as needed
@@ -92,7 +92,6 @@ class TermsAndConditionsView(TemplateView):
 
 
 # contacts
-
 def contact_view(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -110,12 +109,12 @@ def contact_view(request):
                 fail_silently=False,
             )
             messages.success(request, "Message sent successfully.")
-            return redirect('thank_you')
+            return redirect('frontend:thank_you')
         except Exception as e:
             messages.error(request, f"Failed to send message: {e}")
-            return redirect('contact')
+            return redirect('frontend:contact')
     
-    return render(request, 'frontend/contact.html')  # this handles GET
+    return render(request, 'frontend/contact.html')
 
 
 
@@ -177,7 +176,7 @@ def start_premium_subscription(request):
 
         return render(request, 'frontend/mpesa_waiting.html', {'response': response})
 
-    return redirect('premium_agent')
+    return redirect('frontend:premium_agent')
 
 
 
@@ -226,7 +225,7 @@ def premium_agent_page(request):
     has_paid = PremiumSubscription.objects.filter(user=user, paid=True).exists()
 
     if not has_paid:
-        return redirect('subscription_status')  # Or 'subscribe' if you prefer
+        return redirect('frontend:subscribe')  # Or 'subscribe' if you prefer
 
     return render(request, 'frontend/premium_agent.html')
 

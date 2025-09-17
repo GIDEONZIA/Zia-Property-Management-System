@@ -33,8 +33,8 @@ class ChatMessageAdmin(admin.ModelAdmin):
     list_display = ("id", "session", "sender", "content", "timestamp")
     list_filter = ("timestamp",)
     search_fields = ("session__id", "sender__username", "content")
-    date_hierarchy = "timestamp"   # ✅ FIXED: must match the model field
-    
+    date_hierarchy = "timestamp"   
+
     def created(self, obj):
         return getattr(obj, "created_at", getattr(obj, "timestamp", None))
     created.short_description = "Created"

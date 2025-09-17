@@ -1,15 +1,13 @@
 import csv
 from django.http import HttpResponse
 from django.contrib import admin
-from .models import PremiumSubscription
-from django.contrib import admin
+from .models import PremiumSubscription, MpesaAuditLog
 from django_q.models import Task
-
 
 
 @admin.register(PremiumSubscription)
 class PremiumSubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('phone', 'plan', 'amount', 'paid', 'created_at')
+    list_display = ('phone', 'plan', 'amount', 'paid', 'created_at','expiry_date')
     list_filter = ('plan', 'paid')
     search_fields = ('phone', 'mpesa_receipt')
     actions = ['export_paid_subscriptions']
@@ -27,4 +25,12 @@ class PremiumSubscriptionAdmin(admin.ModelAdmin):
 
     export_paid_subscriptions.short_description = "Export Paid Subscriptions as CSV"
 
+
 admin.site.register(Task)
+
+
+@admin.register(MpesaAuditLog)
+class MpesaAuditLogAdmin(admin.ModelAdmin):
+    list_display = ('phone_number', 'amount', 'transaction_type', 'reference', 'status', 'created_at')
+    list_filter = ('transaction_type', 'status')
+    search_fields = ('phone_number', 'reference')

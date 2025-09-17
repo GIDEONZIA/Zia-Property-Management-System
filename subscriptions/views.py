@@ -43,7 +43,8 @@ def subscribe_view(request):
                 phone=formatted_phone,
                 plan=plan,
                 amount=amount,
-                paid=False
+                paid=False,
+                checkout_request_id=response.get("CheckoutRequestID")  # 🔑 store it
             )
             messages.success(request, "✅ STK Push sent. Please complete payment on your phone.")
         else:

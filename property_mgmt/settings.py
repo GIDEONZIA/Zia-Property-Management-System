@@ -74,8 +74,8 @@ INSTALLED_APPS = [
     
     # Third-party apps
     'rest_framework',  # Django REST Framework
-    'chat',
     'channels',
+    'chat',
     'rest_framework_simplejwt', # JWT Authentication
       
     
@@ -217,6 +217,14 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+
+    # Custom middleware
+    "subscriptions.middleware.PremiumRequiredMiddleware",
+]
+
+premium_paths = [
+    "/premium/",
+    "/properties/add/",
 ]
 
 ROOT_URLCONF = 'property_mgmt.urls'
@@ -276,7 +284,7 @@ MPESA_CALLBACK_URL = 'https://baec-129-222-187-16.ngrok-free.app'
 
 
 # Email
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")

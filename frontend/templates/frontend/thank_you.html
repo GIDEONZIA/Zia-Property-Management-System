@@ -43,7 +43,7 @@
     <h1 class="display-4 text-success fw-bold">Thank You!</h1>
     <p class="lead">We’ve received your submission.<br>We'll get back to you shortly.</p>
     <p class="text-muted">Redirecting to <strong>Home</strong> in <span id="countdown">5</span> seconds...</p>
-    <a href="{% url 'home' %}" class="btn btn-primary">Go Now</a>
+    <a href="{% url 'frontend:home' %}" class="btn btn-primary">Go Now</a>
   </div>
 </div>
 
@@ -78,7 +78,7 @@
   // Countdown + Redirect
   let seconds = 5;
   const countdown = document.getElementById('countdown');
-  const redirectURL = "{% url 'home' %}";
+  const redirectURL = "{% url 'frontend:home' %}";
 
   const timer = setInterval(() => {
     seconds--;

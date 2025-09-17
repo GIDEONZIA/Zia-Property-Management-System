@@ -1,17 +1,19 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth import get_user_model
-
-User = get_user_model()
 
 
 class ChatSession(models.Model):
     """Represents a chat between a user and an agent/bot."""
-    user = models.ForeignKey(User, related_name="chat_sessions", on_delete=models.CASCADE)
-    agent = models.ForeignKey(
-        User, related_name="agent_sessions", on_delete=models.SET_NULL, null=True, blank=True
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name="chat_sessions", on_delete=models.CASCADE
     )
-    created_at = models.DateTimeField(auto_now_add=True)  # 👈 Add this
-    updated_at = models.DateTimeField(auto_now=True)      # 👈 for edits
+    agent = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name="agent_sessions",
+        on_delete=models.SET_NULL, null=True, blank=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
@@ -22,8 +24,12 @@ class ChatSession(models.Model):
 
 class ChatMessage(models.Model):
     """Stores messages inside a session."""
-    session = models.ForeignKey(ChatSession, related_name="messages", on_delete=models.CASCADE, null=True, blank=True)
-    sender = models.ForeignKey(User, related_name="sent_messages", on_delete=models.CASCADE)
+    session = models.ForeignKey(
+        ChatSession, related_name="messages", on_delete=models.CASCADE, null=True, blank=True
+    )
+    sender = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name="sent_messages", on_delete=models.CASCADE
+    )
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
