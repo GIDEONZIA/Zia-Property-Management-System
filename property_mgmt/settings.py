@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 from pathlib import Path
 from dotenv import load_dotenv
-from decouple import config
 
 import os
 
@@ -273,14 +272,14 @@ DATABASES = {
 }
 
 # Mpesa Daraja API Settings
-MPESA_CONSUMER_KEY = "jG8krQFuzcdYn9EFwwlvMdyC9nLxufKTzJOnHAUYKrFoPUer"
-MPESA_CONSUMER_SECRET = "sNIS1DYt5jl1P1tdsD3oY1kle10nsgGCROyG5aFy8GNIkU28elfZgmqCXX2iMeoP"
+MPESA_CONSUMER_KEY = "dA3zHqpu9out0wO8dU0Ql3xx4gtFMxolN7mFGxBd3HZftJ3T"
+MPESA_CONSUMER_SECRET = "RN1WXAr0IC5NUs0u6rdRT4qo3fWmdWH8f44o76Ak4DzJKrQDvB5qxZjY8MNKrdzO"
 MPESA_BASE_URL = "https://sandbox.safaricom.co.ke"
 MPESA_SHORTCODE = "174379"
-MPESA_PASSKEY = "<your-lipa-na-mpesa-passkey>"  # Still required
+MPESA_PASSKEY = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"  # Still required
 
 # My Ngrok/Public callback base
-MPESA_CALLBACK_URL = 'https://baec-129-222-187-16.ngrok-free.app'
+MPESA_CALLBACK_URL = 'https://22e21a0743bb.ngrok-free.app/'
 
 
 # Email

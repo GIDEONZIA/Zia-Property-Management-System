@@ -1,66 +1,52 @@
+# frontend/urls.py
 from django.urls import path, include
-from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
-from .views import PrivacyPolicyView, TermsAndConditionsView
 from . import views
-
 from .views import (
-    signup_view, CustomLoginView, idx_search_view, listings_view, contact_view, thank_you_view,
-    blog_list_view, blog_detail, start_premium_subscription, subscription_status_view, home_view
+    signup_view, PublicLoginView, AgentLoginView, idx_search_view, listings_view,
+    contact_view, thank_you_view, blog_list_view, blog_detail, home_view,
+    premium_agent_page, payment_success,
 )
-from properties.views import buyer_lead_view, seller_lead_view
-from utils.mpesa_callback import mpesa_callback
-from subscriptions.views import premium_agent_page
+from django.views.generic import TemplateView
 
 app_name = 'frontend'
 
 urlpatterns = [
-    # Home / Landing
+    # Landing / Home
     path('', TemplateView.as_view(template_name='frontend/index.html'), name='landing_page'),
+    path('home/', home_view, name='home'),
 
-    # Authentication
-    path('login/', CustomLoginView.as_view(), name='login'),  # main login
-    path('agent/login/', CustomLoginView.as_view(), name='agent_login'),  # alias for agents
+    # Auth
+    path('login/', PublicLoginView.as_view(), name='login'),
+    path('agent/login/', AgentLoginView.as_view(), name='agent_login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='frontend:landing_page'), name='logout'),
     path('sign-up/', signup_view, name='signup'),
 
-    # Static Pages
+    # Pages
     path('about/', TemplateView.as_view(template_name='frontend/about.html'), name='about'),
     path('services/', TemplateView.as_view(template_name='frontend/services.html'), name='services'),
-    path('premium_agent/', TemplateView.as_view(template_name='frontend/premium_agent.html'), name='premium_agent'),
+    path('privacy-policy/', views.PrivacyPolicyView.as_view(), name='privacy_policy'),
+    path('terms-and-conditions/', views.TermsAndConditionsView.as_view(), name='terms_and_conditions'),
 
-    # Dynamic Search & Listings Views
+    # Listings & Search
     path('idx_search/', idx_search_view, name='idx_search'),
     path('listings/', listings_view, name='listings'),
-    path('property/<int:pk>/', views.property_detail_view, name='property_detail'),  # ✅ This is the one
+    path('property/<int:pk>/', views.property_detail_view, name='property_detail'),
 
+    # Contact & Blog
     path('contact/', contact_view, name='contact'),
-    path('buyer/', buyer_lead_view, name='buy'),
-    path('sell/', seller_lead_view, name='sell'),
-
-    # Blog
+    path('thank-you', thank_you_view, name='thank_you'),
     path('blog/', blog_list_view, name='blog'),
     path('blog/<slug:slug>/', blog_detail, name='blog_detail'),
 
-    # Thank You Page
-    path('thank-you', thank_you_view, name='thank_you'),
+    # Premium (renders the page) and payment success page (frontend only)
+    path('premium-agent/', premium_agent_page, name='premium_agent'),
+    path('payment-success/', payment_success, name='payment_success'),
+    path('payment-failed/', views.payment_failed, name='payment_failed'),
+    path('mpesa-waiting/', views.mpesa_waiting, name='mpesa_waiting'),
 
-    # Dashboard / Home
-    path('home/', home_view, name='home'),
 
-    # Subscriptions
-    path('subscribe/', start_premium_subscription, name='subscribe'),
-    path('subscription/', subscription_status_view, name='subscription_status'),
-    path('premium-agent/', premium_agent_page, name='premium-agent-page'),
-
-    # API Callback
-    path('api/mpesa-callback/', mpesa_callback, name='mpesa_callback'),
-
-    # AllAuth
+    # Delegated endpoints (handled by subscriptions app)
+    # NOTE: mpesa callback should point to the subscriptions app; do NOT expose internal logic here.
     path('accounts/', include('allauth.urls')),
-
-    path('privacy-policy/', PrivacyPolicyView.as_view(), name='privacy_policy'),
-    path('terms-and-conditions/', TermsAndConditionsView.as_view(), name='terms_and_conditions'),
-    # ... other URLs
-
 ]

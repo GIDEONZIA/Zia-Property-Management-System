@@ -1,0 +1,100 @@
+{% extends 'base_public.html' %}
+{% block content %}
+<div class="container text-center py-5">
+  <h1 class="text-success fw-bold mb-3">Payment Successful 🎉</h1>
+  <p>Your subscription has been activated successfully.</p>
+  <div class="spinner-border text-success mt-4" role="status">
+    <span class="visually-hidden">Redirecting...</span>
+  </div>
+  <p class="text-secondary mt-3" id="redirect-text">
+  Redirecting you in <span id="countdown">5</span> seconds...
+</p>
+</div>
+
+<script>
+const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+const payButtons = document.querySelectorAll('.pay-btn');
+const form = document.getElementById('paymentForm');
+
+// Show modal with plan info
+payButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.getElementById('plan').value = btn.dataset.plan;
+    document.getElementById('amount').value = btn.dataset.amount;
+    paymentModal.show();
+  });
+});
+
+// Handle payment form submission
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const phone = document.getElementById('phone').value;
+  const plan = document.getElementById('plan').value;
+  const amount = document.getElementById('amount').value;
+
+  try {
+    const response = await fetch("{% url 'subscriptions:stk_push' %}", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: JSON.stringify({ phone, plan, amount })
+    });
+
+    const result = await response.json();
+    paymentModal.hide();
+
+    if (response.ok && result.status?.ResponseCode === "0") {
+      // Success: confetti + toast
+      confetti({ particleCount: 200, spread: 100 });
+      showToast('success', '✅ STK Push sent! Complete payment on your phone.');
+
+    // Countdown redirect to home
+    let count = 5;
+    const countdownEl = document.getElementById('countdown');
+    const redirectURL = "{% url 'frontend:home' %}"; // Go back to home
+
+    const interval = setInterval(() => {
+      count--;
+      countdownEl.textContent = count;
+      if (count === 0) {
+        clearInterval(interval);
+        window.location.href = redirectURL;
+      }
+    }, 1000);
+
+    } else {
+      // Failure: toast only
+      showToast('danger', '❌ Payment initiation failed. ' + (result.status?.errorMessage || 'Try again.'));
+    }
+
+  } catch (err) {
+    paymentModal.hide();
+    showToast('danger', '❌ Payment failed. Network error.');
+    console.error(err);
+  }
+});
+
+// Bootstrap toast helper
+function showToast(type, message) {
+  const toastContainer = document.querySelector('.position-fixed');
+  const toastEl = document.createElement('div');
+  toastEl.className = `toast align-items-center text-bg-${type} border-0 mb-2`;
+  toastEl.setAttribute('role', 'alert');
+  toastEl.setAttribute('aria-live', 'assertive');
+  toastEl.setAttribute('aria-atomic', 'true');
+  toastEl.innerHTML = `
+    <div class="d-flex">
+      <div class="toast-body">${message}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  `;
+  toastContainer.appendChild(toastEl);
+  const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
+  toast.show();
+}
+</script>
+
+
+{% endblock %}

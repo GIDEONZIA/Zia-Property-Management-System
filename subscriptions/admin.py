@@ -7,8 +7,8 @@ from django_q.models import Task
 
 @admin.register(PremiumSubscription)
 class PremiumSubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('phone', 'plan', 'amount', 'paid', 'created_at','expiry_date')
-    list_filter = ('plan', 'paid')
+    list_display = ('phone', 'plan', 'amount', 'paid', 'created_at','expiry_date', 'payment_gateway')
+    list_filter = ('plan', 'paid', 'payment_gateway')
     search_fields = ('phone', 'mpesa_receipt')
     actions = ['export_paid_subscriptions']
 

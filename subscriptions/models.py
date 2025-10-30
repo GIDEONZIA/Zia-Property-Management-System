@@ -20,6 +20,8 @@ class PremiumSubscription(models.Model):
     expiry_date = models.DateTimeField(blank=True, null=True)
     mpesa_receipt = models.CharField(max_length=100, blank=True, null=True)
     checkout_request_id = models.CharField(max_length=100, blank=True, null=True)
+    payment_gateway = models.CharField(max_length=50, default='MPESA')
+
 
     def __str__(self):
         return f"{self.phone} - {self.plan} - {'Paid' if self.paid else 'Pending'}"
