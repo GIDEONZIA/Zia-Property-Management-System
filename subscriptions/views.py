@@ -9,11 +9,55 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django_q.tasks import async_task
 
-from .models import PremiumSubscription
+from .models import PremiumSubscription, MpesaAuditLog
 from utils.mpesa import initiate_stk_push
 from utils.mpesa_callback import log_audit
 
 logger = logging.getLogger(__name__)
+
+def manual_payment(request):
+    if request.method == "POST":
+        phone = request.POST.get('phone')
+        receipt = request.POST.get('receipt').strip().upper()
+
+        # 1️⃣ Check if receipt already used
+        if PremiumSubscription.objects.filter(mpesa_receipt=receipt).exists():
+            messages.error(request, "⚠️ This receipt has already been used.")
+            return redirect('frontend:premium_agent')
+
+        # 2️⃣ Look for the receipt in M-Pesa audit logs
+        matched_audit = None
+        for log in MpesaAuditLog.objects.filter(event_type='stk_callback'):
+            try:
+                payload = json.loads(log.payload)
+                callback = payload.get('Body', {}).get('stkCallback', {})
+                items = callback.get('CallbackMetadata', {}).get('Item', [])
+                mpesa_receipt = next((i['Value'] for i in items if i['Name'] == 'MpesaReceiptNumber'), None)
+                mpesa_phone = next((i['Value'] for i in items if i['Name'] == 'PhoneNumber'), None)
+                if mpesa_receipt and mpesa_receipt.upper() == receipt and str(mpesa_phone) == str(phone):
+                    matched_audit = log
+                    break
+            except Exception:
+                continue
+
+        # 3️⃣ Handle if found or not
+        if not matched_audit:
+            messages.error(request, "❌ Receipt not found in M-Pesa records. Please confirm and try again.")
+            return redirect('frontend:premium_agent')
+
+        # 4️⃣ Mark subscription as paid
+        subscription = PremiumSubscription.objects.filter(phone=phone, paid=False).last()
+        if subscription:
+            subscription.paid = True
+            subscription.mpesa_receipt = receipt
+            subscription.save()
+            messages.success(request, "✅ Manual payment verified successfully!")
+            return redirect('frontend:payment_success')
+        else:
+            messages.warning(request, "⚠️ No pending subscription found for this number.")
+            return redirect('frontend:premium_agent')
+
+    return redirect('frontend:premium_agent')
 
 # -----------------------
 # Classic form-post subscribe (server-side fallback)

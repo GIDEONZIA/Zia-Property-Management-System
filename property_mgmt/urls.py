@@ -5,7 +5,6 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.urls import re_path
-from chat import consumers
 
 from frontend.views import PublicLoginView
 from properties.views import InternalLoginView, admin_dashboard
@@ -39,12 +38,6 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
-    # Chat API
-    path("api/", include("chat.urls")),
-]
-
-websocket_urlpatterns = [
-    re_path(r"ws/chat/(?P<room_name>\w+)/$", consumers.ChatConsumer.as_asgi()),
 ]
 
 if settings.DEBUG:

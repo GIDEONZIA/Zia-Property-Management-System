@@ -73,8 +73,6 @@ INSTALLED_APPS = [
     
     # Third-party apps
     'rest_framework',  # Django REST Framework
-    'channels',
-    'chat',
     'rest_framework_simplejwt', # JWT Authentication
       
     
@@ -153,8 +151,7 @@ JAZZMIN_SETTINGS = {
         "django_q.Success": "fas fa-check-circle",         # ✅ Successful tasks
 
         # Bonus suggestion for overall tasks:
-        "django_q.QueuedTask": "fas fa-tasks",             # 🧾 QueuedTask (if you define it)
-
+        "django_q.QueuedTask": "fas fa-tasks",             
     },
 
     "custom_links": {
@@ -255,7 +252,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],  # make sure Redis is running
+            "hosts": [("127.0.0.1", 6379)],  
         },
     },
 }
@@ -266,7 +263,7 @@ DATABASES = {
         'NAME': 'property_management_system',
         'USER': 'gwiternz',
         'PASSWORD': '@#93Gwiternz29#@',
-        'HOST': '127.0.0.1', # <-- NOT 'localhost'
+        'HOST': '127.0.0.1', 
         'PORT': '5432',
     }
 }
@@ -276,7 +273,7 @@ MPESA_CONSUMER_KEY = "dA3zHqpu9out0wO8dU0Ql3xx4gtFMxolN7mFGxBd3HZftJ3T"
 MPESA_CONSUMER_SECRET = "RN1WXAr0IC5NUs0u6rdRT4qo3fWmdWH8f44o76Ak4DzJKrQDvB5qxZjY8MNKrdzO"
 MPESA_BASE_URL = "https://sandbox.safaricom.co.ke"
 MPESA_SHORTCODE = "174379"
-MPESA_PASSKEY = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"  # Still required
+MPESA_PASSKEY = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"  
 
 # My Ngrok/Public callback base
 MPESA_CALLBACK_URL = 'https://22e21a0743bb.ngrok-free.app/'
