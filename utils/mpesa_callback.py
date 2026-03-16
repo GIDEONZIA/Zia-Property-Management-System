@@ -1,67 +1,63 @@
+import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import json
 from subscriptions.models import PremiumSubscription, MpesaAuditLog
-
 
 def process_mpesa_callback(data):
     try:
         callback = data['Body']['stkCallback']
         result_code = callback['ResultCode']
+        checkout_id = callback.get('CheckoutRequestID')
         metadata = callback.get('CallbackMetadata', {}).get('Item', [])
 
         if result_code == 0:
-            phone = next((i['Value'] for i in metadata if i['Name'] == 'PhoneNumber'), None)
-            amount = next((i['Value'] for i in metadata if i['Name'] == 'Amount'), None)
             receipt = next((i['Value'] for i in metadata if i['Name'] == 'MpesaReceiptNumber'), None)
+            
+            # Find the specific record by CheckoutID
+            subscription = PremiumSubscription.objects.filter(
+                checkout_request_id=checkout_id, 
+                paid=False
+            ).last()
 
-            subscription = PremiumSubscription.objects.filter(phone=str(phone), paid=False).last()
             if subscription:
-                subscription.paid = True
-                subscription.mpesa_receipt = receipt
-                subscription.save()
-
-        return {"ResultCode": 0, "ResultDesc": "Processed"}
+                # Triggers activate() to handle expiry logic correctly
+                subscription.activate(receipt)
+                return {"ResultCode": 0, "ResultDesc": "Success"}
+            
+        return {"ResultCode": 0, "ResultDesc": "No pending subscription found"}
     except Exception as e:
-        print("M-PESA callback processing error:", e)
-        return {"ResultCode": 1, "ResultDesc": "Error"}
+        return {"ResultCode": 1, "ResultDesc": str(e)}
 
-
-def log_audit(phone, event_type, payload):
+def log_audit(phone, event_type, status, amount, reference, payload):
+    """Synchronized with MpesaAuditLog model fields"""
     MpesaAuditLog.objects.create(
-        phone=phone,
-        event_type=event_type,
-        payload=payload
+        phone_number=str(phone),
+        transaction_type=event_type,
+        amount=amount,
+        reference=reference,
+        status=status,
+        raw_response=payload
     )
-
 
 @csrf_exempt
 def mpesa_callback(request):
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body)
+    if request.method != "POST":
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+    
+    try:
+        data = json.loads(request.body)
+        callback = data['Body']['stkCallback']
+        metadata = callback.get('CallbackMetadata', {}).get('Item', [])
+        
+        # Extract metadata for the audit log
+        phone = next((i['Value'] for i in metadata if i['Name'] == 'PhoneNumber'), "0")
+        amount = next((i['Value'] for i in metadata if i['Name'] == 'Amount'), 0)
+        receipt = next((i['Value'] for i in metadata if i['Name'] == 'MpesaReceiptNumber'), "N/A")
+        status = "Success" if callback['ResultCode'] == 0 else "Failed"
 
-            # Try to get phone number from callback
-            phone = ''
-            try:
-                metadata = data['Body']['stkCallback'].get('CallbackMetadata', {}).get('Item', [])
-                phone_item = next((i for i in metadata if i['Name'] == 'PhoneNumber'), None)
-                if phone_item:
-                    phone = phone_item.get('Value', '')
-            except Exception:
-                pass
+        log_audit(phone, 'stk_callback', status, amount, receipt, data)
 
-            log_audit(
-                phone=phone,
-                event_type='stk_callback',
-                payload=json.dumps(data)
-            )
-
-            response = process_mpesa_callback(data)
-            return JsonResponse(response)
-
-        except Exception as e:
-            print("Error in mpesa_callback view:", e)
-            return JsonResponse({"ResultCode": 1, "ResultDesc": "Failed to process"}, status=500)
-
-    return JsonResponse({"error": "Invalid request method"}, status=400)
+        response = process_mpesa_callback(data)
+        return JsonResponse(response)
+    except Exception:
+        return JsonResponse({"ResultCode": 1}, status=500)
