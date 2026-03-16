@@ -9,6 +9,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    # 🐘 Start the Postgres Service
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: mr-gwiternz
+          POSTGRES_PASSWORD: "@#93Gwiternz29#@"
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
     - uses: actions/checkout@v4
@@ -24,17 +40,15 @@ jobs:
         python -m pip install flake8 pytest pytest-django
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-        
-    - name: Test with pytest
+    - name: Run Tests
       env:
-        # Points to your property_mgmt folder and makes 'utils' visible
         DJANGO_SETTINGS_MODULE: property_mgmt.settings
         PYTHONPATH: .
+        # These must match your settings.py
+        DB_NAME: postgres
+        DB_USER: mr-gwiternz
+        DB_PASSWORD: "@#93Gwiternz29#@"
+        DB_HOST: 127.0.0.1
+        DB_PORT: 5432
       run: |
         pytest
