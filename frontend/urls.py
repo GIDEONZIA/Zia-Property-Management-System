@@ -5,7 +5,7 @@ from . import views
 from .views import (
     signup_view, PublicLoginView, AgentLoginView, idx_search_view, listings_view,
     contact_view, thank_you_view, blog_list_view, blog_detail, home_view,
-    premium_agent_page, payment_success,
+    premium_agent_page, payment_success,testimonials_view,
 )
 from django.views.generic import TemplateView
 
@@ -27,6 +27,8 @@ urlpatterns = [
     path('services/', TemplateView.as_view(template_name='frontend/services.html'), name='services'),
     path('privacy-policy/', views.PrivacyPolicyView.as_view(), name='privacy_policy'),
     path('terms-and-conditions/', views.TermsAndConditionsView.as_view(), name='terms_and_conditions'),
+    path('testimonials/', views.testimonials_view, name='testimonials'),
+
 
     # Listings & Search
     path('idx_search/', idx_search_view, name='idx_search'),

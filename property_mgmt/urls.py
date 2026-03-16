@@ -8,6 +8,7 @@ from django.urls import re_path
 
 from frontend.views import PublicLoginView
 from properties.views import InternalLoginView, admin_dashboard
+from frontend import views as frontend_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,7 +30,8 @@ urlpatterns = [
     # App-specific routes
     path('', include('frontend.urls', namespace='frontend')),
     path('properties/', include('properties.urls')),
-    path('testimonials/', include('testimonial.urls')),
+    path('testimonials/', frontend_views.testimonials_view, name='testimonials'),
+    path('about/', frontend_views.about_view, name='about'),
     path('transactions/', include('transactions.urls')),
     path('reports/', include('reports.urls')),
     path('subscriptions/', include('subscriptions.urls')),  # ✅ Handles /subscribe/, /stk_push/, etc.

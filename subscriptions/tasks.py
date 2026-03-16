@@ -1,9 +1,15 @@
 from .models import PremiumSubscription, MpesaAuditLog
+from django.db import transaction
+import logging
 from django.utils import timezone
 from datetime import timedelta
+from django.core.mail import send_mail
+# It's better to use a logger than 'print' in production
+logger = logging.getLogger(__name__)
 
 def process_mpesa_callback(data):
     try:
+        # 1. Extract the core data from the Safaricom JSON
         body = data.get("Body", {})
         stk_callback = body.get("stkCallback", {})
         result_code = stk_callback.get("ResultCode")
@@ -14,36 +20,43 @@ def process_mpesa_callback(data):
         amount = None
         receipt = None
 
+        # 2. Parse the metadata list
         for item in metadata:
             name = item.get("Name")
+            value = item.get("Value")
             if name == "PhoneNumber":
-                phone = str(item.get("Value"))
+                phone = str(value)
             elif name == "Amount":
-                amount = item.get("Value")
+                amount = value
             elif name == "MpesaReceiptNumber":
-                receipt = item.get("Value")
+                receipt = value
 
+        # 3. Handle the Payment Logic
         if result_code == 0:  # ✅ Payment successful
-            # Log transaction
-            MpesaAuditLog.objects.create(
-                phone_number=phone,
-                amount=amount,
-                transaction_type="STK Push",
-                reference=receipt,
-                status="Success",
-                raw_response=data
-            )
+            with transaction.atomic():
+                # Log the success in the Audit table
+                MpesaAuditLog.objects.create(
+                    phone_number=phone,
+                    amount=amount,
+                    transaction_type="STK Push",
+                    reference=receipt,
+                    status="Success",
+                    raw_response=data
+                )
 
-            # Update subscription
-            sub = PremiumSubscription.objects.filter(
-                checkout_request_id=checkout_request_id,
-                paid=False
-            ).last()
+                # Find and activate the matching subscription
+                # select_for_update() locks the row so two callbacks don't process at once
+                sub = PremiumSubscription.objects.filter(
+                    checkout_request_id=checkout_request_id,
+                    paid=False
+                ).select_for_update().last()
 
-            if sub:
-                sub.activate(receipt)
-        else:
-            # ❌ Payment failed
+                if sub:
+                    sub.activate(receipt)
+                else:
+                    logger.warning(f"⚠️ Subscription not found for ID: {checkout_request_id}")
+        
+        else:  # ❌ Payment failed (User cancelled or insufficient funds)
             MpesaAuditLog.objects.create(
                 phone_number=phone or "unknown",
                 amount=amount or 0,
@@ -54,4 +67,39 @@ def process_mpesa_callback(data):
             )
 
     except Exception as e:
-        print("⚠️ Mpesa processing error:", e)
+        # This 'except' fixes the SyntaxError you were seeing
+        logger.error(f"⚠️ Mpesa processing error: {e}")
+
+
+def send_reminders():
+    """
+    Scheduled task to remind users whose subscriptions are expiring soon.
+    Runs daily via Django Q.
+    """
+    # 1. Define 'Soon' (e.g., expiring in exactly 3 days)
+    reminder_date = timezone.now().date() + timedelta(days=3)
+    
+    # 2. Find active subscriptions expiring on that specific date
+    expiring_soon = PremiumSubscription.objects.filter(
+        end_date=reminder_date,
+        paid=True,
+        active=True
+    )
+
+    sent_count = 0
+
+    for sub in expiring_soon:
+        try:
+            # 3. Send the Email
+            send_mail(
+                subject="Your Premium Subscription is Expiring Soon!",
+                message=f"Hi {sub.user.username}, your subscription for {sub.property.name} expires on {sub.end_date}. Renew now to stay premium!",
+                from_email="noreply@ziaproperties.com",
+                recipient_list=[sub.user.email],
+                fail_silently=False,
+            )
+            sent_count += 1
+        except Exception as e:
+            print(f"❌ Failed to send reminder to {sub.user.email}: {e}")
+
+    return f"Successfully sent {sent_count} reminders for {reminder_date}"

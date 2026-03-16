@@ -8,6 +8,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
+from testimonial.models import Testimonial # Ensure you import it from the correct app
 
 from .forms import CustomSignupForm
 from properties.models import Property, BlogPost
@@ -54,6 +55,23 @@ def home_view(request):
     featured_properties = Property.objects.filter(is_featured=True, is_available=True).order_by('-created_at')[:3]
     return render(request, 'frontend/home.html', {'featured_properties': featured_properties})
 
+# frontend/views.py
+
+def about_view(request):
+    testimonials = [
+        {
+            "name": "Sarah Jenkins",
+            "role": "Administrative Director",
+            "content": "Working with Zia Properties has completely streamlined our operations."
+        },
+        {
+            "name": "Michael Chen",
+            "role": "Operations Manager",
+            "content": "A truly comprehensive platform. The maintenance tools are intuitive."
+        }
+    ]
+    return render(request, 'frontend/about.html', {'testimonials': testimonials})
+
 
 def idx_search_view(request):
     properties = Property.objects.all()
@@ -71,10 +89,25 @@ def idx_search_view(request):
     return render(request, 'frontend/idx_search.html', {'properties': properties})
 
 
-def listings_view(request):
-    properties = Property.objects.filter(is_available=True).order_by('-created_at')
-    return render(request, 'frontend/listings.html', {'properties': properties})
+# frontend/views.py
 
+def listings_view(request):
+    # Start with all available properties
+    properties = Property.objects.filter(is_available=True).order_by('-created_at')
+
+    # Get search parameters from the Hero form
+    location = request.GET.get('location')
+    property_type = request.GET.get('type')
+
+    # Apply filters if data exists
+    if location:
+        properties = properties.filter(location__icontains=location)
+    
+    if property_type:
+        # Match 'type' from the <select name="type"> in your HTML
+        properties = properties.filter(property_type__iexact=property_type)
+
+    return render(request, 'frontend/listings.html', {'properties': properties})
 
 def property_detail_view(request, pk):
     property_obj = get_object_or_404(Property, pk=pk)
@@ -128,6 +161,19 @@ def thank_you_view(request):
     return render(request, 'frontend/thank_you.html')
 
 
+# frontend/views.py
+
+# frontend/views.py
+
+# frontend/views.py
+
+# frontend/views.py
+def testimonials_view(request):
+    # Use 'is_visible' to match your model
+    testimonials = Testimonial.objects.filter(is_visible=True).order_by('-created_at')
+    
+    return render(request, 'frontend/testimonials.html', {'testimonials': testimonials})
+
 # -----------------------
 # Premium / Payment pages (render only)
 # -----------------------
@@ -161,3 +207,4 @@ def mpesa_waiting(request):
     """
     checkout_id = request.GET.get("checkout_id")
     return render(request, "frontend/mpesa_waiting.html", {"checkout_id": checkout_id})
+

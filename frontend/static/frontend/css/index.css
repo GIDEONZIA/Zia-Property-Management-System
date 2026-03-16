@@ -1,220 +1,125 @@
-/* 🧼 Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* 🧼 Reset & Global remains same... */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', sans-serif; color: #222; background: #f9f9f9; line-height: 1.6; overflow-x: hidden; }
 
-/* 🌐 Global Styles */
-body {
-  font-family: 'Segoe UI', sans-serif;
-  color: #222;
-  background: #f9f9f9;
-  line-height: 1.6;
-}
-
-/* 🧭 Navbar */
-.overlay-nav {
-  background: transparent;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 10;
-}
-
-.overlay-nav .navbar-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.overlay-nav .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #fff;
-}
-
-.overlay-nav .auth-actions a {
-  margin-left: 1rem;
-  padding: 0.5rem 1.2rem;
-  border-radius: 4px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: 0.3s ease;
-  color: #fff;
-  border: 1px solid #fff;
-}
-
-.overlay-nav .auth-actions a:hover {
-  background: #fff;
-  color: #2b6cb0;
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #2b6cb0;
-}
-
-.login-btn {
-  background: none;
-  color: #2b6cb0;
-  border: 1px solid #2b6cb0;
-}
-.login-btn:hover {
-  background: #2b6cb0;
-  color: #fff;
-}
-.register-btn {
-  background: #2b6cb0;
-  color: #fff;
-  border: none;
-}
-.register-btn:hover {
-  background: #234e7d;
-}
-
-/* 🏡 Hero Section */
+/* 🏡 Hero Section - UPDATED with "Breathing" Background */
 .hero {
   height: 100vh;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  position: relative;
+  overflow: hidden; /* Keeps the zoom inside */
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
 }
 
-.hero::before {
+/* New Background Animation Layer */
+.hero::after {
   content: "";
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4); /* optional */
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6)), 
+              url('/static/frontend/images/beauty.png') no-repeat center center / cover;
+  background-attachment: fixed;
   z-index: 1;
+  animation: zoomBackground 20s infinite alternate ease-in-out;
 }
+
+@keyframes zoomBackground {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+}
+
+/* 🌀 Hero Text - UPDATED with "Drifting" Animation */
 .hero-centered-content {
   position: relative;
   z-index: 2;
+  text-align: center;
+  
+  /* Modern Glassmorphism */
+  background: rgba(255, 255, 255, 0.05); /* Lighter for better transparency */
+  -webkit-backdrop-filter: blur(12px);    /* Safari support */
+  backdrop-filter: blur(12px);
+  
+  padding: 3.5rem;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  
+  /* Interaction: The box "lifts" slightly on hover/touch */
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
 }
 
-.hero-overlay {
-  background-color: rgba(0, 0, 0, 0.4);
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.hero-centered-content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6);
+}
+
+
+@keyframes driftUp {
+  0% { opacity: 0; transform: translateY(50px); filter: blur(10px); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
 
 .hero-centered-content h1 {
-  font-size: 3rem;
-  line-height: 1.2;
-  font-weight: 700;
-  margin-bottom: 1rem;
+  font-size: 3.5rem;
+  font-weight: 800;
   color: white;
+  text-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
-.hero-centered-content p {
-  font-size: 1.3rem;
-  margin-bottom: 2rem;
-  color:white;
+
+/* ⭐ Features Section - UPDATED for Touch Interractions */
+.feature-card {
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  max-width: 350px;
+  flex: 1 1 300px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
 }
-.cta-button {
-  display: inline-block;
+
+/* When Touched/Hovered */
+.feature-card:hover {
+  transform: translateY(-15px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(43, 108, 176, 0.15);
+  border-color: #2b6cb0;
+}
+
+/* Icon Animation inside card */
+.feature-card i {
+  color: #2b6cb0;
+  margin-bottom: 1.5rem;
+  transition: transform 0.5s ease;
+}
+
+.feature-card:hover i {
+  transform: scale(1.3) rotate(10deg);
+}
+
+/* The blue line interaction on touch */
+.feature-card::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 50%;
+  width: 0; height: 4px;
   background: #2b6cb0;
-  color: #fff;
-  padding: 0.8rem 2rem;
-  border-radius: 6px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background 0.3s;
+  transition: 0.4s ease;
+}
+
+.feature-card:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* 🚀 Buttons - Added a "Shine" or "Scale" effect */
+.cta-button {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .cta-button:hover {
-  background: #234e7d;
-}
-
-/* ⭐ Features Section */
-.features {
-  background: #fff;
-  padding: 3rem 1rem;
-  text-align: center;
-}
-.features h2 {
-  font-size: 2rem;
-  color: #2b6cb0;
-  margin-bottom: 2rem;
-}
-.feature-grid {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 2rem;
-}
-.feature-card {
-  background: #f7f8fa;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(43, 108, 176, 0.05);
-  max-width: 300px;
-  flex: 1 1 260px;
-}
-.feature-card h3 {
-  color: #234e7d;
-  margin-bottom: 1rem;
-}
-.feature-card p {
-  color: #444;
-}
-
-/* 🚀 CTA Section */
-.cta-section {
-  background: #2b6cb0;
-  color: #fff;
-  text-align: center;
-  padding: 3rem 1rem;
-}
-.cta-section h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-.cta-section p {
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-}
-.cta-section .cta-button {
-  background: #fff;
-  color: #2b6cb0;
-}
-.cta-section .cta-button:hover {
-  background: #e3f0ff;
-  color: #234e7d;
-}
-
-/* 🦶 Footer */
-footer {
-  background: #234e7d;
-  color: #fff;
-  text-align: center;
-  padding: 1.2rem;
-  font-size: 1rem;
-}
-
-/* 📱 Responsive */
-@media (max-width: 768px) {
-  .hero-centered-content h1 {
-    font-size: 2.2rem;
-  }
-  .hero-centered-content p {
-    font-size: 1.1rem;
-  }
-  .feature-grid {
-    flex-direction: column;
-    align-items: center;
-  }
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(43, 108, 176, 0.3);
 }
