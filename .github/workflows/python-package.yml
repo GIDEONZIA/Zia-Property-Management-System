@@ -10,21 +10,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
-    # 🐘 Start the Postgres Service
     services:
-        db:
-          image: postgres:latest
-          env:
-            POSTGRES_DB: property_management_system
-            POSTGRES_USER: gwiternz
-            POSTGRES_PASSWORD: "@#93Gwiternz29#@"
-          ports:
-            - 5432:5432
-          options: >-
-            --health-cmd pg_isready
-            --health-interval 10s
-            --health-timeout 5s
-            --health-retries 5
+      db:
+        image: postgres:latest
+        env:
+          # These must match what the 'Run Tests' env uses
+          POSTGRES_DB: postgres
+          POSTGRES_USER: gwiternz
+          POSTGRES_PASSWORD: "@#93Gwiternz29#@"
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
     - uses: actions/checkout@v4
@@ -44,11 +44,11 @@ jobs:
       env:
         DJANGO_SETTINGS_MODULE: property_mgmt.settings
         PYTHONPATH: .
-        # These must match your settings.py
         DB_NAME: postgres
-        DB_USER: mr-gwiternz
+        DB_USER: gwiternz
         DB_PASSWORD: "@#93Gwiternz29#@"
         DB_HOST: 127.0.0.1
         DB_PORT: 5432
       run: |
-        pytest
+        # Using 'python -m pytest' ensures it uses the venv-installed plugins
+        python -m pytest
