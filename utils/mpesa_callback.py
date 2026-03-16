@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from subscriptions.models import PremiumSubscription, MpesaAuditLog
 
+# Update these two functions in mpesa_callback.py
+
 def process_mpesa_callback(data):
     try:
         callback = data['Body']['stkCallback']
@@ -13,30 +15,30 @@ def process_mpesa_callback(data):
         if result_code == 0:
             receipt = next((i['Value'] for i in metadata if i['Name'] == 'MpesaReceiptNumber'), None)
             
-            # Find the specific record by CheckoutID
+            # Find by checkout_request_id instead of just phone
             subscription = PremiumSubscription.objects.filter(
                 checkout_request_id=checkout_id, 
                 paid=False
             ).last()
 
             if subscription:
-                # Triggers activate() to handle expiry logic correctly
+                # Use the model's activate method to set the expiry date!
                 subscription.activate(receipt)
                 return {"ResultCode": 0, "ResultDesc": "Success"}
             
-        return {"ResultCode": 0, "ResultDesc": "No pending subscription found"}
+        return {"ResultCode": 0, "ResultDesc": "No matching record"}
     except Exception as e:
         return {"ResultCode": 1, "ResultDesc": str(e)}
 
-def log_audit(phone, event_type, status, amount, reference, payload):
-    """Synchronized with MpesaAuditLog model fields"""
+def log_audit(phone, event_type, payload):
+    # Fixed field names: phone_number instead of phone, raw_response instead of payload
     MpesaAuditLog.objects.create(
         phone_number=str(phone),
         transaction_type=event_type,
-        amount=amount,
-        reference=reference,
-        status=status,
-        raw_response=payload
+        amount=0,
+        reference="CALLBACK",
+        status="Received",
+        raw_response=payload 
     )
 
 @csrf_exempt

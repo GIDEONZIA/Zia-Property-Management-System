@@ -9,23 +9,32 @@ User = get_user_model()
 class TestMpesaCallback:
 
     def test_process_mpesa_callback_valid(self):
-        # 1. Create User to fix IntegrityError (NotNullViolation)
-        user = User.objects.create_user(username='tester', password='password')
-
-        # 2. Setup: Use a specific CheckoutRequestID for matching
+        """
+        Tests that a valid M-Pesa callback correctly updates a 
+        pending subscription to paid and sets an expiry date.
+        """
+        # 1. Create a user to satisfy the NOT NULL (user_id) constraint
+        user = User.objects.create_user(
+            username='testworker', 
+            password='password123'
+        )
+        
+        # 2. Create a pending subscription linked to the user
+        # 'checkout_request_id' must match the payload ID below
         PremiumSubscription.objects.create(
-            user=user,
-            phone='254712345678',
-            plan='monthly',
-            amount=29,
+            user=user, 
+            phone='254712345678', 
+            plan='monthly', 
+            amount=29, 
             paid=False,
-            checkout_request_id="CH_12345" 
+            checkout_request_id="67890" 
         )
 
+        # 3. Simulate the JSON payload sent by Safaricom
         payload = {
             "Body": {
                 "stkCallback": {
-                    "CheckoutRequestID": "CH_12345",
+                    "CheckoutRequestID": "67890",
                     "ResultCode": 0,
                     "CallbackMetadata": {
                         "Item": [
@@ -38,12 +47,14 @@ class TestMpesaCallback:
             }
         }
 
-        # 3. Action: Process the simulated callback
+        # 4. Run the callback processor logic
         response = mpesa_callback.process_mpesa_callback(payload)
         
-        # 4. Assertions: Verify everything updated
-        sub = PremiumSubscription.objects.get(user=user)
+        # 5. Assertions
         assert response["ResultCode"] == 0
+        
+        # Refresh from database and verify updates
+        sub = PremiumSubscription.objects.get(user=user)
         assert sub.paid is True
         assert sub.mpesa_receipt == "ABC123XYZ"
-        assert sub.expiry_date is not None  # Verifies Fair Renewal Logic worked
+        assert sub.expiry_date is not None  # Verifies activate() logic worked
