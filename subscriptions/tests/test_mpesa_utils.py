@@ -1,18 +1,18 @@
 import unittest
 from unittest.mock import patch
-from subscriptions.utils import mpesa, mpesa_callback
+from utils import mpesa, mpesa_callback
 
 class MpesaUtilsTest(unittest.TestCase):
 
-    @patch('subscriptions.utils.mpesa.requests.get')
+    @patch('utils.mpesa.requests.get')
     def test_get_access_token_success(self, mock_get):
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {'access_token': 'dummy_token'}
         token = mpesa.get_access_token()
         self.assertEqual(token, 'dummy_token')
 
-    @patch('subscriptions.utils.mpesa.requests.post')
-    @patch('subscriptions.utils.mpesa.get_access_token')
+    @patch('utils.mpesa.requests.post')
+    @patch('utils.mpesa.get_access_token')
     def test_initiate_stk_push_success(self, mock_token, mock_post):
         mock_token.return_value = 'dummy_token'
         mock_post.return_value.json.return_value = {'ResponseCode': '0'}
