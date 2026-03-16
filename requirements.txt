@@ -43,6 +43,7 @@ pyHanko==0.30.0
 pyhanko-certvalidator==0.28.0
 PyJWT==2.10.1
 pypdf==6.0.0
+pytest-django
 python-bidi==0.6.6
 python-dateutil==2.9.0.post0
 python-decouple==3.8

@@ -261,7 +261,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'property_management_system',
-        'USER': 'gwiternz',
+        'USER': 'mr-gwiternz',
         'PASSWORD': '@#93Gwiternz29#@',
         'HOST': '127.0.0.1', 
         'PORT': '5432',

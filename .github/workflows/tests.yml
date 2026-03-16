@@ -22,6 +22,6 @@ jobs:
 
       - name: Test with pytest
         env:
-          DJANGO_SETTINGS_MODULE: zia_property_management_system.settings
-          PYTHONPATH: ${{ github.workspace }}
+          DJANGO_SETTINGS_MODULE: property_mgmt.settings
+          PYTHONPATH: .
         run: pytest
