@@ -4,11 +4,12 @@ import django
 # Force Django settings to load
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'property_mgmt.settings')
 django.setup()
-
+import pytest
 import unittest
 from unittest.mock import patch
 from utils import mpesa, mpesa_callback
 
+@pytest.mark.django_db
 class MpesaUtilsTest(unittest.TestCase):
 
     @patch('utils.mpesa.requests.get')
