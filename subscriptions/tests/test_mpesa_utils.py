@@ -9,17 +9,19 @@ User = get_user_model()
 class MpesaUtilsTest: # Ensure the class name matches what pytest expects
 
     def test_process_mpesa_callback_valid(self):
-        # 1. Create a user (This fixes the Not-Null IntegrityError)
-        user = User.objects.create_user(username='testworker', password='password123')
-        
-        # 2. Create the subscription and LINK the user
+
+        user = User.objects.create_user(
+            username="testuser",
+            email="test@example.com",
+            password="testpass123"
+        )
+
         PremiumSubscription.objects.create(
-            user=user,  # <--- CRITICAL FIX
-            phone='254712345678', 
-            plan='monthly', 
-            amount=29, 
-            paid=False,
-            checkout_request_id="67890"
+            user=user,
+            phone='254712345678',
+            plan='monthly',
+            amount=29,
+            paid=False
         )
 
         payload = {

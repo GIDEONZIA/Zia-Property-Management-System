@@ -51,6 +51,12 @@ class PremiumSubscription(models.Model):
         self.expiry_date = start_point + timedelta(days=days)
         self.save()
 
+        self.save(update_fields=[
+            "paid",
+            "mpesa_receipt",
+            "expiry_date"
+        ])
+
     @property
     def is_active(self):
         """Check if subscription is currently valid."""
