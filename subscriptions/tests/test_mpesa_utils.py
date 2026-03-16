@@ -1,12 +1,12 @@
-import pytest
+from django.test import TestCase
 from django.contrib.auth import get_user_model
 from subscriptions.models import PremiumSubscription
 from utils import mpesa_callback
 
+
 User = get_user_model()
 
-@pytest.mark.django_db
-class MpesaUtilsTest: # Ensure the class name matches what pytest expects
+class TestMpesaUtils (TestCase):
 
     def test_process_mpesa_callback_valid(self):
 
@@ -18,11 +18,13 @@ class MpesaUtilsTest: # Ensure the class name matches what pytest expects
 
         PremiumSubscription.objects.create(
             user=user,
-            phone='254712345678',
-            plan='monthly',
+            phone="254712345678",
+            plan="monthly",
             amount=29,
-            paid=False
+            paid=False,
+            checkout_request_id="67890"  # match the payload
         )
+        
 
         payload = {
             "Body": {

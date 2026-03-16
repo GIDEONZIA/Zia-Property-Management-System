@@ -30,16 +30,20 @@ def process_mpesa_callback(data):
     except Exception as e:
         return {"ResultCode": 1, "ResultDesc": str(e)}
 
-def log_audit(phone, event_type, payload):
-    # Fixed field names: phone_number instead of phone, raw_response instead of payload
+# utils/mpesa_callback.py
+
+
+def log_audit(phone, event_type, status, amount, reference, payload):
+    """Corrected to match MpesaAuditLog model fields exactly"""
     MpesaAuditLog.objects.create(
         phone_number=str(phone),
         transaction_type=event_type,
-        amount=0,
-        reference="CALLBACK",
-        status="Received",
-        raw_response=payload 
+        amount=amount,
+        reference=reference,
+        status=status,
+        raw_response=payload  # Ensure this is the data dict
     )
+
 
 @csrf_exempt
 def mpesa_callback(request):
