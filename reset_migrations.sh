@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# ✅ List your Django app names here — only these will be cleaned
-APPS=("properties" "transactions" "reports" "account")  # Add your app names
+# ✅ Django app names here — only these will be cleaned
+APPS=("properties" "transactions" "reports" "account")  # App names
 
 DB_NAME="property_management_system"
 DB_USER="gwiternz"

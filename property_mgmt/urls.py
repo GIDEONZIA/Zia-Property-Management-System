@@ -26,6 +26,7 @@ urlpatterns = [
     path('dashboard/login/', InternalLoginView.as_view(), name='internal_login'),
     path('dashboard/', admin_dashboard, name='dashboard'),
     path('admin_dashboard/', admin_dashboard, name='admin_dashboard'),
+    path('analytics/', include('analytics.urls')),
 
     # App-specific routes
     path('', include('frontend.urls', namespace='frontend')),

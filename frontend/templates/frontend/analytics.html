@@ -1,0 +1,485 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics | Zia Properties</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-gold: #d4af37;
+            --dark-bg: #1a1a2e;
+            --card-bg: rgba(255, 255, 255, 0.95);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background: var(--dark-bg) !important;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .metric-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-gold);
+        }
+        
+        .metric-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        
+        .bg-gold { background: rgba(212, 175, 55, 0.1); color: var(--primary-gold); }
+        .bg-blue { background: rgba(54, 162, 235, 0.1); color: #36a2eb; }
+        .bg-green { background: rgba(75, 192, 192, 0.1); color: #4bc0c0; }
+        .bg-red { background: rgba(255, 99, 132, 0.1); color: #ff6384; }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-bg);
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .chart-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-bg);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-gold);
+            display: inline-block;
+        }
+        
+        .table-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status-available { background: #d4edda; color: #155724; }
+        .status-rented { background: #fff3cd; color: #856404; }
+        .status-sold { background: #d1ecf1; color: #0c5460; }
+        
+        .refresh-btn {
+            background: var(--primary-gold);
+            border: none;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .refresh-btn:hover {
+            background: #b8941f;
+            transform: scale(1.05);
+        }
+        
+        .live-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #28a745;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* FIXED CHART CONTAINER SIZES */
+        .chart-container {
+            position: relative;
+            height: 200px;
+        }
+        
+        .chart-container-tall {
+            position: relative;
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-home me-2"></i>Zia Properties
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/analytics/">Analytics</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-dark">
+                    <span class="live-indicator"></span>
+                    Property Analytics Dashboard
+                </h2>
+                <p class="text-muted mb-0">Real-time insights into your property portfolio</p>
+            </div>
+            <button class="refresh-btn" onclick="loadAllData()">
+                <i class="fas fa-sync-alt me-2"></i>Refresh Data
+            </button>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="metric-card">
+                    <div class="metric-icon bg-gold">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="metric-value" id="total-properties">-</div>
+                    <div class="metric-label">Total Properties</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric-card">
+                    <div class="metric-icon bg-green">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="metric-value" id="occupancy-rate">-%</div>
+                    <div class="metric-label">Occupancy Rate</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric-card">
+                    <div class="metric-icon bg-blue">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="metric-value" id="total-revenue">-</div>
+                    <div class="metric-label">Total Revenue</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric-card">
+                    <div class="metric-icon bg-red">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="metric-value" id="avg-price">-</div>
+                    <div class="metric-label">Avg. Price</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="chart-card">
+                    <h5 class="chart-title">
+                        <i class="fas fa-chart-pie me-2"></i>Properties by Type
+                    </h5>
+                    <div class="chart-container">
+                        <canvas id="typeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-card">
+                    <h5 class="chart-title">
+                        <i class="fas fa-map-marker-alt me-2"></i>Properties by Location
+                    </h5>
+                    <div class="chart-container">
+                        <canvas id="locationChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 2 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="chart-card">
+                    <h5 class="chart-title">
+                        <i class="fas fa-chart-line me-2"></i>6-Month Trends
+                    </h5>
+                    <div class="chart-container-tall">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Table -->
+        <div class="row">
+            <div class="col-12">
+                <div class="table-card">
+                    <h5 class="chart-title">
+                        <i class="fas fa-list me-2"></i>Recent Properties
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Location</th>
+                                    <th>Type</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Views</th>
+                                    <th>Date Listed</th>
+                                </tr>
+                            </thead>
+                            <tbody id="properties-table">
+                                <tr>
+                                    <td colspan="7" class="text-center py-4">
+                                        <div class="loading"></div>
+                                        <p class="text-muted mt-2">Loading data...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let typeChart, locationChart, trendChart;
+
+        const formatCurrency = (value) => {
+            return new Intl.NumberFormat('en-KE', {
+                style: 'currency',
+                currency: 'KES',
+                minimumFractionDigits: 0
+            }).format(value);
+        };
+
+        function initCharts() {
+            const typeCtx = document.getElementById('typeChart').getContext('2d');
+            typeChart = new Chart(typeCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: ['#d4af37', '#36a2eb', '#4bc0c0', '#ff6384'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            const locCtx = document.getElementById('locationChart').getContext('2d');
+            locationChart = new Chart(locCtx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Properties',
+                        data: [],
+                        backgroundColor: '#d4af37',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                    }
+                }
+            });
+
+            const trendCtx = document.getElementById('trendChart').getContext('2d');
+            trendChart = new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'New Listings',
+                            data: [],
+                            borderColor: '#36a2eb',
+                            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Transactions',
+                            data: [],
+                            borderColor: '#4bc0c0',
+                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        async function loadAllData() {
+            try {
+                const statsRes = await fetch('/analytics/api/stats/');
+                const stats = await statsRes.json();
+                
+                document.getElementById('total-properties').textContent = stats.total_properties;
+                document.getElementById('occupancy-rate').textContent = stats.occupancy_rate + '%';
+                document.getElementById('total-revenue').textContent = formatCurrency(stats.total_revenue);
+                document.getElementById('avg-price').textContent = formatCurrency(stats.average_price);
+
+                const typesRes = await fetch('/analytics/api/types/');
+                const types = await typesRes.json();
+                typeChart.data.labels = types.labels;
+                typeChart.data.datasets[0].data = types.data;
+                typeChart.update();
+
+                const locRes = await fetch('/analytics/api/locations/');
+                const locs = await locRes.json();
+                locationChart.data.labels = locs.locations;
+                locationChart.data.datasets[0].data = locs.counts;
+                locationChart.update();
+
+                const trendsRes = await fetch('/analytics/api/trends/');
+                const trends = await trendsRes.json();
+                trendChart.data.labels = trends.months;
+                trendChart.data.datasets[0].data = trends.listings;
+                trendChart.data.datasets[1].data = trends.transactions;
+                trendChart.update();
+
+                const activityRes = await fetch('/analytics/api/activity/');
+                const activity = await activityRes.json();
+                
+                const tbody = document.getElementById('properties-table');
+                tbody.innerHTML = activity.properties.map(p => `
+                    <tr>
+                        <td><strong>${p.title}</strong></td>
+                        <td><i class="fas fa-map-marker-alt text-muted me-1"></i>${p.location}</td>
+                        <td>${p.type}</td>
+                        <td class="fw-bold text-success">${formatCurrency(p.price)}</td>
+                        <td><span class="status-badge status-${p.status}">${p.status_display}</span></td>
+                        <td><i class="fas fa-eye text-muted me-1"></i>${p.views}</td>
+                        <td>${p.date}</td>
+                    </tr>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('properties-table').innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-danger py-4">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            Error loading data. Please try again.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            loadAllData();
+            setInterval(loadAllData, 30000);
+        });
+    </script>
+</body>
+</html>

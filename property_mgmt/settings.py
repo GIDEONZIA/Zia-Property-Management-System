@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -63,7 +64,7 @@ INSTALLED_APPS = [
    
 
     # Custom apps
-     
+    'analytics', # Analytics App for property insights
     'frontend',  # Frontend App for the Property Management System
     'properties',  # Property Management App
     'transactions', # Transaction Management App
@@ -77,6 +78,9 @@ INSTALLED_APPS = [
       
     
 ]
+
+
+SITE_ID = 1  # Required for allauth to function
 
 Q_CLUSTER = {
     'name': 'ZiaQ',
@@ -179,8 +183,9 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Optional: collect all static files into one folder (e.g. for deployment)
 STATICFILES_DIRS = [
+    BASE_DIR / "static",
     BASE_DIR / 'property_mgmt_backend' / 'static',
-    BASE_DIR / 'frontend',  # Additional static files directory
+    BASE_DIR / 'frontend',
 ]
 
 AUTHENTICATION_BACKENDS = [
