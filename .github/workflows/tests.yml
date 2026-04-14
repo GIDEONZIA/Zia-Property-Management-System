@@ -7,11 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:15
+        image: postgres:latest
         env:
-          POSTGRES_DB: test_db
-          POSTGRES_USER: user
-          POSTGRES_PASSWORD: password
+          POSTGRES_DB: property_management_system
+          POSTGRES_USER: gwiternz
+          POSTGRES_PASSWORD: "@#93Gwiternz29#@"
         ports:
           - 5432:5432
         options: >-
