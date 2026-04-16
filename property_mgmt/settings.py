@@ -262,16 +262,23 @@ CHANNEL_LAYERS = {
     },
 }
 
+import os
+from dotenv import load_dotenv
+
+# This loads the variables from .env
+load_dotenv()
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'property_management_system',
-        'USER': 'gwiternz',
-        'PASSWORD': '@#93Gwiternz29#@',
-        'HOST': '127.0.0.1', 
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
+
 
 # Mpesa Daraja API Settings
 MPESA_CONSUMER_KEY = "dA3zHqpu9out0wO8dU0Ql3xx4gtFMxolN7mFGxBd3HZftJ3T"
@@ -292,7 +299,7 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
 
-DEFAULT_FROM_EMAIL = 'noreply@zia-properties.com'
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@zia-properties.com")
 
 
 CSRF_TRUSTED_ORIGINS = [
