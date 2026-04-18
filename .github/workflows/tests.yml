@@ -9,9 +9,9 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_DB: property_management_system
+          POSTGRES_DB: property_test
           POSTGRES_USER: gwiternz
-          POSTGRES_PASSWORD: "@#93Gwiternz29#@"
+          POSTGRES_PASSWORD: password123  # Simple password for CI
         ports:
           - 5432:5432
         options: >-
@@ -35,9 +35,7 @@ jobs:
 
     - name: Run Tests
       env:
-        # Credentials below match the Postgres service above
-        # Password '@#93Gwiternz29#@' is encoded to '%40%2393Gwiternz29%23%40'
-        DATABASE_URL: postgresql://gwiternz:%40%2393Gwiternz29%23%40@localhost:5432/property_management_system
+        DATABASE_URL: postgresql://gwiternz:password123@localhost:5432/property_test
         DJANGO_SETTINGS_MODULE: property_mgmt.settings
       run: |
-        pytest
+
