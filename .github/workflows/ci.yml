@@ -41,9 +41,13 @@ jobs:
 
     - name: Run Tests
       env:
-        # We use a simpler password here to ensure the connection string doesn't break
-        DATABASE_URL: postgresql://gwiternz:password123@localhost:5432/property_management_system
         DJANGO_SETTINGS_MODULE: property_mgmt.settings
         PYTHONPATH: .
+        # Provide individual variables so Django doesn't have to guess
+        DB_NAME: property_management_system
+        DB_USER: gwiternz
+        DB_PASSWORD: "password123"
+        DB_HOST: 127.0.0.1
+        DB_PORT: 5432
       run: |
         uv run pytest
