@@ -8,9 +8,8 @@ media/
 
 # Environments
 .env
-venv/
 .venv/
-env/
+
 
 # Ngrok
 *.tgz
@@ -29,3 +28,5 @@ Thumbs.db
 *.orig
 *.bak
 .env
+.reset_migrations.sh
+.gitpush.sh
