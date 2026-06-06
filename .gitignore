@@ -4,17 +4,27 @@
 __pycache__/
 db.sqlite3
 media/
+staticfiles/
 *.log
 
 # Environments
 .env
 .venv/
+venv/
 
-
-# Ngrok
+# Ngrok & Executables
+ngrok
+*.zip
 *.tgz
 *.ngrok
 ngrok.log
+curl_response
+
+# Custom Scripts
+gitpush
+gitpush.sh
+clear_admin_log.sh
+pg_backup.sh
 
 # IDEs
 .vscode/
@@ -24,9 +34,6 @@ ngrok.log
 .DS_Store
 Thumbs.db
 
-# Git
+# Git Conflict Artifacts
 *.orig
 *.bak
-.env
-.reset_migrations.sh
-.gitpush.sh
