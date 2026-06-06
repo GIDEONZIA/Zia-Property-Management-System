@@ -329,7 +329,7 @@ class Inspection(models.Model):
         return f"{self.property} - {self.inspection_date} - {self.status}"
 
 
-from properties.models import Tenant  # adjust if your Tenant model is elsewhere
+ # adjust if your Tenant model is elsewhere
 class Payment(models.Model):
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE, related_name='payments')
     amount = models.DecimalField(max_digits=10, decimal_places=2)

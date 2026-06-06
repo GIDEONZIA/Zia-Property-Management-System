@@ -9,16 +9,16 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+
+import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-import os
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-# Load environment variables
-load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from .env (override=True forces .env values over shell vars)
+load_dotenv(BASE_DIR / '.env', override=True)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -34,10 +34,6 @@ ALLOWED_HOSTS = []
 DJANGO_SETTINGS_MODULE = "property_mgmt.settings"
 
 # openai
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 
@@ -71,6 +67,7 @@ INSTALLED_APPS = [
     'reports',  # Reporting App
     'testimonial',  # Testimonials App
     'subscriptions',  # Subscription Management App
+    'payments',  # Payments App for handling transactions and Mpesa integration
     
     # Third-party apps
     'rest_framework',  # Django REST Framework
@@ -230,7 +227,6 @@ premium_paths = [
 
 ROOT_URLCONF = 'property_mgmt.urls'
 
-import os
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -262,12 +258,6 @@ CHANNEL_LAYERS = {
     },
 }
 
-import os
-from dotenv import load_dotenv
-
-# This loads the variables from .env
-load_dotenv()
-
 
 DATABASES = {
     'default': {
@@ -280,7 +270,8 @@ DATABASES = {
     }
 }
 
-
+AFRICASTALKING_USERNAME = os.getenv("AFRICASTALKING_USERNAME", "sandbox")
+AFRICASTALKING_API_KEY = os.getenv("AFRICASTALKING_API_KEY", "")
 
 # Mpesa Daraja API Settings
 MPESA_CONSUMER_KEY = os.getenv("MPESA_CONSUMER_KEY")
@@ -288,6 +279,7 @@ MPESA_CONSUMER_SECRET = os.getenv("MPESA_CONSUMER_SECRET")
 MPESA_BASE_URL = os.getenv("MPESA_BASE_URL", "https://sandbox.safaricom.co.ke")
 MPESA_SHORTCODE = os.getenv("MPESA_SHORTCODE")
 MPESA_PASSKEY = os.getenv("MPESA_PASSKEY")
+MPESA_SECURITY_CREDENTIAL = os.getenv("MPESA_SECURITY_CREDENTIAL")
 
 # My Ngrok/Public callback base
 MPESA_CALLBACK_URL = os.getenv("MPESA_CALLBACK_URL")
@@ -349,7 +341,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ALLOWED_HOSTS = ['*']
 
-import os
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

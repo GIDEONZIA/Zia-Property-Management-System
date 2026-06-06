@@ -51,6 +51,7 @@ def mpesa_callback(request):
         return JsonResponse({"error": "Method not allowed"}, status=405)
     
     try:
+        
         data = json.loads(request.body)
         callback = data['Body']['stkCallback']
         metadata = callback.get('CallbackMetadata', {}).get('Item', [])

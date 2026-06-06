@@ -36,6 +36,7 @@ urlpatterns = [
     path('transactions/', include('transactions.urls')),
     path('reports/', include('reports.urls')),
     path('subscriptions/', include('subscriptions.urls')),  # ✅ Handles /subscribe/, /stk_push/, etc.
+    path('payments/', include('payments.urls')),
 
     # JWT API
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
