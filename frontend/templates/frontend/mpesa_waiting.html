@@ -1,29 +1,386 @@
 {% extends 'base_public.html' %}
 {% block title %}Processing Payment — Zia Properties{% endblock %}
+
+{% block extra_styles %}
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --primary-light: #818cf8;
+      --accent: #06b6d4;
+      --accent-warm: #f59e0b;
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-hover: #334155;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --border: rgba(99, 102, 241, 0.2);
+      --glass: rgba(30, 41, 59, 0.85);
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5, h6 { font-family: 'Space Grotesk', sans-serif; }
+
+    /* ===== BACKGROUND ===== */
+    .payment-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      background: var(--bg-dark);
+      overflow: hidden;
+    }
+
+    .payment-bg::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 50%, rgba(6, 182, 212, 0.08) 0%, transparent 50%);
+    }
+
+    /* ===== PAYMENT CARD ===== */
+    .payment-card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 3rem;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      max-width: 640px;
+      width: 100%;
+    }
+
+    .payment-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--accent), var(--success));
+      background-size: 300% 100%;
+      animation: gradientShift 3s linear infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+
+    /* ===== SPINNER ===== */
+    .spinner-wrap {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spinner-ring {
+      position: absolute;
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-top-color: var(--success);
+      animation: spin 1s linear infinite;
+    }
+
+    .spinner-ring:nth-child(2) {
+      width: 70%; height: 70%;
+      border-top-color: var(--primary);
+      animation: spin 1.5s linear infinite reverse;
+    }
+
+    .spinner-ring:nth-child(3) {
+      width: 40%; height: 40%;
+      border-top-color: var(--accent);
+      animation: spin 0.8s linear infinite;
+    }
+
+    .spinner-icon {
+      font-size: 1.5rem;
+      color: var(--success);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(0.9); }
+    }
+
+    /* ===== STATUS ===== */
+    .status-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .status-text {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* ===== BADGE ===== */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .badge-waiting {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #60a5fa;
+    }
+
+    .badge-success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #6ee7b7;
+    }
+
+    .badge-failed {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+    }
+
+    .badge-warning {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fcd34d;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* ===== PROGRESS BAR ===== */
+    .progress-track {
+      height: 8px;
+      background: var(--bg-card-hover);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent), var(--success));
+      background-size: 200% 100%;
+      animation: gradientShift 2s linear infinite;
+      transition: width 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn-back {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-back:hover {
+      border-color: var(--primary);
+      color: var(--primary-light);
+      background: rgba(99, 102, 241, 0.1);
+    }
+
+    .btn-retry {
+      background: linear-gradient(135deg, var(--success), #34d399);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-retry:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+    }
+
+    /* ===== DEBUG MSG ===== */
+    .debug-text {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      word-break: break-word;
+      margin-top: 1rem;
+      padding: 0.75rem;
+      background: var(--bg-card);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-family: monospace;
+    }
+
+    /* ===== CHECKMARK ANIMATION ===== */
+    .checkmark {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--success), #34d399);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: checkPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .checkmark i {
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    @keyframes checkPop {
+      0% { transform: scale(0); }
+      70% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    /* ===== CROSS ANIMATION ===== */
+    .crossmark {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--danger), #f87171);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: checkPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .crossmark i {
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    /* ===== FLOATING PARTICLES ===== */
+    .floating-particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(99, 102, 241, 0.3);
+      pointer-events: none;
+      animation: floatUp 3s ease-in-out infinite;
+    }
+
+    @keyframes floatUp {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+      50% { transform: translateY(-20px) scale(1.2); opacity: 0.6; }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 576px) {
+      .payment-card {
+        padding: 2rem 1.5rem;
+        margin: 0 1rem;
+      }
+
+      .status-title {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
-<div class="container d-flex align-items-center justify-content-center vh-100">
-  <div class="card shadow-sm border-0 p-4 rounded-4" style="max-width:640px; width:100%;">
+<div class="payment-bg"></div>
+
+<div class="container d-flex align-items-center justify-content-center min-vh-100 position-relative" style="z-index: 1;">
+  <div class="payment-card">
+
+    <!-- Floating Particles -->
+    <div class="floating-particle" style="width: 6px; height: 6px; top: 20%; left: 10%; animation-delay: 0s;"></div>
+    <div class="floating-particle" style="width: 4px; height: 4px; top: 60%; right: 15%; animation-delay: 1s;"></div>
+    <div class="floating-particle" style="width: 8px; height: 8px; bottom: 20%; left: 30%; animation-delay: 2s;"></div>
+
     <div class="row g-0 align-items-center">
-      <div class="col-md-4 d-flex justify-content-center">
-        <div class="spinner-border text-success" style="width:4.5rem; height:4.5rem;" role="status"></div>
+      <div class="col-md-4 d-flex justify-content-center mb-4 mb-md-0">
+        <div id="spinnerArea">
+          <div class="spinner-wrap">
+            <div class="spinner-ring"></div>
+            <div class="spinner-ring"></div>
+            <div class="spinner-ring"></div>
+            <i class="fas fa-mobile-alt spinner-icon"></i>
+          </div>
+        </div>
       </div>
       <div class="col-md-8">
-        <h4 class="mb-1">Processing your payment</h4>
-        <p class="mb-2 text-muted">Please confirm the M-Pesa prompt on your phone — we are verifying the transaction.</p>
+        <h4 class="status-title mb-2">Processing your payment</h4>
+        <p class="status-text mb-3">Please confirm the M-Pesa prompt on your phone — we are verifying the transaction.</p>
 
-        <div id="statusBadge" class="mb-2">
-          <span class="badge bg-info">Waiting for confirmation…</span>
+        <div id="statusBadge" class="mb-3">
+          <span class="status-badge badge-waiting">
+            <i class="fas fa-clock" style="font-size: 0.7rem;"></i> Waiting for confirmation…
+          </span>
         </div>
 
-        <div class="progress mb-3" style="height:8px;">
-          <div id="progressBar" class="progress-bar bg-success progress-bar-striped progress-bar-animated" style="width:0%"></div>
+        <div class="progress-track mb-3">
+          <div id="progressBar" class="progress-fill" style="width: 0%"></div>
         </div>
 
         <div class="d-flex gap-2">
-          <button id="backBtn" class="btn btn-outline-secondary btn-sm">Back to Premium</button>
-          <button id="retryBtn" class="btn btn-success btn-sm d-none">Retry Payment</button>
+          <button id="backBtn" class="btn btn-back">
+            <i class="fas fa-arrow-left me-2" style="font-size: 0.8rem;"></i>Back to Premium
+          </button>
+          <button id="retryBtn" class="btn btn-retry d-none">
+            <i class="fas fa-redo me-2" style="font-size: 0.8rem;"></i>Retry Payment
+          </button>
         </div>
-        <p class="text-muted small mt-3" id="debugMsg" style="word-break:break-word;"></p>
+        <p class="debug-text d-none" id="debugMsg"></p>
       </div>
     </div>
   </div>
@@ -36,6 +393,7 @@
   const debugMsg = document.getElementById('debugMsg');
   const backBtn = document.getElementById('backBtn');
   const retryBtn = document.getElementById('retryBtn');
+  const spinnerArea = document.getElementById('spinnerArea');
 
   backBtn.addEventListener('click', () => {
     window.location.href = "{% url 'frontend:premium_agent' %}";
@@ -45,15 +403,17 @@
   });
 
   if (!checkoutId) {
-    statusBadge.innerHTML = '<span class="badge bg-danger">Missing checkout id</span>';
+    statusBadge.innerHTML = '<span class="status-badge badge-failed"><i class="fas fa-times-circle" style="font-size: 0.7rem;"></i> Missing checkout id</span>';
     debugMsg.textContent = "No checkout_id supplied. Try initiating payment again from the Premium page.";
+    debugMsg.classList.remove('d-none');
+    spinnerArea.innerHTML = '<div class="crossmark"><i class="fas fa-times"></i></div>';
     throw new Error("Missing checkout_id");
   }
 
   let attempts = 0;
-  const maxAttempts = 5;    // overall timeout attempts (adjust)
-  const initialInterval = 2000; // 2s first
-  const maxInterval = 8000;     // up to 8s
+  const maxAttempts = 5;
+  const initialInterval = 2000;
+  const maxInterval = 8000;
   let currentInterval = initialInterval;
 
   const updateProgressUI = () => {
@@ -61,6 +421,7 @@
     const percent = Math.min((attempts / maxAttempts) * 100, 100);
     progressBar.style.width = percent + '%';
     debugMsg.textContent = `Checking... attempt ${attempts}/${maxAttempts}`;
+    debugMsg.classList.remove('d-none');
   };
 
   async function pollStatus() {
@@ -68,61 +429,58 @@
       const url = `{% url 'subscriptions:check_status' %}?checkout_id=${encodeURIComponent(checkoutId)}`;
       const r = await fetch(url, { method: 'GET', headers: {'X-Requested-With':'XMLHttpRequest'} });
       if (!r.ok) {
-        // transient server error — show message and retry
-        statusBadge.innerHTML = '<span class="badge bg-warning">Network issue — retrying</span>';
+        statusBadge.innerHTML = '<span class="status-badge badge-warning"><i class="fas fa-exclamation-triangle" style="font-size: 0.7rem;"></i> Network issue — retrying</span>';
         updateProgressUI();
       } else {
         const data = await r.json();
         if (data.status === 'success') {
-          statusBadge.innerHTML = '<span class="badge bg-success">Payment successful</span>';
+          statusBadge.innerHTML = '<span class="status-badge badge-success"><i class="fas fa-check-circle" style="font-size: 0.7rem;"></i> Payment successful</span>';
           progressBar.style.width = '100%';
-          // give the user a short celebratory pause
+          spinnerArea.innerHTML = '<div class="checkmark"><i class="fas fa-check"></i></div>';
           setTimeout(() => {
             window.location.href = "{% url 'frontend:payment_success' %}";
           }, 900);
           return;
         } else if (data.status === 'failed') {
-          statusBadge.innerHTML = '<span class="badge bg-danger">Payment failed</span>';
+          statusBadge.innerHTML = '<span class="status-badge badge-failed"><i class="fas fa-times-circle" style="font-size: 0.7rem;"></i> Payment failed</span>';
           debugMsg.textContent = "Payment failed. Please try again or contact support.";
+          spinnerArea.innerHTML = '<div class="crossmark"><i class="fas fa-times"></i></div>';
           retryBtn.classList.remove('d-none');
-          // optionally redirect after a short pause:
           setTimeout(() => {
             window.location.href = "{% url 'frontend:payment_failed' %}";
           }, 1200);
           return;
         } else if (data.status === 'pending' || data.status === 'not_found') {
-          statusBadge.innerHTML = '<span class="badge bg-info">Waiting for confirmation…</span>';
+          statusBadge.innerHTML = '<span class="status-badge badge-waiting"><i class="fas fa-clock" style="font-size: 0.7rem;"></i> Waiting for confirmation…</span>';
           updateProgressUI();
         } else {
-          // unexpected
-          statusBadge.innerHTML = '<span class="badge bg-warning">Unknown response</span>';
+          statusBadge.innerHTML = '<span class="status-badge badge-warning"><i class="fas fa-question-circle" style="font-size: 0.7rem;"></i> Unknown response</span>';
           debugMsg.textContent = JSON.stringify(data);
+          debugMsg.classList.remove('d-none');
           updateProgressUI();
         }
       }
     } catch (err) {
-      statusBadge.innerHTML = '<span class="badge bg-warning">Connection error — retrying</span>';
+      statusBadge.innerHTML = '<span class="status-badge badge-warning"><i class="fas fa-wifi" style="font-size: 0.7rem;"></i> Connection error — retrying</span>';
       debugMsg.textContent = err.toString();
+      debugMsg.classList.remove('d-none');
       updateProgressUI();
     }
 
     if (attempts >= maxAttempts) {
-      statusBadge.innerHTML = '<span class="badge bg-danger">Timeout — could not confirm</span>';
+      statusBadge.innerHTML = '<span class="status-badge badge-failed"><i class="fas fa-hourglass-end" style="font-size: 0.7rem;"></i> Timeout — could not confirm</span>';
       debugMsg.textContent = 'Payment verification timed out. Please check your phone or subscription status later.';
       retryBtn.classList.remove('d-none');
-      // final fallback redirect to payment_failed after giving them a moment
       setTimeout(() => {
         window.location.href = "{% url 'frontend:payment_failed' %}";
       }, 2500);
       return;
     }
 
-    // increase interval gradually up to maxInterval (helps reduce load)
     currentInterval = Math.min(initialInterval + Math.floor(attempts/3) * 1000, maxInterval);
     setTimeout(pollStatus, currentInterval);
   }
 
-  // start polling after a short delay so DB has time to commit
   setTimeout(pollStatus, 1200);
 </script>
 {% endblock %}

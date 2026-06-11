@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,145 +9,739 @@
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --primary-light: #818cf8;
+      --accent: #06b6d4;
+      --accent-warm: #f59e0b;
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-hover: #334155;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --border: rgba(99, 102, 241, 0.2);
+      --glass: rgba(30, 41, 59, 0.7);
+      --success: #10b981;
+      --warning: #f59e0b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* Animated Background */
+    .bg-mesh {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: 
+        radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 70%),
+        var(--bg-dark);
+    }
+
+    .bg-mesh::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+
+    /* Floating Orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: -1;
+      animation: orbFloat 8s ease-in-out infinite;
+    }
+
+    .orb-1 {
+      width: 400px;
+      height: 400px;
+      background: rgba(99, 102, 241, 0.2);
+      top: -100px;
+      right: -100px;
+      animation-delay: 0s;
+    }
+
+    .orb-2 {
+      width: 300px;
+      height: 300px;
+      background: rgba(6, 182, 212, 0.15);
+      bottom: -50px;
+      left: -50px;
+      animation-delay: -3s;
+    }
+
+    .orb-3 {
+      width: 250px;
+      height: 250px;
+      background: rgba(245, 158, 11, 0.1);
+      top: 50%;
+      left: 50%;
+      animation-delay: -6s;
+    }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -30px) scale(1.1); }
+      66% { transform: translate(-20px, 20px) scale(0.9); }
+    }
+
+    /* Navbar */
+    .navbar-custom {
+      background: var(--glass) !important;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+      transition: all 0.3s ease;
+    }
+
+    .navbar-custom.scrolled {
+      padding: 0.5rem 0;
+      background: rgba(15, 23, 42, 0.95) !important;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .navbar-brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--primary-light), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar-brand:hover {
+      transform: scale(1.05);
+    }
+
+    .navbar-brand i {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-right: 0.5rem;
+    }
+
+    .nav-link {
+      color: var(--text-secondary) !important;
+      font-weight: 500;
+      position: relative;
+      padding: 0.5rem 1rem !important;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary) !important;
+    }
+
+    .nav-link:hover::after {
+      width: 80%;
+    }
+
+    .nav-link.active {
+      color: var(--primary-light) !important;
+    }
+
+    .nav-link.active::after {
+      width: 80%;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 0.4rem 0.8rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--primary);
+      color: var(--primary-light);
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+    }
+
+    /* Main Content */
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Floating Sidebar */
+    .floating-sidebar {
+      position: fixed;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      z-index: 1050;
+    }
+
+    .floating-sidebar a {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 1.2rem;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .floating-sidebar a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+    }
+
+    .floating-sidebar a:hover {
+      color: white;
+      transform: translateX(-5px) scale(1.1);
+      border-color: var(--primary);
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+    }
+
+    .floating-sidebar a:hover::before {
+      opacity: 1;
+    }
+
+    .floating-sidebar a::after {
+      content: attr(title);
+      position: absolute;
+      right: 60px;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateX(10px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+      border: 1px solid var(--border);
+    }
+
+    .floating-sidebar a:hover::after {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 1));
+      border-top: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), var(--accent), transparent);
+    }
+
+    footer h5 {
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    footer h5::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 2px;
+    }
+
+    footer a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-block;
+      padding: 0.2rem 0;
+    }
+
+    footer a:hover {
+      color: var(--primary-light);
+      transform: translateX(5px);
+    }
+
+    footer p {
+      color: var(--text-secondary);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-color: transparent;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .social-links a:hover i {
+      color: white !important;
+    }
+
+    /* Newsletter */
+    .newsletter-input {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .newsletter-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      outline: none;
+    }
+
+    .newsletter-input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .btn-glow {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-glow::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn-glow:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-glow:hover::before {
+      left: 100%;
+    }
+
+    /* Chat Widget */
+    .chat-trigger {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 1040;
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chat-trigger:hover {
+      transform: scale(1.1) rotate(10deg);
+      box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
+    }
+
+    .chat-trigger.pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+      70% { box-shadow: 0 0 0 20px rgba(99, 102, 241, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+    }
+
+    .offcanvas {
+      background: var(--bg-dark);
+      border-left: 1px solid var(--border);
+    }
+
+    .offcanvas-header {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+      border-bottom: 1px solid var(--border);
+    }
+
+    .offcanvas-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--primary-light), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .form-control, .form-select {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+      background: var(--bg-card);
+      border-color: var(--primary);
+      color: var(--text-primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .form-control::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .form-label {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* Chat Messages */
+    #chatLog {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1rem;
+    }
+
+    .chat-bubble {
+      padding: 0.75rem 1rem;
+      border-radius: 16px;
+      max-width: 80%;
+      word-wrap: break-word;
+      animation: messagePop 0.3s ease;
+    }
+
+    @keyframes messagePop {
+      0% { opacity: 0; transform: scale(0.8) translateY(10px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .chat-bubble-user {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border-bottom-right-radius: 4px;
+      margin-left: auto;
+    }
+
+    .chat-bubble-bot {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--bg-card-hover);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
+    }
+
+    /* Scroll Reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .floating-sidebar {
+        right: 10px;
+        gap: 10px;
+      }
+      
+      .floating-sidebar a {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
+      
+      .chat-trigger {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+      }
+    }
+  </style>
 </head>
-<body class="d-flex flex-column min-vh-100 bg-light">
+<body class="d-flex flex-column min-vh-100">
+
+  <!-- Animated Background -->
+  <div class="bg-mesh"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top" id="mainNav">
     <div class="container">
-      <a class="navbar-brand fw-bold text-primary" href="{% url 'frontend:home' %}">
+      <a class="navbar-brand" href="{% url 'frontend:home' %}">
         <i class="fa-solid fa-building"></i> Zia Properties Ltd.
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
-        <span class="navbar-toggler-icon"></span>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" style="border-color: var(--border);">
+        <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
       </button>
       <div class="collapse navbar-collapse" id="mainNavbar">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
           <li class="nav-item"><a class="nav-link" href="{% url 'frontend:home' %}">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'frontend:about' %}">About</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'frontend:services' %}">Services</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'frontend:contact' %}">Contact</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'frontend:blog' %}">Blog</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'frontend:testimonials' %}">Testimonials</a></li>
+          <li class="nav-item ms-lg-2">
+            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+              <i class="fas fa-moon" id="themeIcon"></i>
+              <span id="themeText">Dark</span>
+            </button>
+          </li>
         </ul>
       </div>
     </div>
   </nav>
 
   <!-- Main Content -->
-  <main class="flex-grow-1 py-4">
+  <main class="flex-grow-1 py-5">
     <div class="container">
       {% block content %}{% endblock %}
     </div>
   </main>
 
-  <!-- Floating Sidebar Styles -->
-  <style>
-    .floating-sidebar {
-      position: fixed;
-      top: 40%;
-      right: 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      z-index: 1050;
-    }
-    .floating-sidebar a {
-      background: #0d6efd;
-      color: #fff;
-      padding: 14px;
-      border-radius: 50%;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      text-align: center;
-      transition: all 0.3s;
-      font-size: 1.2rem;
-    }
-    .floating-sidebar a:hover {
-      background: #0b5ed7;
-      transform: scale(1.1);
-    }
-  </style>
-
   <!-- Floating Sidebar -->
   <div class="floating-sidebar">
-    <a href="{% url 'frontend:contact' %}" title="Contact"><i class="fas fa-envelope"></i></a>
-    <a href="https://wa.me/254758928268" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-    <a href="{% url 'frontend:listings' %}" title="Search"><i class="fas fa-search"></i></a>
+    <a href="{% url 'frontend:contact' %}" title="Contact Us">
+      <i class="fas fa-envelope"></i>
+    </a>
+    <a href="https://wa.me/254758928268" target="_blank" title="WhatsApp Chat">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+    <a href="{% url 'frontend:listings' %}" title="Search Properties">
+      <i class="fas fa-search"></i>
+    </a>
   </div>
 
+  <!-- Chat Trigger Button -->
+  <button class="chat-trigger pulse" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatWidget" aria-label="Open Chat">
+    <i class="fas fa-robot"></i>
+  </button>
+
   <!-- Footer -->
-  <footer class="bg-dark text-white pt-5">
+  <footer class="pt-5 pb-3">
     <div class="container">
-      <div class="row gy-4">
+      <div class="row gy-5 reveal">
 
         <!-- About -->
         <div class="col-md-3">
-          <h5 class="fw-bold">About Zia Properties</h5>
-          <p class="small text-light">
+          <h5>About Zia Properties</h5>
+          <p class="small" style="color: var(--text-secondary); line-height: 1.8;">
             Zia Properties Ltd is your trusted partner for real estate investments in Kenya. 
             We connect buyers, sellers, and tenants with verified property opportunities.
           </p>
           <p class="small">
-            <i class="fas fa-envelope me-2"></i> 
-            <a href="mailto:ziaproagency@yahoo.com" class="text-white text-decoration-none">ziaproagency@yahoo.com</a><br>
-            <i class="fas fa-phone me-2"></i> +254 758 928 268
+            <i class="fas fa-envelope me-2" style="color: var(--primary-light);"></i> 
+            <a href="mailto:ziaproagency@yahoo.com">ziaproagency@yahoo.com</a><br>
+            <i class="fas fa-phone me-2" style="color: var(--primary-light);"></i> +254 758 928 268
           </p>
         </div>
 
         <!-- Quick Links -->
         <div class="col-md-2">
-          <h5 class="fw-bold">Quick Links</h5>
+          <h5>Quick Links</h5>
           <ul class="list-unstyled small">
-            <li><a href="{% url 'frontend:home' %}" class="text-white text-decoration-none">Home</a></li>
-            <li><a href="{% url 'frontend:about' %}" class="text-white text-decoration-none">About Us</a></li>
-            <li><a href="{% url 'frontend:services' %}" class="text-white text-decoration-none">Services</a></li>
-            <li><a href="{% url 'frontend:contact' %}" class="text-white text-decoration-none">Contact</a></li>
-            <li><a href="{% url 'frontend:blog' %}" class="text-white text-decoration-none">Blogs</a></li>
-            <li><a href="{% url 'frontend:testimonials' %}" class="text-white text-decoration-none">Testimonials</a></li>
+            <li><a href="{% url 'frontend:home' %}">Home</a></li>
+            <li><a href="{% url 'frontend:about' %}">About Us</a></li>
+            <li><a href="{% url 'frontend:services' %}">Services</a></li>
+            <li><a href="{% url 'frontend:contact' %}">Contact</a></li>
+            <li><a href="{% url 'frontend:blog' %}">Blogs</a></li>
+            <li><a href="{% url 'frontend:testimonials' %}">Testimonials</a></li>
           </ul>
         </div>
 
         <!-- Partners -->
         <div class="col-md-3">
-          <h5 class="fw-bold">Our Partners</h5>
+          <h5>Our Partners</h5>
           <ul class="list-unstyled small">
-            <li><a href="https://www.realtor.com/" target="_blank" class="text-white text-decoration-none">Realtor.com</a></li>
-            <li><a href="https://www.property24.co.ke/" target="_blank" class="text-white text-decoration-none">Property24</a></li>
-            <li><a href="https://www.airbnb.com/" target="_blank" class="text-white text-decoration-none">Airbnb</a></li>
-            <li><a href="https://www.booking.com/" target="_blank" class="text-white text-decoration-none">Booking.com</a></li>
-            <li><a href="https://www.jumia.co.ke/" target="_blank" class="text-white text-decoration-none">Jumia Real Estate</a></li>
+            <li><a href="https://www.realtor.com/" target="_blank">Realtor.com</a></li>
+            <li><a href="https://www.property24.co.ke/" target="_blank">Property24</a></li>
+            <li><a href="https://www.airbnb.com/" target="_blank">Airbnb</a></li>
+            <li><a href="https://www.booking.com/" target="_blank">Booking.com</a></li>
+            <li><a href="https://www.jumia.co.ke/" target="_blank">Jumia Real Estate</a></li>
           </ul>
         </div>
 
         <!-- Social Media -->
         <div class="col-md-2">
-          <h5 class="fw-bold">Follow Us</h5>
-          <ul class="list-unstyled d-flex gap-2">
-            <li><a href="https://facebook.com/propertiesmalindi" target="_blank" class="text-white fs-5"><i class="fab fa-facebook-f"></i></a></li>
-            <li><a href="https://twitter.com" target="_blank" class="text-white fs-5"><i class="fab fa-twitter"></i></a></li>
-            <li><a href="https://instagram.com" target="_blank" class="text-white fs-5"><i class="fab fa-instagram"></i></a></li>
-            <li><a href="https://linkedin.com" target="_blank" class="text-white fs-5"><i class="fab fa-linkedin-in"></i></a></li>
-          </ul>
+          <h5>Follow Us</h5>
+          <div class="social-links">
+            <a href="https://facebook.com/propertiesmalindi" target="_blank" title="Facebook">
+              <i class="fab fa-facebook-f" style="color: var(--text-secondary);"></i>
+            </a>
+            <a href="https://twitter.com" target="_blank" title="Twitter">
+              <i class="fab fa-twitter" style="color: var(--text-secondary);"></i>
+            </a>
+            <a href="https://instagram.com" target="_blank" title="Instagram">
+              <i class="fab fa-instagram" style="color: var(--text-secondary);"></i>
+            </a>
+            <a href="https://linkedin.com" target="_blank" title="LinkedIn">
+              <i class="fab fa-linkedin-in" style="color: var(--text-secondary);"></i>
+            </a>
+          </div>
         </div>
 
         <!-- Newsletter -->
         <div class="col-md-2">
-          <h5 class="fw-bold">Newsletter</h5>
-          <p class="small text-muted">Subscribe to get latest listings and property news.</p>
+          <h5>Newsletter</h5>
+          <p class="small" style="color: var(--text-secondary);">Subscribe to get latest listings and property news.</p>
           <form class="d-flex flex-column gap-2">
-            <input type="email" class="form-control form-control-sm" placeholder="Email address">
-            <button type="submit" class="btn btn-warning btn-sm fw-bold">Subscribe</button>
+            <input type="email" class="newsletter-input form-control-sm" placeholder="Email address">
+            <button type="submit" class="btn-glow btn-sm">Subscribe</button>
           </form>
         </div>
       </div>
 
-      <hr class="border-light my-4">
+      <hr style="border-color: var(--border); margin: 3rem 0 1.5rem;">
 
       <div class="d-flex flex-column flex-md-row justify-content-between align-items-center pb-3">
-        <small class="text-muted">&copy; 2025 Zia Properties Ltd. All rights reserved.</small>
+        <small style="color: var(--text-secondary);">&copy; 2025 Zia Properties Ltd. All rights reserved.</small>
         <div class="small">
-          <a href="{% url 'frontend:privacy_policy' %}" class="text-white text-decoration-none me-3">Privacy Policy</a>
-          <a href="{% url 'frontend:terms_and_conditions' %}" class="text-white text-decoration-none">Terms & Conditions</a>
+          <a href="{% url 'frontend:privacy_policy' %}" class="me-3">Privacy Policy</a>
+          <a href="{% url 'frontend:terms_and_conditions' %}">Terms & Conditions</a>
         </div>
       </div>
     </div>
@@ -156,40 +750,43 @@
   <!-- Bootstrap Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-
   <!-- Chat Offcanvas -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="chatWidget">
-    <div class="offcanvas-header border-bottom">
-      <h5 class="offcanvas-title">Zia AI Assistant</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title"><i class="fas fa-robot me-2"></i>Zia AI Assistant</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body d-flex flex-column">
 
       <!-- Setup Step -->
       <div id="setupStep" class="mb-3">
-        <label class="form-label fw-bold">Your Name</label>
-        <input type="text" id="usernameInput" class="form-control mb-2" placeholder="Enter your name">
+        <label class="form-label">Your Name</label>
+        <input type="text" id="usernameInput" class="form-control mb-3" placeholder="Enter your name">
 
-        <label class="form-label fw-bold">Choose Assistant</label>
-        <select id="chatModeSelect" class="form-select mb-2">
+        <label class="form-label">Choose Assistant</label>
+        <select id="chatModeSelect" class="form-select mb-3">
           <option value="bot" selected>🤖 AI Bot Assistant</option>
           <option value="agent">👨‍💼 Real Estate Agent</option>
         </select>
 
-        <button class="btn btn-success w-100" id="startChatBtn">Start Chat</button>
+        <button class="btn-glow w-100" id="startChatBtn">Start Chat</button>
       </div>
 
       <!-- Chat Step -->
       <div id="chatStep" class="d-none flex-column flex-grow-1">
-        <div id="chatLog" class="mb-3 border rounded p-2 bg-white flex-grow-1 overflow-auto" style="max-height: 300px;"></div>
+        <div id="chatLog" class="mb-3 flex-grow-1 overflow-auto" style="max-height: 300px;"></div>
 
         <div class="d-flex mb-2 justify-content-end">
-          <button class="btn btn-warning btn-sm" id="clearChatBtn">Clear Chat</button>
+          <button class="btn btn-outline-warning btn-sm" id="clearChatBtn" style="border-radius: 8px;">
+            <i class="fas fa-trash me-1"></i>Clear Chat
+          </button>
         </div>
 
         <div class="input-group">
-          <input type="text" id="chatInput" class="form-control" placeholder="Type a message...">
-          <button class="btn btn-success" id="sendBtn">Send</button>
+          <input type="text" id="chatInput" class="form-control" placeholder="Type a message..." style="border-radius: 12px 0 0 12px;">
+          <button class="btn-glow" id="sendBtn" style="border-radius: 0 12px 12px 0;">
+            <i class="fas fa-paper-plane"></i>
+          </button>
         </div>
       </div>
 
@@ -207,10 +804,11 @@
 
     function appendMessage(sender, text) {
       const div = document.createElement("div");
-      div.className = sender === "You" ? "text-end mb-2" : "text-start mb-2";
+      div.className = sender === "You" ? "text-end mb-3" : "text-start mb-3";
       div.innerHTML = `
-        <div class="p-2 rounded ${sender === "You" ? "bg-primary text-white d-inline-block" : "bg-light text-dark d-inline-block"}">
-          <b>${sender}:</b> ${text}
+        <div class="chat-bubble ${sender === "You" ? "chat-bubble-user" : "chat-bubble-bot"} d-inline-block">
+          <small class="d-block mb-1 opacity-75" style="font-size: 0.7rem;">${sender}</small>
+          ${text}
         </div>`;
       chatLog.appendChild(div);
       chatLog.scrollTop = chatLog.scrollHeight;
@@ -251,7 +849,12 @@
       };
 
       chatSocket.onclose = function() {
-        appendMessage("System", "⚠️ Chat disconnected.");
+        appendMessage("System", "⚠️ Chat disconnected. Reconnecting...");
+        setTimeout(() => connectWebSocket(username, mode), 3000);
+      };
+
+      chatSocket.onerror = function() {
+        appendMessage("System", "❌ Connection error.");
       };
     }
 
@@ -272,16 +875,73 @@
     });
 
     initChat();
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('mainNav');
+      if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+
+    // Theme Toggle
+    function toggleTheme() {
+      const html = document.documentElement;
+      const icon = document.getElementById('themeIcon');
+      const text = document.getElementById('themeText');
+      
+      if (html.getAttribute('data-bs-theme') === 'dark') {
+        html.setAttribute('data-bs-theme', 'light');
+        icon.className = 'fas fa-sun';
+        text.textContent = 'Light';
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.setAttribute('data-bs-theme', 'dark');
+        icon.className = 'fas fa-moon';
+        text.textContent = 'Dark';
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    if (savedTheme === 'light') {
+      document.documentElement.setAttribute('data-bs-theme', 'light');
+      document.getElementById('themeIcon').className = 'fas fa-sun';
+      document.getElementById('themeText').textContent = 'Light';
+    }
+
+    // Scroll Reveal Animation
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // Active nav link highlighting
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.nav-link').forEach(link => {
+      if (link.getAttribute('href') === currentPath) {
+        link.classList.add('active');
+      }
+    });
   </script>
 
   <!-- OpenAI ChatKit UI Widget -->
-<script 
-  src="https://openai.com" 
-  data-domain-public-key="domain_pk_6a19d7aaa4508193928705e7"
-  data-workflow-id="wf_6a19d55fa1b48190bd915bd37ff6d1a7062c7478e"
-  data-version="draft"
-  defer>
-</script>
+  <script 
+    src="https://openai.com" 
+    data-domain-public-key="domain_pk_6a19d7aaa4508193928705e7"
+    data-workflow-id="wf_6a19d55fa1b48190bd915bd37ff6d1a7062c7478e"
+    data-version="draft"
+    defer>
+  </script>
 
 </body>
 </html>
