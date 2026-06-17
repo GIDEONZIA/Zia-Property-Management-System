@@ -24,10 +24,10 @@ load_dotenv(BASE_DIR / '.env', override=True)
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-tj6t^#(83bs9=k$2on9_jvr0!u0z4*rm4ku(oit+-skg2r9l2@'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -174,16 +174,18 @@ JAZZMIN_UI_TWEAKS = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+# The URL prefix used to access static files in the browser
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
 
-
-# Optional: collect all static files into one folder (e.g. for deployment)
+# Directories where Django looks for additional static files (Source folders)
 STATICFILES_DIRS = [
     BASE_DIR / "static",
     BASE_DIR / 'property_mgmt_backend' / 'static',
     BASE_DIR / 'frontend',
 ]
+
+# The single folder where Vercel will look for all compiled production assets
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',

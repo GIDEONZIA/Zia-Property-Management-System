@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "zia_property_management_system/wsgi.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "staticfiles/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "staticfiles/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "zia_property_management_system/wsgi.py"
+    }
+  ]
+}
