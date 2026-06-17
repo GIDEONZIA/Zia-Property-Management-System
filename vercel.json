@@ -19,11 +19,5 @@
       "src": "/(.*)",
       "dest": "property_mgmt/wsgi.py"
     }
-  ],
-  "functions": {
-    "property_mgmt/wsgi.py": {
-      "runtime": "@vercel/python",
-      "installCommand": "pip install --only-binary=:all: -r requirements.txt"
-    }
-  }
+  ]
 }
