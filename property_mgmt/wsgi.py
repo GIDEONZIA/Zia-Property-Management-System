@@ -14,3 +14,5 @@ from django.core.wsgi import get_wsgi_application
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'property_mgmt.settings')
 
 application = get_wsgi_application()
+
+# Safe comment cache break trigger 2026

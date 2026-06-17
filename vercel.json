@@ -3,10 +3,7 @@
   "builds": [
     {
       "src": "property_mgmt/wsgi.py",
-      "use": "@vercel/python",
-      "config": {
-        "installCommand": "pip install -r requirements.txt"
-      }
+      "use": "@vercel/python"
     },
     {
       "src": "staticfiles/**",
@@ -22,5 +19,11 @@
       "src": "/(.*)",
       "dest": "property_mgmt/wsgi.py"
     }
-  ]
+  ],
+  "functions": {
+    "property_mgmt/wsgi.py": {
+      "runtime": "@vercel/python",
+      "installCommand": "pip install --only-binary=:all: -r requirements.txt"
+    }
+  }
 }
