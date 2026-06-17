@@ -1,0 +1,271 @@
+/* Reset and base styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', Arial, sans-serif;
+    background: #f7f8fa;
+    color: #222;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #1a2238;
+    padding: 1rem 2rem;
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.nav-links li a:hover {
+    color: #e94560;
+}
+
+.nav-toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Contact Section */
+.contact-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    max-width: 900px;
+    margin: 3rem auto 2rem auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(30,40,90,0.08);
+    padding: 2.5rem 2rem;
+}
+
+.contact-info {
+    flex: 1 1 250px;
+    min-width: 250px;
+    margin-right: 2rem;
+}
+
+.contact-info h2 {
+    margin-top: 0;
+    color: #1a2238;
+    font-size: 2rem;
+}
+
+.contact-info p {
+    margin-bottom: 1.5rem;
+    color: #555;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    color: #222;
+    font-size: 1rem;
+}
+
+.info-item i {
+    color: #e94560;
+    margin-right: 0.8rem;
+    font-size: 1.2rem;
+}
+
+/* Contact Form */
+.contact-form {
+    flex: 1 1 320px;
+    min-width: 300px;
+    background: #f7f8fa;
+    border-radius: 8px;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 2px 12px rgba(30,40,90,0.05);
+}
+
+.contact-form h3 {
+    margin-top: 0;
+    color: #1a2238;
+    margin-bottom: 1.2rem;
+}
+
+.contact-form label {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: #222;
+    font-weight: 500;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 0.7rem;
+    margin-bottom: 1.2rem;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: #fff;
+    resize: none;
+    transition: border 0.2s;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: #e94560;
+    outline: none;
+}
+
+.contact-form button {
+    background: #e94560;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.contact-form button:hover {
+    background: #d7263d;
+}
+
+/* Message alerts */
+.message-container {
+    margin-bottom: 1rem;
+}
+
+.alert {
+    padding: 0.7rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    font-size: 0.97rem;
+}
+
+.alert-success {
+    background: #e6f9ed;
+    color: #1b7e3c;
+    border: 1px solid #b6e7c9;
+}
+
+.alert-error,
+.alert-danger {
+    background: #ffeaea;
+    color: #c0392b;
+    border: 1px solid #f5c6cb;
+}
+
+/* CTA Section */
+.cta-section {
+    text-align: center;
+    background: #1a2238;
+    color: #fff;
+    padding: 3rem 1rem 2.5rem 1rem;
+    margin-top: 2rem;
+}
+
+.cta-section h2 {
+    margin-top: 0;
+    font-size: 2rem;
+    margin-bottom: 0.7rem;
+}
+
+.cta-section p {
+    margin-bottom: 1.5rem;
+    color: #e0e6f7;
+}
+
+.cta-button {
+    display: inline-block;
+    background: #e94560;
+    color: #fff;
+    padding: 0.9rem 2.2rem;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.cta-button:hover {
+    background: #d7263d;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1.2rem 0;
+    background: #222b45;
+    color: #fff;
+    font-size: 1rem;
+    margin-top: 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 900px) {
+    .contact-container {
+        flex-direction: column;
+        padding: 2rem 1rem;
+        gap: 2rem;
+    }
+    .contact-info {
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 700px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+    }
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+        display: none;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    .nav-links.active {
+        display: flex;
+    }
+    .nav-toggle {
+        display: block;
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 500px) {
+    .contact-container {
+        padding: 1rem 0.3rem;
+    }
+    .contact-form {
+        padding: 1.2rem 0.5rem;
+    }
+    .cta-section {
+        padding: 2rem 0.5rem;
+    }
+}

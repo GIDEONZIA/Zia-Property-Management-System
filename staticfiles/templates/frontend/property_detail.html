@@ -1,0 +1,70 @@
+{% extends "base_public.html" %}
+{% load static %}
+
+{% block title %}{{ property.property_name }} | Property Details{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row g-4">
+        <!-- Image Column with Carousel -->
+        <div class="col-md-6">
+            {% if property.images.all %}
+                <div id="propertyCarousel" class="carousel slide rounded shadow-sm" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for img in property.images.all %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                {% if img.image %}
+                                    <img src="{{ img.image.url }}" class="d-block w-100 rounded" alt="Image {{ forloop.counter }}">
+                                {% else %}
+                                    <img src="{% static 'frontend/images/placeholder-property.jpg' %}" class="d-block w-100 rounded" alt="No image">
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {% if property.images.count > 1 %}
+                        <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    {% endif %}
+                </div>
+            {% else %}
+                {% if property.image %}
+                    <img src="{{ property.image.url }}" class="img-fluid rounded shadow-sm" alt="{{ property.property_name }}">
+                {% else %}
+                    <img src="{% static 'frontend/images/placeholder-property.jpg' %}" class="img-fluid rounded shadow-sm" alt="No image available">
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <!-- Details Column -->
+        <div class="col-md-6">
+            <h2 class="mb-3">{{ property.property_name }}</h2>
+
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Location:</strong> {{ property.location }}</li>
+                <li class="list-group-item"><strong>Type:</strong> {{ property.property_type }}</li>
+                <li class="list-group-item"><strong>Address:</strong> {{ property.address }}</li>
+                <li class="list-group-item"><strong>Price:</strong> {{ property.currency }} {{ property.price|floatformat:2 }}</li>
+                <li class="list-group-item"><strong>Description:</strong><br>{{ property.description }}</li>
+            </ul>
+
+            <div class="mt-4">
+                <a href="mailto:{{ property.agent.email|default:'info@example.com' }}" class="btn btn-primary">
+                    <i class="fas fa-envelope"></i> Contact Agent
+                </a>
+                <a href="{% url 'frontend:listings' %}" class="btn btn-outline-secondary ms-2">Back to Listings</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+{% endblock %}

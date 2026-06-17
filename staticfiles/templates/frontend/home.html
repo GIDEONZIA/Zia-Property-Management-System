@@ -1,0 +1,86 @@
+{% extends "base_public.html" %}
+{% load static %}
+
+{% block title %}Home - Zia Properties Ltd{% endblock %}
+
+{% block extra_styles %}
+  <!-- Bootstrap & Font Awesome -->
+  <link href="https://cdn.jsdelivr.net" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com" rel="stylesheet">
+  <style>
+    .property-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    .hero-section {
+      background: url("{% static 'frontend/images/hero-bg.jpg' %}") center/cover no-repeat;
+      color: white;
+      position: relative;
+    }
+    .hero-overlay {
+      background: rgba(0,0,0,0.5);
+      padding: 5rem 0;
+    }
+    .card-img-top {
+      height: 220px;
+      object-fit: cover;
+    }
+    .testimonial-card {
+      border: none;
+      border-radius: 10px;
+      background: #f8f9fa;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<header class="hero-section mb-5" role="banner">
+  <div class="hero-overlay text-center">
+    <div class="container">
+      <h1 class="display-4 fw-bold">Helping You Find Your Next Property</h1>
+      <p class="lead">Browse verified properties for rent, lease, or purchase anywhere in Kenya.</p>
+      <a href="{% url 'frontend:listings' %}" class="btn btn-warning btn-lg mt-3">Explore Listings</a>
+    </div>
+  </div>
+</header>
+
+<!-- Featured Properties -->
+<section class="container mb-5" role="region">
+  <h2 class="text-center mb-4">Featured Properties</h2>
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for property in featured_properties %}
+      <div class="col">
+        <article class="card h-100 shadow-sm property-card">
+          {% if property.image %}
+            <img src="{{ property.image.url }}" class="card-img-top" alt="{{ property.property_name }}">
+          {% else %}
+            <img src="https://via.placeholder.com" class="card-img-top" alt="No image">
+          {% endif %}
+          <div class="card-body">
+            <h3 class="card-title h5">{{ property.property_name }}</h3>
+            <p class="card-text small mb-0">
+              <strong>{{ property.currency }} {{ property.price|floatformat }}</strong><br>
+              <i class="fas fa-map-marker-alt me-1 text-muted"></i> {{ property.location }}<br>
+              <i class="fas fa-bed me-1"></i> {{ property.bedrooms }} Beds
+              <i class="fas fa-bath ms-3 me-1"></i> {{ property.bathrooms }} Baths
+            </p>
+          </div>
+        </article>
+      </div>
+    {% empty %}
+      <div class="col-12 text-center">
+        <p class="text-muted">No featured properties currently available.</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+
+{% endblock %}
+
+{% block extra_scripts %}
+  <script src="https://cdn.jsdelivr.net"></script>
+{% endblock %}

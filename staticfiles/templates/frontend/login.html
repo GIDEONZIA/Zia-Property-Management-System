@@ -1,0 +1,634 @@
+{% extends "base_public.html" %}
+{% load static %}
+{% load socialaccount %}
+
+{% block title %}Login - Zia Properties Ltd{% endblock %}
+
+{% block extra_styles %}
+  <link rel="stylesheet" href="{% static 'frontend/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --primary-light: #818cf8;
+      --accent: #06b6d4;
+      --accent-warm: #f59e0b;
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-hover: #334155;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --border: rgba(99, 102, 241, 0.2);
+      --glass: rgba(30, 41, 59, 0.7);
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* Animated Background */
+    .login-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: var(--bg-dark);
+      overflow: hidden;
+    }
+
+    .login-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+    }
+
+    .login-bg::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+
+    /* Floating Orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: -1;
+      animation: orbFloat 8s ease-in-out infinite;
+    }
+
+    .orb-1 {
+      width: 400px;
+      height: 400px;
+      background: rgba(99, 102, 241, 0.2);
+      top: -100px;
+      right: -100px;
+      animation-delay: 0s;
+    }
+
+    .orb-2 {
+      width: 300px;
+      height: 300px;
+      background: rgba(6, 182, 212, 0.15);
+      bottom: -50px;
+      left: -50px;
+      animation-delay: -3s;
+    }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -30px) scale(1.1); }
+      66% { transform: translate(-20px, 20px) scale(0.9); }
+    }
+
+    /* Login Card */
+    .login-card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+      background-size: 200% 100%;
+      animation: gradientShift 3s linear infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    .login-card:hover {
+      box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    /* Logo Animation */
+    .login-logo {
+      width: 70px;
+      height: 70px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      position: relative;
+      animation: logoFloat 3s ease-in-out infinite;
+    }
+
+    .login-logo::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      filter: blur(15px);
+      opacity: 0.5;
+      animation: logoGlow 3s ease-in-out infinite;
+    }
+
+    .login-logo i {
+      font-size: 1.8rem;
+      color: white;
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes logoGlow {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.1); }
+    }
+
+    .login-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, var(--text-primary), var(--primary-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .login-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    /* Form Inputs */
+    .form-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-control-custom {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: var(--text-primary);
+      padding: 1rem 1rem 1rem 3rem;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .form-control-custom:focus {
+      background: var(--bg-card-hover);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+      outline: none;
+      color: var(--text-primary);
+    }
+
+    .form-control-custom::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      transition: color 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .form-group:focus-within .input-icon {
+      color: var(--primary-light);
+    }
+
+    /* Password Toggle */
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: color 0.3s ease;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .password-toggle:hover {
+      color: var(--primary-light);
+    }
+
+    /* Login Button */
+    .btn-login {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border: none;
+      border-radius: 14px;
+      color: white;
+      font-weight: 600;
+      padding: 1rem;
+      font-size: 1rem;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .btn-login::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-login:hover::before {
+      left: 100%;
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    /* Links */
+    .login-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .login-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transition: width 0.3s ease;
+    }
+
+    .login-link:hover {
+      color: var(--primary-light);
+    }
+
+    .login-link:hover::after {
+      width: 100%;
+    }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 1.5rem 0;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+
+    .divider::before {
+      margin-right: 1rem;
+    }
+
+    .divider::after {
+      margin-left: 1rem;
+    }
+
+    /* Social Buttons */
+    .btn-social {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: var(--text-primary);
+      padding: 0.85rem 1rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+    }
+
+    .btn-social::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.05));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .btn-social:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);
+      color: var(--text-primary);
+    }
+
+    .btn-social:hover::before {
+      opacity: 1;
+    }
+
+    .btn-social img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
+    .btn-social i {
+      font-size: 1.2rem;
+    }
+
+    /* Alert */
+    .alert-custom {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 12px;
+      color: #fca5a5;
+      padding: 1rem;
+      font-size: 0.9rem;
+      animation: shake 0.5s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-left: 0.5rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--bg-card-hover);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
+    }
+
+    /* Reveal Animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: revealUp 0.8s ease forwards;
+    }
+
+    .reveal-delay-1 { animation-delay: 0.1s; }
+    .reveal-delay-2 { animation-delay: 0.2s; }
+    .reveal-delay-3 { animation-delay: 0.3s; }
+    .reveal-delay-4 { animation-delay: 0.4s; }
+
+    @keyframes revealUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 576px) {
+      .login-card {
+        margin: 0 1rem;
+      }
+      
+      .login-title {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="login-bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<section class="container my-5 position-relative" style="z-index: 1;">
+  <div class="row justify-content-center min-vh-100 align-items-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card login-card shadow reveal reveal-delay-1">
+        <div class="card-body p-4 p-md-5">
+
+          <div class="text-center mb-4">
+            <div class="login-logo">
+              <i class="fas fa-home"></i>
+            </div>
+            <h1 class="login-title mt-3">Welcome Back</h1>
+            <p class="login-subtitle mt-2">Access your account to manage or view listings.</p>
+          </div>
+
+          {% if form.errors %}
+            <div class="alert alert-custom mb-4" role="alert" aria-live="assertive">
+              <i class="fas fa-exclamation-circle me-2"></i>
+              {% if form.errors|length > 1 %}
+                Please correct the errors below.
+              {% else %}
+                Please correct the error below.
+              {% endif %}
+            </div>
+          {% endif %}
+
+          <form method="POST" novalidate id="loginForm">
+            {% csrf_token %}
+
+            <div class="form-group reveal reveal-delay-2">
+              <i class="fas fa-user input-icon"></i>
+              <input type="text" name="username" id="id_username" class="form-control-custom" required placeholder="Enter your username">
+            </div>
+
+            <div class="form-group reveal reveal-delay-3">
+              <i class="fas fa-lock input-icon"></i>
+              <input type="password" name="password" id="id_password" class="form-control-custom" required placeholder="Enter your password">
+              <button type="button" class="password-toggle" id="togglePassword" aria-label="Toggle password visibility">
+                <i class="fas fa-eye" id="toggleIcon"></i>
+              </button>
+            </div>
+
+            <div class="d-grid mb-3 reveal reveal-delay-3">
+              <button type="submit" class="btn btn-login" id="loginBtn">
+                <span id="btnText">Sign In</span>
+                <div class="spinner" id="btnSpinner"></div>
+              </button>
+            </div>
+
+            <div class="d-flex justify-content-between reveal reveal-delay-3">
+              <a href="{% url 'frontend/password_reset' %}" class="login-link">Forgot password?</a>
+              <a href="{% url 'frontend:signup' %}" class="login-link">Create account</a>
+            </div>
+          </form>
+
+          <div class="divider reveal reveal-delay-4">or continue with</div>
+
+          <!-- Social Logins -->
+          <div class="d-grid gap-2 reveal reveal-delay-4">
+            <a href="{% provider_login_url 'google' %}" class="btn-social">
+              <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google"> Sign in with Google
+            </a>
+            <a href="{% provider_login_url 'facebook' %}" class="btn-social">
+              <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook"> Sign in with Facebook
+            </a>
+            <a href="{% provider_login_url 'github' %}" class="btn-social">
+              <i class="fab fa-github" style="color: var(--text-primary);"></i> Sign in with GitHub
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script src="{% static 'frontend/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+  <script>
+    // Password Toggle
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('id_password');
+    const toggleIcon = document.getElementById('toggleIcon');
+
+    togglePassword.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      toggleIcon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+    });
+
+    // Form Submit Loading State
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const btnText = document.getElementById('btnText');
+    const btnSpinner = document.getElementById('btnSpinner');
+
+    loginForm.addEventListener('submit', () => {
+      loginBtn.disabled = true;
+      btnText.textContent = 'Signing in...';
+      btnSpinner.style.display = 'inline-block';
+      loginBtn.style.opacity = '0.8';
+    });
+
+    // Input Focus Effects
+    document.querySelectorAll('.form-control-custom').forEach(input => {
+      input.addEventListener('focus', () => {
+        input.parentElement.style.transform = 'scale(1.02)';
+      });
+      
+      input.addEventListener('blur', () => {
+        input.parentElement.style.transform = 'scale(1)';
+      });
+    });
+
+    // Social Button Hover Sound Effect (optional - visual feedback)
+    document.querySelectorAll('.btn-social').forEach(btn => {
+      btn.addEventListener('mouseenter', () => {
+        btn.style.transform = 'translateY(-3px)';
+      });
+      
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = 'translateY(0)';
+      });
+    });
+  </script>
+{% endblock %}

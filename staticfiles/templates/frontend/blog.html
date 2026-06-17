@@ -1,0 +1,59 @@
+{% extends "base_public.html" %}
+{% load static %}
+
+{% block title %}Our Blog - Zia Properties Ltd{% endblock %}
+
+{% block extra_styles %}
+    <!-- Bootstrap 5 CSS (local) -->
+    <link rel="stylesheet" href="{% static 'frontend/css/bootstrap.min.css' %}">
+
+    <!-- Font Awesome (for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+{% endblock %}
+
+{% block content %}
+<section class="container my-5" aria-labelledby="blog-heading">
+  <div class="text-center mb-4">
+    <h1 id="blog-heading" class="fw-bold">Our Blog</h1>
+    <p class="text-muted">Latest updates, tips, and insights from Zia Properties.</p>
+  </div>
+
+  <div class="row g-4">
+    {% for post in posts %}
+      <article class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm">
+          {% if post.image %}
+            <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title|escape }}">
+          {% else %}
+            <img src="https://via.placeholder.com/600x300?text=No+Image" class="card-img-top" alt="No image available">
+          {% endif %}
+
+          <div class="card-body">
+            <h2 class="card-title h5">
+              <a href="{% url 'frontend:blog_detail' slug=post.slug %}" class="text-decoration-none text-dark">{{ post.title }}</a>
+            </h2>
+            <p class="card-text text-muted">{{ post.content|truncatewords:25 }}</p>
+          </div>
+
+          <div class="card-footer bg-white border-0">
+            <a href="{% url 'frontend:blog_detail' slug=post.slug %}" class="btn btn-outline-primary btn-sm" aria-label="Read more about {{ post.title|escape }}">Read More</a>
+          </div>
+        </div>
+      </article>
+    {% empty %}
+      <div class="col-12 text-center">
+        <p class="text-muted">No blog posts available.</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+  <!-- Bootstrap Bundle JS (Local) -->
+  <script src="{% static 'frontend/js/bootstrap.bundle.min.js' %}"></script>
+  <!-- Font Awesome JS (Optional, CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+{% endblock %}

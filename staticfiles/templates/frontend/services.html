@@ -1,0 +1,106 @@
+{% extends "base_public.html" %}
+{% load static %}
+
+{% block title %}Our Services - Zia Properties Ltd{% endblock %}
+
+{% block extra_styles %}
+<style>
+  .service-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+  }
+  .service-icon {
+    font-size: 2.5rem;
+    color: #0d6efd;
+    margin-bottom: 1rem;
+    transition: color 0.3s ease;
+  }
+  .service-card:hover .service-icon {
+    color: #ffc107; /* Highlight icon on hover */
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="bg-primary text-white text-center py-5 mb-5" role="banner">
+  <div class="container">
+    <h1 class="display-5 fw-bold mb-2">Our Services</h1>
+    <p class="lead mb-0">Comprehensive solutions for property owners and tenants</p>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section class="py-5" role="main">
+  <div class="container">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+      <div class="col">
+        <div class="card service-card h-100 shadow-sm border-0 text-center p-3">
+          <i class="fas fa-building service-icon"></i>
+          <div class="card-body">
+            <h5 class="card-title fw-bold">Property Listing & Marketing</h5>
+            <p class="card-text">We list your property on top platforms and market it to attract quality tenants quickly.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card service-card h-100 shadow-sm border-0 text-center p-3">
+          <i class="fas fa-user-check service-icon"></i>
+          <div class="card-body">
+            <h5 class="card-title fw-bold">Tenant Screening</h5>
+            <p class="card-text">Comprehensive background, credit, and reference checks to ensure reliable tenants.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card service-card h-100 shadow-sm border-0 text-center p-3">
+          <i class="fas fa-hand-holding-dollar service-icon"></i>
+          <div class="card-body">
+            <h5 class="card-title fw-bold">Rent Collection</h5>
+            <p class="card-text">Secure and timely rent collection with automated reminders and online payment options.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card service-card h-100 shadow-sm border-0 text-center p-3">
+          <i class="fas fa-tools service-icon"></i>
+          <div class="card-body">
+            <h5 class="card-title fw-bold">Maintenance & Repairs</h5>
+            <p class="card-text">24/7 maintenance support and coordination with trusted contractors for all property needs.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card service-card h-100 shadow-sm border-0 text-center p-3">
+          <i class="fas fa-chart-line service-icon"></i>
+          <div class="card-body">
+            <h5 class="card-title fw-bold">Financial Reporting</h5>
+            <p class="card-text">Monthly statements and transparent accounting to keep you informed about your investment.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card service-card h-100 shadow-sm border-0 text-center p-3">
+          <i class="fas fa-gavel service-icon"></i>
+          <div class="card-body">
+            <h5 class="card-title fw-bold">Legal Compliance</h5>
+            <p class="card-text">Guidance and management of leases, evictions, and regulatory requirements.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

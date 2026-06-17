@@ -1,0 +1,347 @@
+{% extends 'base_public.html' %}
+
+{% block title %}Payment Failed | Zia Properties{% endblock %}
+
+{% block extra_styles %}
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --accent: #06b6d4;
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-hover: #334155;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --border: rgba(99, 102, 241, 0.2);
+      --glass: rgba(30, 41, 59, 0.85);
+      --danger: #ef4444;
+      --danger-light: #f87171;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* Background */
+    .failed-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      background: var(--bg-dark);
+      overflow: hidden;
+    }
+
+    .failed-bg::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(239, 68, 68, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
+    }
+
+    /* Card */
+    .failed-card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 3rem;
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+      z-index: 1;
+      animation: cardSlideIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      overflow: hidden;
+    }
+
+    .failed-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--danger), var(--danger-light), var(--primary));
+      background-size: 200% 100%;
+      animation: gradientShift 3s linear infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    @keyframes cardSlideIn {
+      from { opacity: 0; transform: translateY(40px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Crossmark */
+    .crossmark-wrap {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .crossmark {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
+      border: 2px solid rgba(239, 68, 68, 0.3);
+      position: relative;
+      animation: crossPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .crossmark::before,
+    .crossmark::after {
+      content: "";
+      position: absolute;
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--danger), var(--danger-light));
+      border-radius: 2px;
+    }
+
+    .crossmark::before { transform: rotate(45deg); }
+    .crossmark::after { transform: rotate(-45deg); }
+
+    @keyframes crossPop {
+      0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+      70% { transform: scale(1.1) rotate(10deg); }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    /* Pulse ring */
+    .crossmark-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      border: 2px solid var(--danger);
+      animation: crossRing 2s infinite;
+    }
+
+    @keyframes crossRing {
+      0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+      100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+    }
+
+    /* Title */
+    .failed-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, var(--danger-light), var(--danger));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.75rem;
+    }
+
+    .failed-text {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Error message */
+    .error-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 12px;
+      padding: 1rem;
+      margin: 1rem 0;
+      color: #fca5a5;
+      font-size: 0.9rem;
+      animation: shake 0.5s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    /* Countdown */
+    .countdown-wrap {
+      margin: 1.5rem 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .countdown-number {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      color: var(--danger-light);
+      display: inline-block;
+      min-width: 30px;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Progress bar */
+    .countdown-track {
+      height: 4px;
+      background: var(--bg-card-hover);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 0.75rem;
+    }
+
+    .countdown-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--danger), var(--danger-light));
+      border-radius: 2px;
+      transition: width 1s linear;
+    }
+
+    /* Buttons */
+    .btn-retry {
+      background: linear-gradient(135deg, var(--danger), var(--danger-light));
+      border: none;
+      border-radius: 14px;
+      color: white;
+      font-weight: 600;
+      padding: 1rem 2.5rem;
+      font-size: 1rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      margin-top: 0.5rem;
+    }
+
+    .btn-retry::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .btn-retry:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(239, 68, 68, 0.3);
+      color: white;
+    }
+
+    .btn-retry:hover::before {
+      left: 100%;
+    }
+
+    /* Floating particles */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(239, 68, 68, 0.2);
+      pointer-events: none;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+      50% { transform: translateY(-15px) scale(1.1); opacity: 0.6; }
+    }
+
+    /* Responsive */
+    @media (max-width: 576px) {
+      .failed-card {
+        padding: 2rem 1.5rem;
+      }
+
+      .failed-title {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="failed-bg"></div>
+
+<div class="container d-flex align-items-center justify-content-center min-vh-100 position-relative" style="z-index: 1;">
+  <div class="failed-card">
+
+    <!-- Floating particles -->
+    <div class="particle" style="width: 6px; height: 6px; top: 15%; left: 10%; animation-delay: 0s;"></div>
+    <div class="particle" style="width: 4px; height: 4px; top: 70%; right: 15%; animation-delay: 1s;"></div>
+    <div class="particle" style="width: 8px; height: 8px; bottom: 20%; left: 25%; animation-delay: 2s;"></div>
+
+    <!-- Crossmark -->
+    <div class="crossmark-wrap">
+      <div class="crossmark-ring"></div>
+      <div class="crossmark"></div>
+    </div>
+
+    <!-- Content -->
+    <h2 class="failed-title">Payment Failed!</h2>
+    <p class="failed-text">Unfortunately, your payment could not be completed.</p>
+
+    {% if error %}
+      <div class="error-box">
+        <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+      </div>
+    {% endif %}
+
+    <p class="failed-text">Please check your M-Pesa account and try again.</p>
+
+    <a href="{% url 'frontend:premium_agent' %}" class="btn btn-retry">
+      <i class="fas fa-redo"></i> Retry Payment
+    </a>
+
+    <!-- Countdown -->
+    <div class="countdown-wrap">
+      <p>Redirecting in <span class="countdown-number" id="countdown">5</span> seconds</p>
+      <div class="countdown-track">
+        <div class="countdown-fill" id="countdownBar" style="width: 100%"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  let count = 5;
+  const countdownEl = document.getElementById('countdown');
+  const countdownBar = document.getElementById('countdownBar');
+  const redirectURL = "{% url 'frontend:premium_agent' %}";
+
+  const interval = setInterval(() => {
+    count--;
+    countdownEl.textContent = count;
+    countdownBar.style.width = (count / 5 * 100) + '%';
+
+    if (count === 0) {
+      clearInterval(interval);
+      window.location.href = redirectURL;
+    }
+  }, 1000);
+</script>
+{% endblock %}

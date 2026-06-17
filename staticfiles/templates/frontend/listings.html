@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zia Properties Ltd - Property Listings</title>
+  <link rel="icon" href="{% static 'frontend/images/.ico' %}">
+  
+  <!---Custom css-->
+  <link rel="stylesheet" href="{% static 'frontend/css/listings.css' %}">
+  
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="logo">Zia Properties Ltd</div>
+          <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+            <ul class="nav-links">
+              <li><a href="{% url 'home' %}">Home</a></li>
+              <li><a href="{% url 'blog' %}">Blog</a></li>
+              <li><a href="{% url 'about' %}">About Us</a></li>
+              <li><a href="{% url 'contact' %}">Contact</a></li>
+            </ul>
+        </div>
+      </div> 
+    </nav>
+
+    <h1>Zia Properties Ltd - Property Listings</h1>
+    <p>Find your next home or investment with our professional real estate listings.</p>
+    
+
+  <div class="container">
+  <div class="listings">
+    {% for property in properties %}
+      <div class="property-card">
+        {% if property.image %}
+          <img class="property-image" src="{{ property.image.url }}" alt="{{ property.property_name }}">
+        {% else %}
+          <img class="property-image" src="https://via.placeholder.com/300x200" alt="No image">
+        {% endif %}
+
+        <div class="property-details">
+          <div class="property-title">{{ property.property_name }}</div>
+          <div class="property-location">{{ property.location }}</div>
+          
+          <div class="property-price">
+            {% if property.currency == "KES" %}
+              KES {{ property.price }}
+            {% elif property.currency == "USD" %}
+              ${{ property.price }}
+            {% elif property.currency == "EUR" %}
+              €{{ property.price }}
+            {% else %}
+              {{ property.price }}
+            {% endif %}
+          </div>
+
+          <div class="property-description">
+            {{ property.description|truncatewords:20 }}
+          </div>
+
+          <a href="mailto:{{ property.agent.email|default:'info@example.com' }}" class="contact-btn">
+            Contact Agent
+          </a>
+        </div>
+      </div>
+    {% empty %}
+      <p>No properties available at the moment.</p>
+    {% endfor %}
+  </div>
+</div>
+
+
+  </div> 
+  <script src="{% static 'frontend/js/listings.js' %}"></script>                                 
+</body>
+</html>
