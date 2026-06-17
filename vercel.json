@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "zia_property_management_system/wsgi.py",
+      "src": "property_mgmt/wsgi.py",
       "use": "@vercel/python"
     },
     {
@@ -17,7 +17,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "zia_property_management_system/wsgi.py"
+      "dest": "property_mgmt/wsgi.py"
     }
   ]
 }
