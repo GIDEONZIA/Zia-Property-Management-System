@@ -1,0 +1,249 @@
+{% extends 'frontend/agent_base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Welcome back, <span>{{ agent.first_name }}</span>{% endblock %}
+
+{% block content %}
+<!-- Stats Grid -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon blue"><i class="fas fa-home"></i></div>
+      <span class="status-badge active">{{ available_properties }} Available</span>
+    </div>
+    <div class="stat-value">{{ total_properties }}</div>
+    <div class="stat-label">Total Properties</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon green"><i class="fas fa-users"></i></div>
+      <span class="status-badge active">+{{ new_tenants_this_month }} this month</span>
+    </div>
+    <div class="stat-value">{{ total_tenants }}</div>
+    <div class="stat-label">Total Tenants</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon orange"><i class="fas fa-file-contract"></i></div>
+      <span class="status-badge {% if leases_ending_soon > 0 %}pending{% else %}active{% endif %}">
+        {{ leases_ending_soon }} ending soon
+      </span>
+    </div>
+    <div class="stat-value">{{ active_leases }}</div>
+    <div class="stat-label">Active Leases</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon cyan"><i class="fas fa-money-bill-wave"></i></div>
+      <span class="status-badge active">KES {{ monthly_revenue|floatformat:0 }}</span>
+    </div>
+    <div class="stat-value">KES {{ total_revenue|floatformat:0 }}</div>
+    <div class="stat-label">Total Revenue</div>
+  </div>
+</div>
+
+<!-- Charts -->
+<div class="stats-grid" style="grid-template-columns: 2fr 1fr;">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Revenue Overview</div>
+      <select class="filter-select">
+        <option>This Year</option>
+        <option>Last Year</option>
+      </select>
+    </div>
+    <div style="position: relative; height: 300px;">
+      <canvas id="revenueChart"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Properties by Type</div>
+    </div>
+    <div style="position: relative; height: 300px;">
+      <canvas id="propertyTypeChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="stats-grid" style="grid-template-columns: 1fr 1fr;">
+  <!-- Recent Leases -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Recent Leases</div>
+      <a href="{% url 'frontend:agent_leases' %}" class="btn-view-all">View All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Tenant</th>
+          <th>Property</th>
+          <th>Status</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for lease in recent_leases %}
+        <tr>
+          <td>
+            <div class="tenant-info">
+              <div class="tenant-avatar">{{ lease.tenant.property_name|slice:":1"|upper }}</div>
+              <div>
+                <div class="tenant-name">{{ lease.tenant.property_name }}</div>
+                <div class="tenant-email">{{ lease.tenant.email }}</div>
+              </div>
+            </div>
+          </td>
+          <td>{{ lease.property.property_name }}</td>
+          <td>
+            <span class="status-badge {% if lease.is_active %}active{% else %}pending{% endif %}">
+              <span class="status-dot {% if lease.is_active %}active{% else %}pending{% endif %}"></span>
+              {% if lease.is_active %}Active{% else %}Expired{% endif %}
+            </span>
+          </td>
+          <td style="font-weight: 600;">KES {{ lease.rent_amount|floatformat:2 }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" style="text-align: center; color: var(--text-secondary);">No leases found</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Recent Maintenance -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Maintenance Requests</div>
+      <a href="{% url 'frontend:agent_maintenance' %}" class="btn-view-all">View All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Issue</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for req in recent_maintenance %}
+        <tr>
+          <td>{{ req.property.property_name }}</td>
+          <td>{{ req.issue|truncatechars:40 }}</td>
+          <td>
+            <span class="status-badge {{ req.status }}">
+              <span class="status-dot {{ req.status }}"></span>
+              {{ req.status|title }}
+            </span>
+          </td>
+          <td style="color: var(--text-secondary);">{{ req.requested_on }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" style="text-align: center; color: var(--text-secondary);">No maintenance requests</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Recent Payments -->
+<div class="card" style="margin-top: 1.25rem;">
+  <div class="card-header">
+    <div class="card-title">Recent Payments</div>
+    <a href="{% url 'frontend:agent_payments' %}" class="btn-view-all">View All <i class="fas fa-arrow-right"></i></a>
+  </div>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Tenant</th>
+        <th>Amount</th>
+        <th>Method</th>
+        <th>Receipt</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for payment in recent_payments %}
+      <tr>
+        <td>
+          <div class="tenant-info">
+            <div class="tenant-avatar">{{ payment.tenant.property_name|slice:":1"|upper }}</div>
+            <div>
+              <div class="tenant-name">{{ payment.tenant.property_name }}</div>
+              <div class="tenant-email">{{ payment.tenant.email }}</div>
+            </div>
+          </div>
+        </td>
+        <td style="font-weight: 600; color: var(--success);">KES {{ payment.amount_paid|floatformat:2 }}</td>
+        <td>{{ payment.payment_method|title }}</td>
+        <td>{{ payment.receipt_number }}</td>
+        <td style="color: var(--text-secondary);">{{ payment.payment_date|date:"M d, Y" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" style="text-align: center; color: var(--text-secondary);">No payments found</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Revenue Chart
+  new Chart(document.getElementById('revenueChart'), {
+    type: 'line',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      datasets: [{
+        label: 'Revenue (KES)',
+        data: [120000, 150000, 180000, 140000, 200000, 220000, 190000, 250000, 280000, 300000, 270000, 320000],
+        borderColor: '#6366f1',
+        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+        borderWidth: 3,
+        tension: 0.4,
+        fill: true,
+        pointBackgroundColor: '#6366f1',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, grid: { color: 'rgba(99, 102, 241, 0.1)' }, ticks: { color: '#94a3b8' } },
+        x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+      }
+    }
+  });
+
+  // Property Type Chart
+  new Chart(document.getElementById('propertyTypeChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['House', 'Apartment', 'Commercial', 'Land', 'Office'],
+      datasets: [{
+        data: [35, 25, 20, 12, 8],
+        backgroundColor: ['#6366f1', '#06b6d4', '#f59e0b', '#10b981', '#8b5cf6'],
+        borderWidth: 0,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '70%',
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 15, font: { size: 12 } } }
+      }
+    }
+  });
+</script>
+{% endblock %}

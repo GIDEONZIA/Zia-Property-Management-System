@@ -1,0 +1,137 @@
+{% extends 'frontend/agent_base.html' %}
+
+{% block title %}{{ property.property_name }}{% endblock %}
+{% block page_title %}Property <span>Details</span>{% endblock %}
+
+{% block top_actions %}
+<a href="{% url 'frontend:agent_properties' %}" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="stats-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 0;">
+  <!-- Property Info -->
+  <div class="card">
+    <div style="width: 100%; height: 250px; background: linear-gradient(135deg, var(--bg-card-hover), var(--bg-dark)); border-radius: 16px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+      {% if property.image %}
+      <img src="{{ property.image.url }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 16px;">
+      {% else %}
+      <i class="fas fa-home" style="font-size: 4rem; color: var(--text-secondary);"></i>
+      {% endif %}
+    </div>
+    <h2 style="font-family: 'Space Grotesk', sans-serif; margin-bottom: 0.5rem;">{{ property.property_name }}</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 1rem;"><i class="fas fa-map-marker-alt"></i> {{ property.location }}</p>
+    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+      <span class="status-badge {% if property.is_available %}active{% else %}pending{% endif %}">
+        {% if property.is_available %}Available{% else %}Rented{% endif %}
+      </span>
+      <span class="status-badge" style="background: rgba(99, 102, 241, 0.15); color: var(--primary-light);">
+        {{ property.get_property_type_display }}
+      </span>
+      {% if property.is_featured %}
+      <span class="status-badge" style="background: rgba(245, 158, 11, 0.15); color: var(--accent-warm);">
+        <i class="fas fa-star"></i> Featured
+      </span>
+      {% endif %}
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
+      <div style="background: var(--bg-dark); padding: 1rem; border-radius: 12px;">
+        <div style="font-size: 1.25rem; font-weight: 700;">{{ property.bedrooms }}</div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary);">Bedrooms</div>
+      </div>
+      <div style="background: var(--bg-dark); padding: 1rem; border-radius: 12px;">
+        <div style="font-size: 1.25rem; font-weight: 700;">{{ property.bathrooms }}</div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary);">Bathrooms</div>
+      </div>
+      <div style="background: var(--bg-dark); padding: 1rem; border-radius: 12px;">
+        <div style="font-size: 1.25rem; font-weight: 700;">{{ property.size|default:"N/A" }}</div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary);">Size (sqm)</div>
+      </div>
+    </div>
+    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="color: var(--text-secondary);">Price</span>
+        <span style="font-size: 1.5rem; font-weight: 700; color: var(--success);">KES {{ property.price|floatformat:2 }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Side Info -->
+  <div>
+    <!-- Tenants -->
+    <div class="card" style="margin-bottom: 1.25rem;">
+      <div class="card-header">
+        <div class="card-title">Current Tenants</div>
+      </div>
+      {% for tenant in tenants %}
+      <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border);">
+        <div class="tenant-avatar">{{ tenant.property_name|slice:":1"|upper }}</div>
+        <div style="flex: 1;">
+          <div class="tenant-name">{{ tenant.property_name }}</div>
+          <div class="tenant-email">{{ tenant.email }} | {{ tenant.phone }}</div>
+        </div>
+        <span class="status-badge {% if tenant.is_active %}active{% else %}pending{% endif %}">
+          {% if tenant.is_active %}Active{% else %}Inactive{% endif %}
+        </span>
+      </div>
+      {% empty %}
+      <p style="color: var(--text-secondary); text-align: center; padding: 1rem;">No tenants assigned</p>
+      {% endfor %}
+    </div>
+
+    <!-- Active Leases -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Active Leases</div>
+      </div>
+      {% for lease in leases %}
+      <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--border);">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+          <span style="font-weight: 600;">KES {{ lease.rent_amount|floatformat:2 }}/month</span>
+          <span style="color: var(--text-secondary); font-size: 0.85rem;">{{ lease.payment_frequency|title }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; color: var(--text-secondary); font-size: 0.85rem;">
+          <span>{{ lease.start_date|date:"M d, Y" }} - {{ lease.end_date|date:"M d, Y" }}</span>
+          <span class="status-badge {% if lease.is_active %}active{% else %}pending{% endif %}">
+            {% if lease.is_active %}Active{% else %}Expired{% endif %}
+          </span>
+        </div>
+      </div>
+      {% empty %}
+      <p style="color: var(--text-secondary); text-align: center; padding: 1rem;">No active leases</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- Maintenance History -->
+<div class="card" style="margin-top: 1.25rem;">
+  <div class="card-header">
+    <div class="card-title">Maintenance History</div>
+  </div>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Issue</th>
+        <th>Status</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for req in maintenance %}
+      <tr>
+        <td>{{ req.issue|truncatechars:60 }}</td>
+        <td>
+          <span class="status-badge {{ req.status }}">
+            <span class="status-dot {{ req.status }}"></span>
+            {{ req.status|title }}
+          </span>
+        </td>
+        <td style="color: var(--text-secondary);">{{ req.requested_on|date:"M d, Y" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="3" style="text-align: center; color: var(--text-secondary);">No maintenance records</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

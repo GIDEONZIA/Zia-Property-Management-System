@@ -1,0 +1,80 @@
+{% extends 'frontend/agent_base.html' %}
+
+{% block title %}Payments{% endblock %}
+{% block page_title %}Payment <span>History</span>{% endblock %}
+
+{% block content %}
+<div class="stats-grid" style="margin-bottom: 1.5rem;">
+  <div class="stat-card" style="padding: 1rem;">
+    <div class="stat-value" style="font-size: 1.5rem; color: var(--success);">KES {{ total_revenue|floatformat:0 }}</div>
+    <div class="stat-label">Total Revenue</div>
+  </div>
+  <div class="stat-card" style="padding: 1rem;">
+    <div class="stat-value" style="font-size: 1.5rem; color: var(--accent);">KES {{ monthly_revenue|floatformat:0 }}</div>
+    <div class="stat-label">This Month</div>
+  </div>
+  <div class="stat-card" style="padding: 1rem;">
+    <div class="stat-value" style="font-size: 1.5rem;">{{ total_count }}</div>
+    <div class="stat-label">Total Payments</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">All Payments</div>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Tenant</th>
+        <th>Property</th>
+        <th>Amount</th>
+        <th>Method</th>
+        <th>Receipt</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for payment in payments %}
+      <tr>
+        <td>
+          <div class="tenant-info">
+            <div class="tenant-avatar">{{ payment.tenant.property_name|slice:":1"|upper }}</div>
+            <div>
+              <div class="tenant-name">{{ payment.tenant.property_name }}</div>
+              <div class="tenant-email">{{ payment.tenant.email }}</div>
+            </div>
+          </div>
+        </td>
+        <td>{{ payment.lease.property.property_name }}</td>
+        <td style="font-weight: 600; color: var(--success);">KES {{ payment.amount_paid|floatformat:2 }}</td>
+        <td>{{ payment.payment_method|title }}</td>
+        <td><code style="background: var(--bg-dark); padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.8rem;">{{ payment.receipt_number }}</code></td>
+        <td style="color: var(--text-secondary);">{{ payment.payment_date|date:"M d, Y" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" style="text-align: center; color: var(--text-secondary); padding: 3rem;">No payments found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if payments.has_other_pages %}
+  <div class="pagination">
+    {% if payments.has_previous %}
+    <a href="?page={{ payments.previous_page_number }}"><i class="fas fa-chevron-left"></i></a>
+    {% endif %}
+    {% for num in payments.paginator.page_range %}
+    {% if payments.number == num %}
+    <span class="current">{{ num }}</span>
+    {% else %}
+    <a href="?page={{ num }}">{{ num }}</a>
+    {% endif %}
+    {% endfor %}
+    {% if payments.has_next %}
+    <a href="?page={{ payments.next_page_number }}"><i class="fas fa-chevron-right"></i></a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

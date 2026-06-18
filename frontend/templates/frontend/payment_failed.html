@@ -1,4 +1,4 @@
-{% extends 'base_public.html' %}
+{% extends 'frontend/agent_base.html' %}
 
 {% block title %}Payment Failed | Zia Properties{% endblock %}
 
@@ -280,6 +280,14 @@
         font-size: 1.5rem;
       }
     }
+
+    /* Respect user motion preferences */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
   </style>
 {% endblock %}
 
@@ -306,14 +314,22 @@
 
     {% if error %}
       <div class="error-box">
-        <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="margin-right:6px;vertical-align:text-bottom;" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+          <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+        </svg>
+        {{ error }}
       </div>
     {% endif %}
 
     <p class="failed-text">Please check your M-Pesa account and try again.</p>
 
     <a href="{% url 'frontend:premium_agent' %}" class="btn btn-retry">
-      <i class="fas fa-redo"></i> Retry Payment
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="margin-right:4px;" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+      </svg>
+      Retry Payment
     </a>
 
     <!-- Countdown -->

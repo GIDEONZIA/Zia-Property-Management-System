@@ -1,175 +1,239 @@
+{% extends 'frontend/agent_base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zia Property Ltd | Premium Agent</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <style>
-    body {
-      background-color: #f8fafc;
-      font-family: 'Poppins', sans-serif;
-    }
-    .hero {
-      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), 
-                  url("{% static 'images/premium-bg.jpg' %}") center/cover no-repeat;
-      color: #fff;
-      padding: 100px 0;
-      text-align: center;
-    }
-    .card {
-      border: none;
-      border-radius: 1.5rem;
-      transition: transform .3s ease;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
-    .price {
-      font-size: 2.5rem;
-      color: #198754;
-      font-weight: 700;
-    }
-    .btn-premium {
-      background-color: #198754;
-      color: #fff;
-      border-radius: 50px;
-      padding: 10px 25px;
-      transition: all .3s ease;
-    }
-    .btn-premium:hover {
-      background-color: #145c32;
-      color: #fff;
-    }
-  </style>
-</head>
-<body>
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="container">
-      <h1 class="display-4 fw-bold">Upgrade to Premium Agent</h1>
-      <p class="lead mt-3">Unlock exclusive features to boost your listings and grow your real estate reach.</p>
-      <a href="#plans" class="btn btn-premium mt-4">View Plans</a>
-    </div>
-  </section>
 
-  <!-- Pricing Plans -->
-  <section id="plans" class="py-5">
-    <div class="container">
-      <div class="text-center mb-5">
-        <h2 class="fw-bold">Choose Your Plan</h2>
-        <p class="text-muted">Flexible plans tailored for your growth.</p>
-      </div>
+{% block title %}Premium{% endblock %}
+{% block page_title %}Upgrade to <span>Premium</span>{% endblock %}
 
-      <div class="row justify-content-center g-4">
-        <!-- Basic -->
-        <div class="col-md-4">
-          <div class="card shadow-sm text-center p-4">
-            <h4 class="fw-bold">Basic</h4>
-            <p class="price mb-0">KSh 999</p>
-            <p class="text-muted">/ month</p>
-            <ul class="list-unstyled mb-4">
-              <li>✔ Up to 10 property listings</li>
-              <li>✔ Featured on homepage</li>
-              <li>✖ No social promotion</li>
-            </ul>
-            <button class="btn btn-premium w-100 pay-btn" data-amount="999" data-plan="Basic">Subscribe</button>
-          </div>
-        </div>
-
-        <!-- Pro -->
-        <div class="col-md-4">
-          <div class="card shadow text-center p-4 border-success">
-            <h4 class="fw-bold">Pro</h4>
-            <p class="price mb-0">KSh 2,499</p>
-            <p class="text-muted">/ month</p>
-            <ul class="list-unstyled mb-4">
-              <li>✔ Up to 50 listings</li>
-              <li>✔ Homepage & social media promotion</li>
-              <li>✔ Dedicated support</li>
-            </ul>
-            <button class="btn btn-premium w-100 pay-btn" data-amount="2499" data-plan="Pro">Subscribe</button>
-          </div>
-        </div>
-
-        <!-- Enterprise -->
-        <div class="col-md-4">
-          <div class="card shadow-sm text-center p-4">
-            <h4 class="fw-bold">Enterprise</h4>
-            <p class="price mb-0">KSh 4,999</p>
-            <p class="text-muted">/ month</p>
-            <ul class="list-unstyled mb-4">
-              <li>✔ Unlimited listings</li>
-              <li>✔ Social & Email marketing</li>
-              <li>✔ Priority placement</li>
-            </ul>
-            <button class="btn btn-premium w-100 pay-btn" data-amount="4999" data-plan="Enterprise">Subscribe</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Payment Modal -->
-  <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content p-4">
-        <div class="modal-header border-0">
-          <h5 class="modal-title fw-bold">Confirm Payment</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <p>Enter your M-Pesa phone number to complete payment.</p>
-          <form id="paymentForm">
-            <div class="mb-3">
-              <input type="tel" name="phone" id="phone" class="form-control" placeholder="e.g. 0712345678" required>
-              <input type="hidden" id="plan" name="plan">
-              <input type="hidden" id="amount" name="amount">
-            </div>
-            <button type="submit" class="btn btn-premium w-100">Pay Now</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="alert alert-warning text-start">
-  <strong>Instructions:</strong>
-  <ul class="mb-0">
-    <li>Open your M-Pesa app and go to <b>Lipa na M-Pesa</b> → <b>Paybill</b>.</li>
-    <li>Enter <b>Paybill: 247247</b> and <b>Account: Zia Premium</b>.</li>
-    <li>Enter the amount (KSh 500.00) and complete the payment.</li>
-    <li>After payment, copy your <b>M-Pesa receipt number</b> (e.g. QBC123XYZ) and enter it below.</li>
-  </ul>
+{% block content %}
+<!-- Hero Banner -->
+<div class="card" style="text-align: center; padding: 3rem 2rem; margin-bottom: 2rem; background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.1)); border-color: var(--primary);">
+  <div style="font-size: 3rem; margin-bottom: 1rem;">👑</div>
+  <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.75rem; margin-bottom: 0.5rem;">Unlock Your Full Potential</h2>
+  <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 1.5rem;">Get verified badges, unlimited listings, priority placement, and exclusive marketing tools.</p>
+  {% if agent.is_premium %}
+  <span class="status-badge" style="background: rgba(245, 158, 11, 0.15); color: var(--accent-warm); font-size: 1rem; padding: 0.5rem 1.5rem;">
+    <i class="fas fa-crown"></i> You are Premium!
+  </span>
+  <p style="color: var(--text-secondary); margin-top: 1rem; font-size: 0.9rem;">
+    Plan: <strong>{{ agent.subscription_plan|title }}</strong> | 
+    Subscribed: {{ agent.subscribed_at|date:"M d, Y" }}
+  </p>
+  {% else %}
+  <a href="#plans" class="btn btn-primary" style="font-size: 1rem; padding: 0.75rem 2rem;">
+    <i class="fas fa-arrow-down"></i> View Plans
+  </a>
+  {% endif %}
 </div>
 
+<!-- Current Status -->
+<div class="stats-grid" style="margin-bottom: 2rem;">
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon blue"><i class="fas fa-list"></i></div>
+    </div>
+    <div class="stat-value">{{ total_properties }}</div>
+    <div class="stat-label">Current Listings</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon green"><i class="fas fa-eye"></i></div>
+    </div>
+    <div class="stat-value">{{ featured_properties }}</div>
+    <div class="stat-label">Featured</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon orange"><i class="fas fa-star"></i></div>
+    </div>
+    <div class="stat-value">{% if agent.is_premium %}∞{% else %}10{% endif %}</div>
+    <div class="stat-label">Listing Limit</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon cyan"><i class="fas fa-chart-line"></i></div>
+    </div>
+    <div class="stat-value">{% if agent.is_premium %}+300%{% else %}Basic{% endif %}</div>
+    <div class="stat-label">Visibility</div>
+  </div>
+</div>
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<!-- Pricing Plans -->
+<div id="plans" style="margin-bottom: 2rem;">
+  <div style="text-align: center; margin-bottom: 1.5rem;">
+    <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem;">Choose Your Plan</h3>
+    <p style="color: var(--text-secondary); font-size: 0.9rem;">Flexible plans tailored for your growth</p>
+  </div>
 
+  <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); align-items: stretch;">
+    <!-- Basic -->
+    <div class="card" style="padding: 1.5rem; text-align: center; position: relative;">
+      {% if agent.subscription_plan == 'monthly' and agent.is_premium %}
+      <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--success); color: white; padding: 0.25rem 1rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600;">Current Plan</div>
+      {% endif %}
+      <div style="width: 50px; height: 50px; border-radius: 14px; background: rgba(99, 102, 241, 0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: var(--primary-light); font-size: 1.25rem;">
+        <i class="fas fa-rocket"></i>
+      </div>
+      <h4 style="font-family: 'Space Grotesk', sans-serif; margin-bottom: 0.5rem;">Basic</h4>
+      <div style="margin-bottom: 1rem;">
+        <span style="font-size: 2rem; font-weight: 700;">KSh 999</span>
+        <span style="color: var(--text-secondary);">/month</span>
+      </div>
+      <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem; text-align: left;">
+        <li style="padding: 0.5rem 0; color: var(--text-secondary); border-bottom: 1px solid var(--border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i> Up to 10 listings</li>
+        <li style="padding: 0.5rem 0; color: var(--text-secondary); border-bottom: 1px solid var(--border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i> Homepage featured</li>
+        <li style="padding: 0.5rem 0; color: var(--text-secondary); border-bottom: 1px solid var(--border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i> Basic analytics</li>
+        <li style="padding: 0.5rem 0; color: var(--text-secondary); opacity: 0.5;"><i class="fas fa-times" style="margin-right: 0.5rem;"></i> Social promotion</li>
+        <li style="padding: 0.5rem 0; color: var(--text-secondary); opacity: 0.5;"><i class="fas fa-times" style="margin-right: 0.5rem;"></i> Priority support</li>
+      </ul>
+      {% if not agent.is_premium %}
+      <button class="btn btn-outline w-100 pay-btn" data-amount="999" data-plan="monthly" style="justify-content: center;">Subscribe</button>
+      {% elif agent.subscription_plan == 'monthly' %}
+      <button class="btn btn-outline w-100" style="justify-content: center; opacity: 0.5; cursor: not-allowed;" disabled>Active</button>
+      {% else %}
+      <button class="btn btn-outline w-100 pay-btn" data-amount="999" data-plan="monthly" style="justify-content: center;">Downgrade</button>
+      {% endif %}
+    </div>
+
+    <!-- Pro -->
+    <div class="card" style="padding: 1.5rem; text-align: center; position: relative; border-color: var(--primary); box-shadow: 0 0 30px rgba(99, 102, 241, 0.15);">
+      <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; padding: 0.25rem 1rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600;">Most Popular</div>
+      {% if agent.subscription_plan == 'annual' and agent.is_premium %}
+      <div style="position: absolute; top: 20px; right: 15px; background: var(--success); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600;">Current</div>
+      {% endif %}
+      <div style="width: 50px; height: 50px; border-radius: 14px; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 1.25rem;">
+        <i class="fas fa-crown"></i>
+      </div>
+      <h4 style="font-family: 'Space Grotesk', sans-serif; margin-bottom: 0.5rem;">Pro</h4>
+      <div style="margin-bottom: 1rem;">
+        <span style="font-size: 2rem; font-weight: 700;">KSh 2,499</span>
+        <span style="color: var(--text-secondary);">/month</span>
+      </div>
+      <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem; text-align: left;">
+        <li style="padding: 0.5rem 0; color: var(--text-secondary); border-bottom: 1px solid var(--border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i> Up to 50 listings</li>
+        <li style="padding: 0.5rem 0; color: var(--text-secondary); border-bottom: 1px solid var(--border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i> Homepage + social promo</li>
+        <li style="padding: 0.5rem 0; color: var(--text-secondary); border-bottom: 1px solid var(--border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i> Advanced analytics</li>
+        <li style="padding: 0.5rem 0; color: var(--text-secondary); border-bottom: 1px solid var(--border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i> Dedicated support</li>
+        <li style="padding: 0.5rem 0; color: var(--text-secondary); opacity: 0.5;"><i class="fas fa-times" style="margin-right: 0.5rem;"></i> Unlimited listings</li>
+      </ul>
+      {% if not agent.is_premium or agent.subscription_plan == 'monthly' %}
+      <button class="btn btn-primary w-100 pay-btn" data-amount="2499" data-plan="annual" style="justify-content: center;">Upgrade to Pro</button>
+      {% else %}
+      <button class="btn btn-primary w-100" style="justify-content: center; opacity: 0.5; cursor: not-allowed;" disabled>Active</button>
+      {% endif %}
+    </div>
+
+    <!-- Enterprise -->
+    <div class="card" style="padding: 1.5rem; text-align: center; position: relative;">
+      <div style="width: 50px; height: 50px; border-radius: 14px; background: rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: var(--accent-warm); font-size: 1.25rem;">
+        <i class="fas fa-gem"></i>
+      </div>
+      <h4 style="font-family: 'Space Grotesk', sans-serif; margin-bottom: 0.5rem;">Enterprise</h4>
+      <div style="margin-bottom: 1rem;">
+        <span style="font-size: 2rem; font-weight: 700;">KSh 4,999</span>
+        <span style="color: var(--text-secondary);">/month</span>
+      </div>
+      <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem; text-align: left;">
+        <li style="padding: 0.5rem 0; color: var(--text-secondary); border-bottom: 1px solid var(--border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i> Unlimited listings</li>
+        <li style="padding: 0.5rem 0; color: var(--text-secondary); border-bottom: 1px solid var(--border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i> Social + Email marketing</li>
+        <li style="padding: 0.5rem 0; color: var(--text-secondary); border-bottom: 1px solid var(--border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i> Priority placement</li>
+        <li style="padding: 0.5rem 0; color: var(--text-secondary); border-bottom: 1px solid var(--border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i> White-label branding</li>
+        <li style="padding: 0.5rem 0; color: var(--text-secondary); border-bottom: 1px solid var(--border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i> 24/7 priority support</li>
+      </ul>
+      <button class="btn btn-outline w-100 pay-btn" data-amount="4999" data-plan="enterprise" style="justify-content: center; border-color: var(--accent-warm); color: var(--accent-warm);">Contact Sales</button>
+    </div>
+  </div>
+</div>
+
+<!-- Payment Instructions -->
+<div class="card" style="margin-bottom: 2rem;">
+  <div class="card-header">
+    <div class="card-title"><i class="fas fa-mobile-alt" style="margin-right: 0.5rem;"></i> M-Pesa Payment Instructions</div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+    <div style="background: var(--bg-dark); padding: 1rem; border-radius: 12px; text-align: center;">
+      <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; color: white; font-weight: 700;">1</div>
+      <p style="font-size: 0.875rem; color: var(--text-secondary);">Open M-Pesa app → <strong>Lipa na M-Pesa</strong></p>
+    </div>
+    <div style="background: var(--bg-dark); padding: 1rem; border-radius: 12px; text-align: center;">
+      <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; color: white; font-weight: 700;">2</div>
+      <p style="font-size: 0.875rem; color: var(--text-secondary);">Select <strong>Paybill</strong>: 247247</p>
+    </div>
+    <div style="background: var(--bg-dark); padding: 1rem; border-radius: 12px; text-align: center;">
+      <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; color: white; font-weight: 700;">3</div>
+      <p style="font-size: 0.875rem; color: var(--text-secondary);">Account: <strong>Zia Premium</strong></p>
+    </div>
+    <div style="background: var(--bg-dark); padding: 1rem; border-radius: 12px; text-align: center;">
+      <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; color: white; font-weight: 700;">4</div>
+      <p style="font-size: 0.875rem; color: var(--text-secondary);">Enter amount & complete</p>
+    </div>
+  </div>
+</div>
+
+<!-- Payment Modal -->
+<div id="paymentModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); z-index: 1000; align-items: center; justify-content: center;">
+  <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 2rem; max-width: 450px; width: 90%; position: relative;">
+    <button onclick="closeModal()" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-secondary); font-size: 1.25rem; cursor: pointer;"><i class="fas fa-times"></i></button>
+    
+    <div style="text-align: center; margin-bottom: 1.5rem;">
+      <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 1.5rem;">
+        <i class="fas fa-credit-card"></i>
+      </div>
+      <h3 style="font-family: 'Space Grotesk', sans-serif; margin-bottom: 0.5rem;">Complete Payment</h3>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">Enter your M-Pesa number to receive STK push</p>
+    </div>
+
+    <form id="paymentForm">
+      {% csrf_token %}
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Phone Number</label>
+        <input type="tel" id="phone" name="phone" class="signup-input" placeholder="e.g. 254712345678" required style="text-align: center; font-size: 1.1rem; letter-spacing: 1px;">
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 1rem; background: var(--bg-dark); border-radius: 12px; margin-bottom: 1.5rem;">
+        <span style="color: var(--text-secondary);">Plan</span>
+        <strong id="modalPlan" style="color: var(--primary-light);">-</strong>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 1rem; background: var(--bg-dark); border-radius: 12px; margin-bottom: 1.5rem;">
+        <span style="color: var(--text-secondary);">Amount</span>
+        <strong id="modalAmount" style="color: var(--success); font-size: 1.25rem;">-</strong>
+      </div>
+      <button type="submit" class="btn btn-primary w-100" style="justify-content: center;">
+        <i class="fas fa-paper-plane"></i> Pay Now
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
 <script>
-const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+const modal = document.getElementById('paymentModal');
 const payButtons = document.querySelectorAll('.pay-btn');
 const form = document.getElementById('paymentForm');
 
+function openModal() { modal.style.display = 'flex'; }
+function closeModal() { modal.style.display = 'none'; }
+
 payButtons.forEach(btn => {
   btn.addEventListener('click', () => {
-    document.getElementById('plan').value = btn.dataset.plan;
-    document.getElementById('amount').value = btn.dataset.amount;
-    paymentModal.show();
+    document.getElementById('modalPlan').textContent = btn.dataset.plan === 'monthly' ? 'Basic' : btn.dataset.plan === 'annual' ? 'Pro' : 'Enterprise';
+    document.getElementById('modalAmount').textContent = 'KSh ' + parseInt(btn.dataset.amount).toLocaleString();
+    document.getElementById('phone').dataset.amount = btn.dataset.amount;
+    document.getElementById('phone').dataset.plan = btn.dataset.plan;
+    openModal();
   });
 });
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const phone = document.getElementById('phone').value.trim();
-  const plan = document.getElementById('plan').value;
-  const amount = document.getElementById('amount').value;
-  const csrfToken = '{{ csrf_token }}';
+  const plan = document.getElementById('phone').dataset.plan;
+  const amount = document.getElementById('phone').dataset.amount;
+  const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+  if (!phone.match(/^254[0-9]{9}$/)) {
+    alert('Please enter a valid Kenyan phone number starting with 254 (e.g. 254712345678)');
+    return;
+  }
 
   try {
     const res = await fetch("{% url 'subscriptions:stk_push' %}", {
@@ -188,17 +252,17 @@ form.addEventListener('submit', async (e) => {
       return;
     }
 
-    // redirect to waiting page (frontend route)
-    const checkoutId = data.checkout_request_id;
-    window.location.href = `{% url 'frontend:mpesa_waiting' %}?checkout_id=${encodeURIComponent(checkoutId)}`;
+    window.location.href = `{% url 'frontend:mpesa_waiting' %}?checkout_id=${encodeURIComponent(data.checkout_request_id)}`;
 
   } catch (err) {
-    console.error("Network error initiating STK:", err);
+    console.error("Network error:", err);
     alert("Network error. Please try again.");
   }
 });
+
+// Close modal on outside click
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) closeModal();
+});
 </script>
-
-
-</body>
-</html>
+{% endblock %}

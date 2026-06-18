@@ -1,0 +1,129 @@
+{% extends 'frontend/agent_base.html' %}
+
+{% block title %}Analytics{% endblock %}
+{% block page_title %}Performance <span>Analytics</span>{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon blue"><i class="fas fa-home"></i></div>
+    </div>
+    <div class="stat-value">{{ total_properties }}</div>
+    <div class="stat-label">Properties</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon green"><i class="fas fa-users"></i></div>
+    </div>
+    <div class="stat-value">{{ total_tenants }}</div>
+    <div class="stat-label">Tenants</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon orange"><i class="fas fa-percentage"></i></div>
+    </div>
+    <div class="stat-value">{{ occupancy_rate }}%</div>
+    <div class="stat-label">Occupancy Rate</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon cyan"><i class="fas fa-money-bill-wave"></i></div>
+    </div>
+    <div class="stat-value">KES {{ total_revenue|floatformat:0 }}</div>
+    <div class="stat-label">Total Revenue</div>
+  </div>
+</div>
+
+<div class="stats-grid" style="grid-template-columns: 2fr 1fr;">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Monthly Revenue Trend</div>
+    </div>
+    <div style="position: relative; height: 350px;">
+      <canvas id="revenueTrendChart"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Properties by Type</div>
+    </div>
+    <div style="position: relative; height: 350px;">
+      <canvas id="propertyTypeChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 1.25rem;">
+  <div class="card-header">
+    <div class="card-title">Performance Summary</div>
+  </div>
+  <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+    <div style="text-align: center; padding: 1.5rem;">
+      <div style="font-size: 2rem; font-weight: 700; color: var(--primary-light);">KES {{ avg_rent|floatformat:0 }}</div>
+      <div style="color: var(--text-secondary); margin-top: 0.5rem;">Average Rent</div>
+    </div>
+    <div style="text-align: center; padding: 1.5rem; border-left: 1px solid var(--border); border-right: 1px solid var(--border);">
+      <div style="font-size: 2rem; font-weight: 700; color: var(--success);">{{ total_leases }}</div>
+      <div style="color: var(--text-secondary); margin-top: 0.5rem;">Total Leases</div>
+    </div>
+    <div style="text-align: center; padding: 1.5rem;">
+      <div style="font-size: 2rem; font-weight: 700; color: var(--accent);">{{ agent.commission_rate|default:0 }}%</div>
+      <div style="color: var(--text-secondary); margin-top: 0.5rem;">Commission Rate</div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Revenue Trend Chart
+  const monthlyData = {{ monthly_data|safe }};
+  new Chart(document.getElementById('revenueTrendChart'), {
+    type: 'bar',
+    data: {
+      labels: monthlyData.map(d => d.month),
+      datasets: [{
+        label: 'Revenue (KES)',
+        data: monthlyData.map(d => d.revenue),
+        backgroundColor: 'rgba(99, 102, 241, 0.6)',
+        borderColor: '#6366f1',
+        borderWidth: 2,
+        borderRadius: 8,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, grid: { color: 'rgba(99, 102, 241, 0.1)' }, ticks: { color: '#94a3b8' } },
+        x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+      }
+    }
+  });
+
+  // Property Type Chart
+  const typeData = {{ properties_by_type|safe }};
+  new Chart(document.getElementById('propertyTypeChart'), {
+    type: 'doughnut',
+    data: {
+      labels: typeData.map(t => t.property_type),
+      datasets: [{
+        data: typeData.map(t => t.count),
+        backgroundColor: ['#6366f1', '#06b6d4', '#f59e0b', '#10b981', '#8b5cf6', '#ec4899'],
+        borderWidth: 0,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '65%',
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 15, font: { size: 12 } } }
+      }
+    }
+  });
+</script>
+{% endblock %}

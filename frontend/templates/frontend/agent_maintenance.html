@@ -1,0 +1,85 @@
+{% extends 'frontend/agent_base.html' %}
+
+{% block title %}Maintenance{% endblock %}
+{% block page_title %}Maintenance <span>Requests</span>{% endblock %}
+
+{% block top_actions %}
+<a href="{% url 'frontend:agent_maintenance_new' %}" class="btn btn-primary"><i class="fas fa-plus"></i> New Request</a>
+{% endblock %}
+
+{% block content %}
+<div class="stats-grid" style="margin-bottom: 1.5rem;">
+  <div class="stat-card" style="padding: 1rem;">
+    <div class="stat-value" style="font-size: 1.5rem; color: var(--accent-warm);">{{ pending_count }}</div>
+    <div class="stat-label">Pending</div>
+  </div>
+  <div class="stat-card" style="padding: 1rem;">
+    <div class="stat-value" style="font-size: 1.5rem; color: var(--accent);">{{ in_progress_count }}</div>
+    <div class="stat-label">In Progress</div>
+  </div>
+  <div class="stat-card" style="padding: 1rem;">
+    <div class="stat-value" style="font-size: 1.5rem; color: var(--success);">{{ resolved_count }}</div>
+    <div class="stat-label">Resolved</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">All Requests ({{ total_count }})</div>
+    <form method="get" class="filter-bar" style="margin: 0;">
+      <select name="status" class="filter-select" onchange="this.form.submit()">
+        <option value="">All Status</option>
+        <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>Pending</option>
+        <option value="in_progress" {% if request.GET.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+        <option value="resolved" {% if request.GET.status == 'resolved' %}selected{% endif %}>Resolved</option>
+      </select>
+    </form>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Issue</th>
+        <th>Status</th>
+        <th>Requested</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for req in maintenance %}
+      <tr>
+        <td>{{ req.property.property_name }}</td>
+        <td>{{ req.issue|truncatechars:50 }}</td>
+        <td>
+          <span class="status-badge {{ req.status }}">
+            <span class="status-dot {{ req.status }}"></span>
+            {{ req.status|title }}
+          </span>
+        </td>
+        <td style="color: var(--text-secondary);">{{ req.requested_on|date:"M d, Y" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" style="text-align: center; color: var(--text-secondary); padding: 3rem;">No maintenance requests found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if maintenance.has_other_pages %}
+  <div class="pagination">
+    {% if maintenance.has_previous %}
+    <a href="?page={{ maintenance.previous_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"><i class="fas fa-chevron-left"></i></a>
+    {% endif %}
+    {% for num in maintenance.paginator.page_range %}
+    {% if maintenance.number == num %}
+    <span class="current">{{ num }}</span>
+    {% else %}
+    <a href="?page={{ num }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">{{ num }}</a>
+    {% endif %}
+    {% endfor %}
+    {% if maintenance.has_next %}
+    <a href="?page={{ maintenance.next_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"><i class="fas fa-chevron-right"></i></a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

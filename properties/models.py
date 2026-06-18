@@ -72,7 +72,41 @@ class Agent(models.Model):
         null=True
     )
     subscribed_at = models.DateTimeField(null=True, blank=True)
-    trial_used = models.BooleanField(default=False)  # Optional
+    trial_used = models.BooleanField(default=False)
+        # Business Info
+    agency_name = models.CharField(max_length=200, blank=True, null=True)
+    business_reg_no = models.CharField(max_length=100, blank=True, null=True, verbose_name="Business Registration Number")
+    license_no = models.CharField(max_length=100, blank=True, null=True, verbose_name="Real Estate License Number")
+    
+    # Address
+    physical_address = models.TextField(blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    country = models.CharField(max_length=100, blank=True, null=True, default="Kenya")
+    
+    # Verification Documents
+    id_document = models.FileField(upload_to='agents/documents/', blank=True, null=True, verbose_name="National ID/Passport")
+    business_certificate = models.FileField(upload_to='agents/documents/', blank=True, null=True)
+    
+    # Agent Type / Role
+    AGENT_TYPE_CHOICES = [
+        ('independent', 'Independent Agent'),
+        ('agency', 'Agency Representative'),
+        ('landlord_agent', 'Landlord & Agent'),
+        ('tenant_agent', 'Tenant & Agent'),
+    ]
+    agent_type = models.CharField(max_length=20, choices=AGENT_TYPE_CHOICES, default='independent')
+    
+    # Experience
+    years_of_experience = models.PositiveIntegerField(default=0)
+    properties_managed = models.PositiveIntegerField(default=0)
+    
+    # Verification Status
+    is_verified = models.BooleanField(default=False)
+    verified_at = models.DateTimeField(null=True, blank=True)
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

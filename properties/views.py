@@ -68,14 +68,6 @@ def admin_dashboard(request):
         'leases': Lease.objects.all(),
     })
 
-
-@login_required
-def agent_dashboard(request):
-    return render(request, 'agent_dashboard.html', {
-        'properties': Property.objects.filter(agent=request.user.agent_profile)
-    })
-
-
 @login_required
 def analytics_view(request):
     context = {

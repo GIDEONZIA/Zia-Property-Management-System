@@ -1,0 +1,87 @@
+{% extends 'frontend/agent_base.html' %}
+
+{% block title %}Inspections{% endblock %}
+{% block page_title %}Property <span>Inspections</span>{% endblock %}
+
+{% block top_actions %}
+<a href="{% url 'frontend:agent_inspection_schedule' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Schedule Inspection</a>
+{% endblock %}
+
+{% block content %}
+<div class="stats-grid" style="margin-bottom: 1.5rem;">
+  <div class="stat-card" style="padding: 1rem;">
+    <div class="stat-value" style="font-size: 1.5rem; color: var(--accent-warm);">{{ scheduled_count }}</div>
+    <div class="stat-label">Scheduled</div>
+  </div>
+  <div class="stat-card" style="padding: 1rem;">
+    <div class="stat-value" style="font-size: 1.5rem; color: var(--success);">{{ completed_count }}</div>
+    <div class="stat-label">Completed</div>
+  </div>
+  <div class="stat-card" style="padding: 1rem;">
+    <div class="stat-value" style="font-size: 1.5rem;">{{ total_count }}</div>
+    <div class="stat-label">Total</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">All Inspections</div>
+    <form method="get" class="filter-bar" style="margin: 0;">
+      <select name="status" class="filter-select" onchange="this.form.submit()">
+        <option value="">All Status</option>
+        <option value="scheduled" {% if request.GET.status == 'scheduled' %}selected{% endif %}>Scheduled</option>
+        <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>Completed</option>
+        <option value="canceled" {% if request.GET.status == 'canceled' %}selected{% endif %}>Canceled</option>
+      </select>
+    </form>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Inspector</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for inspection in inspections %}
+      <tr>
+        <td>{{ inspection.property.property_name }}</td>
+        <td>{{ inspection.inspector_name }}</td>
+        <td>{{ inspection.inspection_date|date:"M d, Y" }}</td>
+        <td>
+          <span class="status-badge {{ inspection.status }}">
+            <span class="status-dot {{ inspection.status }}"></span>
+            {{ inspection.status|title }}
+          </span>
+        </td>
+        <td style="color: var(--text-secondary);">{{ inspection.notes|truncatechars:40 }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" style="text-align: center; color: var(--text-secondary); padding: 3rem;">No inspections found. <a href="#" style="color: var(--primary-light);">Schedule your first inspection</a></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if inspections.has_other_pages %}
+  <div class="pagination">
+    {% if inspections.has_previous %}
+    <a href="?page={{ inspections.previous_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"><i class="fas fa-chevron-left"></i></a>
+    {% endif %}
+    {% for num in inspections.paginator.page_range %}
+    {% if inspections.number == num %}
+    <span class="current">{{ num }}</span>
+    {% else %}
+    <a href="?page={{ num }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">{{ num }}</a>
+    {% endif %}
+    {% endfor %}
+    {% if inspections.has_next %}
+    <a href="?page={{ inspections.next_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"><i class="fas fa-chevron-right"></i></a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

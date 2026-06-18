@@ -1,100 +1,76 @@
-{% extends 'base_public.html' %}
+{% extends 'frontend/agent_base.html' %}
+{% load static %}
+
 {% block content %}
 <div class="container text-center py-5">
-  <h1 class="text-success fw-bold mb-3">Payment Successful 🎉</h1>
-  <p>Your subscription has been activated successfully.</p>
-  <div class="spinner-border text-success mt-4" role="status">
-    <span class="visually-hidden">Redirecting...</span>
-  </div>
-  <p class="text-secondary mt-3" id="redirect-text">
-  Redirecting you in <span id="countdown">5</span> seconds...
-</p>
-</div>
-
-<script>
-const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
-const payButtons = document.querySelectorAll('.pay-btn');
-const form = document.getElementById('paymentForm');
-
-// Show modal with plan info
-payButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.getElementById('plan').value = btn.dataset.plan;
-    document.getElementById('amount').value = btn.dataset.amount;
-    paymentModal.show();
-  });
-});
-
-// Handle payment form submission
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const phone = document.getElementById('phone').value;
-  const plan = document.getElementById('plan').value;
-  const amount = document.getElementById('amount').value;
-
-  try {
-    const response = await fetch("{% url 'subscriptions:stk_push' %}", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': '{{ csrf_token }}'
-      },
-      body: JSON.stringify({ phone, plan, amount })
-    });
-
-    const result = await response.json();
-    paymentModal.hide();
-
-    if (response.ok && result.status?.ResponseCode === "0") {
-      // Success: confetti + toast
-      confetti({ particleCount: 200, spread: 100 });
-      showToast('success', '✅ STK Push sent! Complete payment on your phone.');
-
-    // Countdown redirect to home
-    let count = 5;
-    const countdownEl = document.getElementById('countdown');
-    const redirectURL = "{% url 'frontend:home' %}"; // Go back to home
-
-    const interval = setInterval(() => {
-      count--;
-      countdownEl.textContent = count;
-      if (count === 0) {
-        clearInterval(interval);
-        window.location.href = redirectURL;
-      }
-    }, 1000);
-
-    } else {
-      // Failure: toast only
-      showToast('danger', '❌ Payment initiation failed. ' + (result.status?.errorMessage || 'Try again.'));
-    }
-
-  } catch (err) {
-    paymentModal.hide();
-    showToast('danger', '❌ Payment failed. Network error.');
-    console.error(err);
-  }
-});
-
-// Bootstrap toast helper
-function showToast(type, message) {
-  const toastContainer = document.querySelector('.position-fixed');
-  const toastEl = document.createElement('div');
-  toastEl.className = `toast align-items-center text-bg-${type} border-0 mb-2`;
-  toastEl.setAttribute('role', 'alert');
-  toastEl.setAttribute('aria-live', 'assertive');
-  toastEl.setAttribute('aria-atomic', 'true');
-  toastEl.innerHTML = `
-    <div class="d-flex">
-      <div class="toast-body">${message}</div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+  <!-- Success Icon -->
+  <div class="mb-4">
+    <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success bg-opacity-10" 
+         style="width: 100px; height: 100px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" 
+           class="text-success" viewBox="0 0 16 16">
+        <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+      </svg>
     </div>
-  `;
-  toastContainer.appendChild(toastEl);
-  const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
-  toast.show();
-}
+  </div>
+
+  <h1 class="text-success fw-bold mb-3">Payment Successful 🎉</h1>
+  <p class="lead text-secondary">Your subscription has been activated successfully.</p>
+  
+  {% if plan_name %}
+    <div class="alert alert-light border mx-auto mt-3" style="max-width: 400px;">
+      <strong>Plan:</strong> {{ plan_name|title }}<br>
+      <strong>Amount:</strong> KES {{ amount }}
+    </div>
+  {% endif %}
+
+  <!-- Spinner & Countdown -->
+  <div class="mt-4">
+    <div class="spinner-border text-success" role="status" style="width: 1.5rem; height: 1.5rem;">
+      <span class="visually-hidden">Redirecting...</span>
+    </div>
+    <p class="text-secondary mt-3 mb-0">
+      Redirecting you in <span id="countdown" class="fw-bold text-success">5</span> seconds...
+    </p>
+  </div>
+
+  <!-- Manual fallback -->
+  <div class="mt-4">
+    <a href="{% url 'frontend:home' %}" class="btn btn-outline-success">
+      Go to Dashboard Now
+    </a>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Confetti burst
+  if (typeof confetti === 'function') {
+    confetti({
+      particleCount: 150,
+      spread: 100,
+      origin: { y: 0.6 },
+      colors: ['#198754', '#20c997', '#ffc107', '#0dcaf0']
+    });
+  }
+
+  // 2. Countdown redirect
+  let count = 5;
+  const countdownEl = document.getElementById('countdown');
+  const redirectURL = "{% url 'frontend:home' %}";
+
+  const interval = setInterval(() => {
+    count--;
+    if (countdownEl) countdownEl.textContent = count;
+    
+    if (count <= 0) {
+      clearInterval(interval);
+      window.location.href = redirectURL;
+    }
+  }, 1000);
+});
 </script>
-
-
 {% endblock %}

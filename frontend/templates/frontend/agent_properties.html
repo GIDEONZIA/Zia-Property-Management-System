@@ -1,0 +1,96 @@
+{% extends 'frontend/agent_base.html' %}
+
+{% block title %}My Properties{% endblock %}
+{% block page_title %}My <span>Properties</span>{% endblock %}
+
+{% block top_actions %}
+<a href="{% url 'frontend:agent_property_add' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Add Property</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">All Properties ({{ total_count }})</div>
+    <form method="get" class="filter-bar" style="margin: 0;">
+      <input type="text" name="search" class="search-box" placeholder="Search properties..." value="{{ request.GET.search }}">
+      <select name="type" class="filter-select" onchange="this.form.submit()">
+        <option value="">All Types</option>
+        {% for type_val, type_label in property_types %}
+        <option value="{{ type_val }}" {% if request.GET.type == type_val %}selected{% endif %}>{{ type_label }}</option>
+        {% endfor %}
+      </select>
+      <select name="status" class="filter-select" onchange="this.form.submit()">
+        <option value="">All Status</option>
+        <option value="available" {% if request.GET.status == 'available' %}selected{% endif %}>Available</option>
+        <option value="rented" {% if request.GET.status == 'rented' %}selected{% endif %}>Rented</option>
+      </select>
+    </form>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Type</th>
+        <th>Location</th>
+        <th>Price</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for prop in properties %}
+      <tr>
+        <td>
+          <div class="tenant-info">
+            {% if prop.image %}
+            <img src="{{ prop.image.url }}" style="width: 40px; height: 40px; border-radius: 10px; object-fit: cover;">
+            {% else %}
+            <div class="tenant-avatar"><i class="fas fa-home"></i></div>
+            {% endif %}
+            <div>
+              <div class="tenant-name">{{ prop.property_name }}</div>
+              <div class="tenant-email">{{ prop.address|truncatechars:30 }}</div>
+            </div>
+          </div>
+        </td>
+        <td>{{ prop.get_property_type_display }}</td>
+        <td>{{ prop.location }}</td>
+        <td style="font-weight: 600;">KES {{ prop.price|floatformat:2 }}</td>
+        <td>
+          <span class="status-badge {% if prop.is_available %}active{% else %}pending{% endif %}">
+            <span class="status-dot {% if prop.is_available %}active{% else %}pending{% endif %}"></span>
+            {% if prop.is_available %}Available{% else %}Rented{% endif %}
+          </span>
+        </td>
+        <td>
+          <a href="{% url 'frontend:agent_property_detail' prop.pk %}" class="btn btn-outline" style="padding: 0.375rem 0.75rem; font-size: 0.8rem;">
+            <i class="fas fa-eye"></i> View
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" style="text-align: center; color: var(--text-secondary); padding: 3rem;">No properties found. <a href="#" style="color: var(--primary-light);">Add your first property</a></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if properties.has_other_pages %}
+  <div class="pagination">
+    {% if properties.has_previous %}
+    <a href="?page={{ properties.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"><i class="fas fa-chevron-left"></i></a>
+    {% endif %}
+    {% for num in properties.paginator.page_range %}
+    {% if properties.number == num %}
+    <span class="current">{{ num }}</span>
+    {% else %}
+    <a href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">{{ num }}</a>
+    {% endif %}
+    {% endfor %}
+    {% if properties.has_next %}
+    <a href="?page={{ properties.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"><i class="fas fa-chevron-right"></i></a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

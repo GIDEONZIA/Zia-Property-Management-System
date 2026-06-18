@@ -1,0 +1,83 @@
+{% extends 'frontend/agent_base.html' %}
+
+{% block title %}My Tenants{% endblock %}
+{% block page_title %}My <span>Tenants</span>{% endblock %}
+
+{% block top_actions %}
+<a href="{% url 'frontend:agent_tenant_add' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Add Tenant</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">All Tenants ({{ total_count }})</div>
+    <form method="get" class="filter-bar" style="margin: 0;">
+      <input type="text" name="search" class="search-box" placeholder="Search tenants..." value="{{ request.GET.search }}">
+    </form>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Tenant</th>
+        <th>Property</th>
+        <th>Phone</th>
+        <th>Status</th>
+        <th>Verified</th>
+        <th>Joined</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for tenant in tenants %}
+      <tr>
+        <td>
+          <div class="tenant-info">
+            <div class="tenant-avatar">{{ tenant.property_name|slice:":1"|upper }}</div>
+            <div>
+              <div class="tenant-name">{{ tenant.property_name }}</div>
+              <div class="tenant-email">{{ tenant.email }}</div>
+            </div>
+          </div>
+        </td>
+        <td>{{ tenant.property_name }}</td>
+        <td>{{ tenant.phone }}</td>
+        <td>
+          <span class="status-badge {% if tenant.is_active %}active{% else %}pending{% endif %}">
+            <span class="status-dot {% if tenant.is_active %}active{% else %}pending{% endif %}"></span>
+            {% if tenant.is_active %}Active{% else %}Inactive{% endif %}
+          </span>
+        </td>
+        <td>
+          {% if tenant.is_verified %}
+          <span style="color: var(--success);"><i class="fas fa-check-circle"></i></span>
+          {% else %}
+          <span style="color: var(--text-secondary);"><i class="fas fa-clock"></i></span>
+          {% endif %}
+        </td>
+        <td style="color: var(--text-secondary);">{{ tenant.created_at|date:"M d, Y" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" style="text-align: center; color: var(--text-secondary); padding: 3rem;">No tenants found. <a href="#" style="color: var(--primary-light);">Add your first tenant</a></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if tenants.has_other_pages %}
+  <div class="pagination">
+    {% if tenants.has_previous %}
+    <a href="?page={{ tenants.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"><i class="fas fa-chevron-left"></i></a>
+    {% endif %}
+    {% for num in tenants.paginator.page_range %}
+    {% if tenants.number == num %}
+    <span class="current">{{ num }}</span>
+    {% else %}
+    <a href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ num }}</a>
+    {% endif %}
+    {% endfor %}
+    {% if tenants.has_next %}
+    <a href="?page={{ tenants.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"><i class="fas fa-chevron-right"></i></a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

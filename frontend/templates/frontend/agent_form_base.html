@@ -1,0 +1,39 @@
+{% extends 'frontend/agent_base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block top_actions %}
+<a href="{{ back_url }}" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="stats-grid" style="grid-template-columns: 1fr; max-width: 800px; margin: 0 auto;">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">{{ title }}</div>
+    </div>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label for="{{ field.id_for_label }}">
+          {{ field.label }}
+          {% if field.field.required %}<<span style="color: var(--accent);">*</span>{% endif %}
+        </label>
+        {{ field }}
+        {% if field.help_text %}
+        <div class="help-text">{{ field.help_text }}</div>
+        {% endif %}
+        {% if field.errors %}
+        <ul class="errorlist">{{ field.errors }}</ul>
+        {% endif %}
+      </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+        <i class="fas fa-save"></i> Save
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

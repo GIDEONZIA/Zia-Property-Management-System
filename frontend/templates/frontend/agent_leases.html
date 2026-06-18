@@ -1,0 +1,96 @@
+{% extends 'frontend/agent_base.html' %}
+
+{% block title %}My Leases{% endblock %}
+{% block page_title %}My <span>Leases</span>{% endblock %}
+
+{% block top_actions %}
+<a href="{% url 'frontend:agent_lease_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Create Lease</a>
+{% endblock %}
+
+{% block content %}
+<div class="stats-grid" style="margin-bottom: 1.5rem;">
+  <div class="stat-card" style="padding: 1rem;">
+    <div class="stat-value" style="font-size: 1.5rem;">{{ total_count }}</div>
+    <div class="stat-label">Total Leases</div>
+  </div>
+  <div class="stat-card" style="padding: 1rem;">
+    <div class="stat-value" style="font-size: 1.5rem; color: var(--success);">{{ active_count }}</div>
+    <div class="stat-label">Active</div>
+  </div>
+  <div class="stat-card" style="padding: 1rem;">
+    <div class="stat-value" style="font-size: 1.5rem; color: var(--accent-warm);">{{ ending_soon_count }}</div>
+    <div class="stat-label">Ending Soon</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">All Leases</div>
+    <form method="get" class="filter-bar" style="margin: 0;">
+      <select name="status" class="filter-select" onchange="this.form.submit()">
+        <option value="">All Status</option>
+        <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Active</option>
+        <option value="expired" {% if request.GET.status == 'expired' %}selected{% endif %}>Expired</option>
+      </select>
+    </form>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Tenant</th>
+        <th>Property</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Rent Amount</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for lease in leases %}
+      <tr>
+        <td>
+          <div class="tenant-info">
+            <div class="tenant-avatar">{{ lease.tenant.property_name|slice:":1"|upper }}</div>
+            <div>
+              <div class="tenant-name">{{ lease.tenant.property_name }}</div>
+              <div class="tenant-email">{{ lease.tenant.email }}</div>
+            </div>
+          </div>
+        </td>
+        <td>{{ lease.property.property_name }}</td>
+        <td>{{ lease.start_date|date:"M d, Y" }}</td>
+        <td>{{ lease.end_date|date:"M d, Y" }}</td>
+        <td style="font-weight: 600;">KES {{ lease.rent_amount|floatformat:2 }}</td>
+        <td>
+          <span class="status-badge {% if lease.is_active %}active{% else %}pending{% endif %}">
+            <span class="status-dot {% if lease.is_active %}active{% else %}pending{% endif %}"></span>
+            {% if lease.is_active %}Active{% else %}Expired{% endif %}
+          </span>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" style="text-align: center; color: var(--text-secondary); padding: 3rem;">No leases found. <a href="#" style="color: var(--primary-light);">Create your first lease</a></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if leases.has_other_pages %}
+  <div class="pagination">
+    {% if leases.has_previous %}
+    <a href="?page={{ leases.previous_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"><i class="fas fa-chevron-left"></i></a>
+    {% endif %}
+    {% for num in leases.paginator.page_range %}
+    {% if leases.number == num %}
+    <span class="current">{{ num }}</span>
+    {% else %}
+    <a href="?page={{ num }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">{{ num }}</a>
+    {% endif %}
+    {% endfor %}
+    {% if leases.has_next %}
+    <a href="?page={{ leases.next_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"><i class="fas fa-chevron-right"></i></a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

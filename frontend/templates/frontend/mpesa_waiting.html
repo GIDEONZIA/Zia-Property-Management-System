@@ -1,4 +1,4 @@
-{% extends 'base_public.html' %}
+{% extends 'frontend/agent_base.html' %}
 {% block title %}Processing Payment — Zia Properties{% endblock %}
 
 {% block extra_styles %}
@@ -280,9 +280,10 @@
       animation: checkPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .checkmark i {
+    .checkmark svg {
       color: white;
-      font-size: 1.5rem;
+      width: 28px;
+      height: 28px;
     }
 
     @keyframes checkPop {
@@ -303,9 +304,10 @@
       animation: checkPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .crossmark i {
+    .crossmark svg {
       color: white;
-      font-size: 1.5rem;
+      width: 28px;
+      height: 28px;
     }
 
     /* ===== FLOATING PARTICLES ===== */
@@ -333,6 +335,14 @@
         font-size: 1.25rem;
       }
     }
+
+    /* ===== ACCESSIBILITY ===== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
   </style>
 {% endblock %}
 
@@ -354,7 +364,11 @@
             <div class="spinner-ring"></div>
             <div class="spinner-ring"></div>
             <div class="spinner-ring"></div>
-            <i class="fas fa-mobile-alt spinner-icon"></i>
+            <!-- Inline SVG phone icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="spinner-icon" viewBox="0 0 16 16">
+              <path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+              <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+            </svg>
           </div>
         </div>
       </div>
@@ -364,7 +378,12 @@
 
         <div id="statusBadge" class="mb-3">
           <span class="status-badge badge-waiting">
-            <i class="fas fa-clock" style="font-size: 0.7rem;"></i> Waiting for confirmation…
+            <!-- Inline SVG clock -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
+              <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+            </svg>
+            Waiting for confirmation…
           </span>
         </div>
 
@@ -374,10 +393,19 @@
 
         <div class="d-flex gap-2">
           <button id="backBtn" class="btn btn-back">
-            <i class="fas fa-arrow-left me-2" style="font-size: 0.8rem;"></i>Back to Premium
+            <!-- Inline SVG arrow -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" style="margin-right:6px;vertical-align:text-bottom;" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+            </svg>
+            Back to Premium
           </button>
           <button id="retryBtn" class="btn btn-retry d-none">
-            <i class="fas fa-redo me-2" style="font-size: 0.8rem;"></i>Retry Payment
+            <!-- Inline SVG redo -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" style="margin-right:6px;vertical-align:text-bottom;" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+              <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+            </svg>
+            Retry Payment
           </button>
         </div>
         <p class="debug-text d-none" id="debugMsg"></p>
@@ -403,10 +431,14 @@
   });
 
   if (!checkoutId) {
-    statusBadge.innerHTML = '<span class="status-badge badge-failed"><i class="fas fa-times-circle" style="font-size: 0.7rem;"></i> Missing checkout id</span>';
+    statusBadge.innerHTML = '<span class="status-badge badge-failed">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" style="margin-right:4px;" viewBox="0 0 16 16">' +
+      '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>' +
+      '<path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>' +
+      '</svg> Missing checkout id</span>';
     debugMsg.textContent = "No checkout_id supplied. Try initiating payment again from the Premium page.";
     debugMsg.classList.remove('d-none');
-    spinnerArea.innerHTML = '<div class="crossmark"><i class="fas fa-times"></i></div>';
+    spinnerArea.innerHTML = '<div class="crossmark"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg></div>';
     throw new Error("Missing checkout_id");
   }
 
@@ -429,46 +461,72 @@
       const url = `{% url 'subscriptions:check_status' %}?checkout_id=${encodeURIComponent(checkoutId)}`;
       const r = await fetch(url, { method: 'GET', headers: {'X-Requested-With':'XMLHttpRequest'} });
       if (!r.ok) {
-        statusBadge.innerHTML = '<span class="status-badge badge-warning"><i class="fas fa-exclamation-triangle" style="font-size: 0.7rem;"></i> Network issue — retrying</span>';
+        statusBadge.innerHTML = '<span class="status-badge badge-warning">' +
+          '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" style="margin-right:4px;" viewBox="0 0 16 16">' +
+          '<path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.15.15 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.16.16 0 0 1-.054.06.1.1 0 0 1-.066.017H1.146a.1.1 0 0 1-.066-.017.16.16 0 0 1-.054-.06.18.18 0 0 1 .002-.183L7.884 2.073a.15.15 0 0 1 .054-.057m1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767z"/>' +
+          '<path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>' +
+          '</svg> Network issue — retrying</span>';
         updateProgressUI();
       } else {
         const data = await r.json();
         if (data.status === 'success') {
-          statusBadge.innerHTML = '<span class="status-badge badge-success"><i class="fas fa-check-circle" style="font-size: 0.7rem;"></i> Payment successful</span>';
+          statusBadge.innerHTML = '<span class="status-badge badge-success">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" style="margin-right:4px;" viewBox="0 0 16 16">' +
+            '<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>' +
+            '</svg> Payment successful</span>';
           progressBar.style.width = '100%';
-          spinnerArea.innerHTML = '<div class="checkmark"><i class="fas fa-check"></i></div>';
+          spinnerArea.innerHTML = '<div class="checkmark"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/></svg></div>';
           setTimeout(() => {
             window.location.href = "{% url 'frontend:payment_success' %}";
           }, 900);
           return;
         } else if (data.status === 'failed') {
-          statusBadge.innerHTML = '<span class="status-badge badge-failed"><i class="fas fa-times-circle" style="font-size: 0.7rem;"></i> Payment failed</span>';
+          statusBadge.innerHTML = '<span class="status-badge badge-failed">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" style="margin-right:4px;" viewBox="0 0 16 16">' +
+            '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>' +
+            '<path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>' +
+            '</svg> Payment failed</span>';
           debugMsg.textContent = "Payment failed. Please try again or contact support.";
-          spinnerArea.innerHTML = '<div class="crossmark"><i class="fas fa-times"></i></div>';
+          spinnerArea.innerHTML = '<div class="crossmark"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg></div>';
           retryBtn.classList.remove('d-none');
           setTimeout(() => {
             window.location.href = "{% url 'frontend:payment_failed' %}";
           }, 1200);
           return;
         } else if (data.status === 'pending' || data.status === 'not_found') {
-          statusBadge.innerHTML = '<span class="status-badge badge-waiting"><i class="fas fa-clock" style="font-size: 0.7rem;"></i> Waiting for confirmation…</span>';
+          statusBadge.innerHTML = '<span class="status-badge badge-waiting">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" style="margin-right:4px;" viewBox="0 0 16 16">' +
+            '<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>' +
+            '<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>' +
+            '</svg> Waiting for confirmation…</span>';
           updateProgressUI();
         } else {
-          statusBadge.innerHTML = '<span class="status-badge badge-warning"><i class="fas fa-question-circle" style="font-size: 0.7rem;"></i> Unknown response</span>';
+          statusBadge.innerHTML = '<span class="status-badge badge-warning">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" style="margin-right:4px;" viewBox="0 0 16 16">' +
+            '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>' +
+            '<path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/>' +
+            '</svg> Unknown response</span>';
           debugMsg.textContent = JSON.stringify(data);
           debugMsg.classList.remove('d-none');
           updateProgressUI();
         }
       }
     } catch (err) {
-      statusBadge.innerHTML = '<span class="status-badge badge-warning"><i class="fas fa-wifi" style="font-size: 0.7rem;"></i> Connection error — retrying</span>';
+      statusBadge.innerHTML = '<span class="status-badge badge-warning">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" style="margin-right:4px;" viewBox="0 0 16 16">' +
+        '<path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01zM8.797 1.75a1.25 1.25 0 0 1 1.786 0l.466.464c.29.29.773.362 1.102.164l.825-.519a1.25 1.25 0 0 1 1.911 1.067V3.5a1.25 1.25 0 0 1-.206.691l-.468.781a1.25 1.25 0 0 0-.206.691V8a1.25 1.25 0 0 1-.206.691l-.468.781a1.25 1.25 0 0 0-.206.691v1.25a1.25 1.25 0 0 1-1.911 1.067l-.825-.519a1.25 1.25 0 0 0-1.102.164l-.466.464a1.25 1.25 0 0 1-1.786 0l-.466-.464a1.25 1.25 0 0 0-1.102-.164l-.825.519a1.25 1.25 0 0 1-1.911-1.067V12.5a1.25 1.25 0 0 1 .206-.691l.468-.781a1.25 1.25 0 0 0 .206-.691V8a1.25 1.25 0 0 1 .206-.691l.468-.781a1.25 1.25 0 0 0 .206-.691V4.75a1.25 1.25 0 0 1 1.911-1.067l.825.519c.33.198.812.126 1.102-.164z"/>' +
+        '</svg> Connection error — retrying</span>';
       debugMsg.textContent = err.toString();
       debugMsg.classList.remove('d-none');
       updateProgressUI();
     }
 
     if (attempts >= maxAttempts) {
-      statusBadge.innerHTML = '<span class="status-badge badge-failed"><i class="fas fa-hourglass-end" style="font-size: 0.7rem;"></i> Timeout — could not confirm</span>';
+      statusBadge.innerHTML = '<span class="status-badge badge-failed">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" style="margin-right:4px;" viewBox="0 0 16 16">' +
+        '<path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v1.384l7.614 2.03a1.5 1.5 0 0 0 .772 0L16 5.884V4.5A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5"/>' +
+        '<path d="M0 12.5V10a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5m6.854-9.646a.5.5 0 0 0-.708.708L7.293 6.5 6.146 7.646a.5.5 0 1 0 .708.708l1.147-1.146 1.146 1.147a.5.5 0 0 0 .708-.708L8.207 6.5l1.147-1.146a.5.5 0 0 0-.708-.708L7.5 5.793z"/>' +
+        '</svg> Timeout — could not confirm</span>';
       debugMsg.textContent = 'Payment verification timed out. Please check your phone or subscription status later.';
       retryBtn.classList.remove('d-none');
       setTimeout(() => {
