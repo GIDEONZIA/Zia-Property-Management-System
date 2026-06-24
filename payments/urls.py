@@ -1,7 +1,6 @@
-# payments/urls.py
-
 from django.urls import path
 from . import views
+from . import dashboard_views
 
 urlpatterns = [
     # C2B Webhooks
@@ -11,4 +10,7 @@ urlpatterns = [
     # Admin tools
     path('admin/register-c2b/', views.register_c2b_view, name='register_c2b'),
     path('admin/simulate/', views.simulate_payment_view, name='simulate_c2b'),
+    
+    # Dashboard
+    path('dashboard/', dashboard_views.payment_dashboard, name='payment_dashboard'),
 ]

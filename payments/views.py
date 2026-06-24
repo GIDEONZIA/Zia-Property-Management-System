@@ -31,21 +31,12 @@ sms = africastalking.SMS
 
 
 def _send_sms(phone, message, sender_id=""):
-    """Send SMS via Africa's Talking. Returns (success_bool, response)."""
-    try:
-        phone = str(phone).strip().replace(" ", "").replace("-", "")
-        if phone.startswith("0"):
-            phone = "254" + phone[1:]
-        if phone.startswith("+"):
-            phone = phone[1:]
-
-        response = sms.send(message, [phone], sender_id)
-        status = response["SMSMessageData"]["Recipients"][0]["status"]
-        return status == "Success", response
-    except Exception as exc:
-        print(f"[SMS Error] {exc}")
-        return False, str(exc)
-
+    """
+    SMS via Africa's Talking — DISABLED until integrated.
+    Returns (False, "SMS not configured") to prevent crashes.
+    """
+    print(f"[SMS Skipped] To: {phone}, Message: {message[:50]}...")
+    return False, "SMS not configured"
 
 # -- Helpers ------------------------------------------------------------------
 
