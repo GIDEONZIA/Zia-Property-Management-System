@@ -52,7 +52,6 @@ def _send_sms(phone, message):
     """Send an SMS and return (success, response)."""
     try:
         import africastalking
-
         initialize = africastalking.initialize
     except ImportError:
         return False, "africastalking package not installed"
