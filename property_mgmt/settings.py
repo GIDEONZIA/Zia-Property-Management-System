@@ -43,7 +43,7 @@ DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'zia-property.onrender.com',
+    'zia-property-agency-ltd.onrender.com',
     'ziapropertyagency.com',
     'www.ziapropertyagency.com',
 ]
