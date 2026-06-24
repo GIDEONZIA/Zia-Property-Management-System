@@ -36,7 +36,7 @@ PyJWT==2.13.0
 # (No additional packages — uses requests)
 
 # File Processing
-Pillow==10.2.0
+Pillow==11.2.1
 openpyxl==3.1.5
 fpdf2==2.8.7
 xhtml2pdf==0.2.17
