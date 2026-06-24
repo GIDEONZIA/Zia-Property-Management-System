@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 from decimal import Decimal
 
-import africastalking
+# import africastalking
 from django.conf import settings
 from django.db.models import Q
 from django.http import JsonResponse
@@ -23,11 +23,11 @@ from .models import MpesaRentPayment, ReceiptLog
 
 # -- Africa's Talking ---------------------------------------------------------
 
-africastalking.initialize(
+# africastalking.initialize(
     username=getattr(settings, "AFRICASTALKING_USERNAME", "sandbox"),
-    api_key=getattr(settings, "AFRICASTALKING_API_KEY", ""),
+#    api_key=getattr(settings, "AFRICASTALKING_API_KEY", ""),
 )
-sms = africastalking.SMS
+# sms = africastalking.SMS
 
 
 def _send_sms(phone, message, sender_id=""):
