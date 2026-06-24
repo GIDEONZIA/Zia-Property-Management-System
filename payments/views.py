@@ -21,22 +21,6 @@ from utils.mpesa import (
 
 from .models import MpesaRentPayment, ReceiptLog
 
-# -- Africa's Talking ---------------------------------------------------------
-
-# africastalking.initialize(
-    username=getattr(settings, "AFRICASTALKING_USERNAME", "sandbox"),
-#    api_key=getattr(settings, "AFRICASTALKING_API_KEY", ""),
-)
-# sms = africastalking.SMS
-
-
-def _send_sms(phone, message, sender_id=""):
-    """
-    SMS via Africa's Talking — DISABLED until integrated.
-    Returns (False, "SMS not configured") to prevent crashes.
-    """
-    print(f"[SMS Skipped] To: {phone}, Message: {message[:50]}...")
-    return False, "SMS not configured"
 
 # -- Helpers ------------------------------------------------------------------
 
@@ -62,6 +46,34 @@ def _normalize_phone(phone):
     if len(phone) == 9 and phone.startswith(("7", "1")):
         phone = "254" + phone
     return phone
+
+
+def _send_sms(phone, message):
+    """Send an SMS and return (success, response)."""
+    try:
+        import africastalking
+
+        initialize = africastalking.initialize
+    except ImportError:
+        return False, "africastalking package not installed"
+
+    username = getattr(settings, "AFRICASTALKING_USERNAME", None)
+    api_key = getattr(settings, "AFRICASTALKING_API_KEY", None)
+    sender_id = getattr(settings, "AFRICASTALKING_SENDER_ID", None)
+
+    if not username or not api_key:
+        return False, "AFRICASTALKING credentials not configured"
+
+    try:
+        initialize(username, api_key)
+        sms = africastalking.SMS
+        if sender_id:
+            response = sms.send(message, [phone], sender_id=sender_id)
+        else:
+            response = sms.send(message, [phone])
+        return True, response
+    except Exception as exc:
+        return False, str(exc)
 
 
 def _match_payment(phone, account_reference, amount):
