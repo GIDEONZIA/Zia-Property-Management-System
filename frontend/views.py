@@ -115,6 +115,75 @@ def agent_dashboard_view(request):
     maintenance = MaintenanceRequest.objects.filter(property__agent=agent)
     pending_maintenance = maintenance.filter(status='pending').count()
 
+@login_required
+def agent_dashboard_view(request):
+    agent = get_agent_or_redirect(request)
+    if not agent:
+        return redirect('frontend:home')
+
+    # Properties
+    agent_properties = Property.objects.filter(agent=agent)
+    total_properties = agent_properties.count()
+    available_properties = agent_properties.filter(is_available=True).count()
+
+    # Tenants
+    agent_tenants = Tenant.objects.filter(agent=agent)
+    total_tenants = agent_tenants.count()
+    new_tenants_this_month = agent_tenants.filter(
+        created_at__gte=timezone.now().replace(day=1, hour=0, minute=0, second=0)
+    ).count()
+
+    # Leases
+    agent_leases = Lease.objects.filter(agent=agent)
+    total_leases = agent_leases.count()
+    active_leases = agent_leases.filter(is_active=True).count()
+    leases_ending_soon = agent_leases.filter(
+        end_date__lte=timezone.now().date() + timedelta(days=30),
+        is_active=True
+    ).count()
+
+    # Payments
+    agent_payments = RentPayment.objects.filter(lease__agent=agent)
+    total_revenue = agent_payments.aggregate(total=Sum('amount_paid'))['total'] or 0
+    this_month = timezone.now().replace(day=1, hour=0, minute=0, second=0)
+    monthly_revenue = agent_payments.filter(payment_date__gte=this_month).aggregate(total=Sum('amount_paid'))['total'] or 0
+
+    # Maintenance
+    maintenance = MaintenanceRequest.objects.filter(property__agent=agent)
+    pending_maintenance = maintenance.filter(status='pending').count()
+
+    # ===== REAL CHART DATA (no external dependency) =====
+    monthly_revenue_data = []
+    month_labels = []
+    now = timezone.now()
+
+    for i in range(11, -1, -1):
+        # Calculate month by subtracting i months manually
+        total_months = now.year * 12 + now.month - 1 - i
+        year = total_months // 12
+        month = (total_months % 12) + 1
+
+        month_start = timezone.make_aware(timezone.datetime(year, month, 1, 0, 0, 0))
+        if month == 12:
+            month_end = timezone.make_aware(timezone.datetime(year + 1, 1, 1, 0, 0, 0))
+        else:
+            month_end = timezone.make_aware(timezone.datetime(year, month + 1, 1, 0, 0, 0))
+
+        month_revenue = agent_payments.filter(
+            payment_date__gte=month_start,
+            payment_date__lt=month_end
+        ).aggregate(total=Sum('amount_paid'))['total'] or 0
+
+        monthly_revenue_data.append(int(month_revenue))
+        month_labels.append(month_start.strftime('%b %Y'))
+
+    # Properties by type
+    properties_by_type = list(
+        agent_properties.values('property_type')
+        .annotate(count=Count('id'))
+        .order_by('-count')
+    )
+
     context = {
         'agent': agent,
         'agent_name': f"{agent.first_name} {agent.last_name}",
@@ -132,9 +201,12 @@ def agent_dashboard_view(request):
         'recent_payments': agent_payments.order_by('-payment_date')[:5],
         'recent_maintenance': maintenance.order_by('-requested_on')[:5],
         'recent_properties': agent_properties.order_by('-created_at')[:6],
+        # Chart data
+        'month_labels': month_labels,
+        'monthly_revenue_data': monthly_revenue_data,
+        'properties_by_type': properties_by_type,
     }
-    return render(request, 'frontend/agent_dashboard.html', context)
-
+    return render(request, 'frontend/agent_dashboard.html', context)    
 
 @login_required
 def agent_properties_view(request):

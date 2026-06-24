@@ -17,12 +17,18 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "property_mgmt.settings")
 
 django.setup()
 
-import chat.routing  # 👈 import AFTER django.setup()
+import importlib
+
+# import chat.routing (try top-level app name first, fall back to project-relative)
+try:
+    chat_routing = importlib.import_module('chat.routing')
+except ImportError:
+    chat_routing = importlib.import_module('property_mgmt.chat.routing')
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": AuthMiddlewareStack(
-        URLRouter(chat.routing.websocket_urlpatterns)
+        URLRouter(chat_routing.websocket_urlpatterns)
     ),
 })
 

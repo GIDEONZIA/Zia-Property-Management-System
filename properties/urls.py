@@ -9,8 +9,8 @@ from .views import (
     TenantListCreateView, TenantRetrieveUpdateDestroyView,
     LeaseListCreateView, LeaseRetrieveUpdateDestroyView,
     RentPaymentListCreateView, RentPaymentRetrieveUpdateDestroyView,
-    admin_dashboard, analytics_view,
-    tenant_dashboard_view, lease_list_view, create_lease_view,
+    analytics_view,
+    lease_list_view, create_lease_view,
     tenant_list_view, maintenance_request_list_view, inspection_list_view, blog_detail
 )
 

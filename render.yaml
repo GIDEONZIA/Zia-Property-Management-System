@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: zia-property
+    runtime: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn property_mgmt.wsgi:application --bind 0.0.0.0:$PORT --workers 2"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: zia-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+      - key: DJANGO_SETTINGS_MODULE
+        value: "property_mgmt.settings"
+
+databases:
+  - name: zia-db
+    databaseName: zia_property
+    user: zia_property
+    plan: free

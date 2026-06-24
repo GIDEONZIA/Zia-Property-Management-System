@@ -1,51 +1,58 @@
 from django.urls import path, include
-from django.views.generic import TemplateView
-from .views import (
-    signup_view, CustomLoginView, idx_search_view, listings_view, contact_view, thank_you_view
-)
 from django.contrib.auth import views as auth_views
-from properties.views import buyer_lead_view, seller_lead_view
-from .views import blog_list_view, blog_detail
-from .views import start_premium_subscription, subscription_status_view
-from utils.mpesa_callback import mpesa_callback
-from frontend.views import home_view
+from django.views.generic import TemplateView
+from . import views
 
-
-
+app_name = 'frontend'
 
 urlpatterns = [
-    # Home / Landing
+    # Landing / Home
     path('', TemplateView.as_view(template_name='frontend/index.html'), name='landing_page'),
-    # Auth
-    path('login/', CustomLoginView.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
+    path('home/', views.home_view, name='home'),
 
-    # Static Pages
+    # Auth
+    path('login/', views.PublicLoginView.as_view(), name='login'),
+    path('agent/login/', views.AgentLoginView.as_view(), name='agent_login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='frontend:landing_page'), name='logout'),
+    path('sign-up/', views.signup_view, name='signup'),
+    path('register-agent/', views.agent_register_view, name='agent_register'),
+
+    # Agent Portal
+    path('agent/dashboard/', views.agent_dashboard_view, name='agent_dashboard'),
+    path('agent/properties/', views.agent_properties_view, name='agent_properties'),
+    path('agent/properties/<int:pk>/', views.agent_property_detail_view, name='agent_property_detail'),
+    path('agent/tenants/', views.agent_tenants_view, name='agent_tenants'),
+    path('agent/leases/', views.agent_leases_view, name='agent_leases'),
+    path('agent/payments/', views.agent_payments_view, name='agent_payments'),
+    path('agent/maintenance/', views.agent_maintenance_view, name='agent_maintenance'),
+    path('agent/inspections/', views.agent_inspections_view, name='agent_inspections'),
+    path('agent/analytics/', views.agent_analytics_view, name='agent_analytics'),
+    path('agent/settings/', views.agent_settings_view, name='agent_settings'),
+
+    # Pages
     path('about/', TemplateView.as_view(template_name='frontend/about.html'), name='about'),
     path('services/', TemplateView.as_view(template_name='frontend/services.html'), name='services'),
-    path('premium_agent/', TemplateView.as_view(template_name='frontend/premium_agent.html'), name='premium_agent'),
+    path('privacy-policy/', views.PrivacyPolicyView.as_view(), name='privacy_policy'),
+    path('terms-and-conditions/', views.TermsAndConditionsView.as_view(), name='terms_and_conditions'),
+    path('testimonials/', views.testimonials_view, name='testimonials'),
 
+    # Listings & Search
+    path('idx_search/', views.idx_search_view, name='idx_search'),
+    path('listings/', views.listings_view, name='listings'),
+    path('property/<int:pk>/', views.property_detail_view, name='property_detail'),
 
-    
+    # Contact & Blog
+    path('contact/', views.contact_view, name='contact'),
+    path('thank-you', views.thank_you_view, name='thank_you'),
+    path('blog/', views.blog_list_view, name='blog'),
+    path('blog/<slug:slug>/', views.blog_detail, name='blog_detail'),
 
+    # Premium & Payments
+    path('premium-agent/', views.premium_agent_page, name='premium_agent'),
+    path('payment-success/', views.payment_success, name='payment_success'),
+    path('payment-failed/', views.payment_failed, name='payment_failed'),
+    path('mpesa-waiting/', views.mpesa_waiting, name='mpesa_waiting'),
 
-    # Dynamic Search & Listings Views
-    path('idx_search/', idx_search_view, name='idx_search'),
-    path('listings/', listings_view, name='listings'),
-    path('contact/', contact_view, name='contact'),
-    path('buyer/', buyer_lead_view, name='buy'),
-    path('sell/', seller_lead_view, name='sell'),
-    path('sign-up/', signup_view, name='signup'),
-    path('blog/', blog_list_view, name='blog'),
-    path('blog/<slug:slug>/', blog_detail, name='blog_detail'),
-    path('thank-you', thank_you_view, name='thank_you'),
-    path('home/', home_view, name='home'),
-    path('subscribe/', start_premium_subscription, name='subscribe'),
-    path('subscription/', subscription_status_view, name='subscription_status'),  # optional
-    
-    path('api/mpesa-callback/', mpesa_callback, name='mpesa_callback'),
-
-    
-    # AllAuth (optional)
+    # Allauth
     path('accounts/', include('allauth.urls')),
 ]

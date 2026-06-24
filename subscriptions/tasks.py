@@ -76,30 +76,27 @@ def send_reminders():
     Scheduled task to remind users whose subscriptions are expiring soon.
     Runs daily via Django Q.
     """
-    # 1. Define 'Soon' (e.g., expiring in exactly 3 days)
     reminder_date = timezone.now().date() + timedelta(days=3)
     
-    # 2. Find active subscriptions expiring on that specific date
+    # Find paid subscriptions expiring on that specific date
     expiring_soon = PremiumSubscription.objects.filter(
-        end_date=reminder_date,
-        paid=True,
-        active=True
+        expiry_date=reminder_date,
+        paid=True
     )
 
     sent_count = 0
 
     for sub in expiring_soon:
         try:
-            # 3. Send the Email
             send_mail(
                 subject="Your Premium Subscription is Expiring Soon!",
-                message=f"Hi {sub.user.username}, your subscription for {sub.property.name} expires on {sub.end_date}. Renew now to stay premium!",
+                message=f"Hi {sub.user.username}, your subscription expires on {sub.expiry_date}. Renew now to stay premium!",
                 from_email="noreply@ziaproperties.com",
                 recipient_list=[sub.user.email],
                 fail_silently=False,
             )
             sent_count += 1
         except Exception as e:
-            print(f"❌ Failed to send reminder to {sub.user.email}: {e}")
+            logger.error(f"❌ Failed to send reminder to {sub.user.email}: {e}")
 
     return f"Successfully sent {sent_count} reminders for {reminder_date}"

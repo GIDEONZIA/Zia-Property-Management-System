@@ -918,12 +918,12 @@
 
         <!-- Mobile Menu -->
         <div id="mobileMenu" class="mobile-menu">
-          <a href="#home" onclick="toggleMobileMenu()">Home</a>
-          <a href="#about" onclick="toggleMobileMenu()">About</a>
-          <a href="#services" onclick="toggleMobileMenu()">Services</a>
-          <a href="#contact" onclick="toggleMobileMenu()">Contact</a>
-          <a href="#blog" onclick="toggleMobileMenu()">Blog</a>
-          <a href="#testimonials" onclick="toggleMobileMenu()">Testimonials</a>
+          <a href="home" onclick="toggleMobileMenu()">Home</a>
+          <a href="about" onclick="toggleMobileMenu()">About</a>
+          <a href="services" onclick="toggleMobileMenu()">Services</a>
+          <a href="contact" onclick="toggleMobileMenu()">Contact</a>
+          <a href="blog" onclick="toggleMobileMenu()">Blog</a>
+          <a href="testimonials" onclick="toggleMobileMenu()">Testimonials</a>
           <hr>
           <a href="{% url 'frontend:login' %}" class="mobile-btn mobile-btn-login">Log in</a>
           <a href="{% url 'frontend:agent_register' %}" class="mobile-btn mobile-btn-agent">
@@ -1163,6 +1163,7 @@
         if (chevron) chevron.style.transform = 'rotate(0deg)';
       }
     });
+    
     // ===== COUNTER ANIMATION =====
     function animateCounter(element) {
       const target = parseInt(element.getAttribute('data-target'));

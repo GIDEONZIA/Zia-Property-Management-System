@@ -1,12 +1,12 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Zia Properties Ltd - Discover Your Suitable Home</title>
+  <title>Zia Properties Ltd</title>
 
   <!-- Meta Tags -->
   {% block meta %}
@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="{% static 'frontend/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
+
     <style>
       :root {
         --primary: #6366f1;
@@ -42,52 +42,157 @@
         --success: #10b981;
       }
 
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      html { scroll-behavior: smooth; }
 
       body {
         font-family: 'Inter', sans-serif;
         background: var(--bg-dark);
         color: var(--text-primary);
         overflow-x: hidden;
+        line-height: 1.6;
       }
 
       h1, h2, h3, h4, h5, h6 {
         font-family: 'Space Grotesk', sans-serif;
+        margin: 0;
       }
 
-      /* Cinematic Hero Background */
+      a { text-decoration: none; color: inherit; }
+
+      /* ===== UTILITIES ===== */
+      .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+      }
+
+      .text-center { text-align: center !important; }
+      .d-none { display: none !important; }
+      .d-flex { display: flex; }
+      .justify-content-between { justify-content: space-between; }
+      .align-items-center { align-items: center; }
+      .flex-column { flex-direction: column; }
+      .flex-grow-1 { flex-grow: 1; }
+      .gap-2 { gap: 0.75rem; }
+      .gap-3 { gap: 1rem; }
+      .gap-4 { gap: 1.5rem; }
+      .mb-3 { margin-bottom: 1rem; }
+      .mb-4 { margin-bottom: 1.5rem; }
+      .mb-5 { margin-bottom: 3rem; }
+      .mt-3 { margin-top: 1rem; }
+      .mt-4 { margin-top: 1.5rem; }
+      .mt-5 { margin-top: 3rem; }
+      .ms-2 { margin-left: 0.5rem; }
+      .me-2 { margin-right: 0.5rem; }
+      .p-3 { padding: 1rem; }
+      .p-4 { padding: 1.5rem; }
+      .p-5 { padding: 3rem; }
+      .py-3 { padding-top: 1rem; padding-bottom: 1rem; }
+      .py-4 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+      .py-5 { padding-top: 3rem; padding-bottom: 3rem; }
+      .px-4 { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .pb-4 { padding-bottom: 1.5rem; }
+      .pt-4 { padding-top: 1.5rem; }
+      .fw-bold { font-weight: 700; }
+      .lead { font-size: 1.25rem; font-weight: 300; }
+      .fs-3 { font-size: 1.75rem; }
+      .fs-4 { font-size: 1.5rem; }
+      .h-100 { height: 100%; }
+      .h4 { font-size: 1.25rem; }
+      .h5 { font-size: 1.1rem; }
+      .position-relative { position: relative; }
+      .position-absolute { position: absolute; }
+      .top-0 { top: 0; }
+      .start-0 { left: 0; }
+      .end-0 { right: 0; }
+      .bottom-0 { bottom: 0; }
+      .w-100 { width: 100%; }
+      .rounded-pill { border-radius: 50px; }
+      .rounded-4 { border-radius: 1rem; }
+      .border-0 { border: none; }
+      .card { background: transparent; border: none; }
+      .card-body { padding: 0; }
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -0.75rem;
+      }
+
+      .col-4 {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+        padding: 0 0.75rem;
+      }
+
+      .col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        padding: 0 0.75rem;
+      }
+
+      .col-lg-10 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        padding: 0 0.75rem;
+      }
+
+      .col-xl-8 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        padding: 0 0.75rem;
+      }
+
+      @media (min-width: 768px) {
+        .col-md-4 { flex: 0 0 33.333333%; max-width: 33.333333%; }
+      }
+
+      @media (min-width: 992px) {
+        .col-lg-10 { flex: 0 0 83.333333%; max-width: 83.333333%; }
+      }
+
+      @media (min-width: 1200px) {
+        .col-xl-8 { flex: 0 0 66.666667%; max-width: 66.666667%; }
+      }
+
+      @media (max-width: 991px) {
+        .d-lg-none { display: none !important; }
+        .d-lg-flex { display: flex !important; }
+      }
+
+      @media (min-width: 992px) {
+        .d-lg-none { display: none !important; }
+        .d-lg-flex { display: flex !important; }
+      }
+
+      /* ===== CINEMATIC HERO ===== */
       .hero-section {
         position: relative;
-        height: 100vh;
-        overflow: hidden;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
         background: var(--bg-dark);
+        overflow: hidden;
       }
 
-      .hero-section::before {
-        content: "";
+      .hero-bg {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(180deg, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.85) 100%),
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.9) 100%),
                     url('{% static "frontend/images/beauty.png" %}') no-repeat center center / cover;
         animation: kenBurns 20s infinite alternate ease-in-out;
         z-index: 0;
       }
 
-      .hero-section::after {
-        content: "";
+      .hero-orbs {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: 
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background:
           radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
           radial-gradient(ellipse at 80% 50%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
         z-index: 1;
@@ -104,13 +209,37 @@
         50% { opacity: 1; }
       }
 
-      /* Glass Navbar */
+      #particleCanvas {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      .hero-content-wrapper {
+        position: relative;
+        z-index: 3;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      /* ===== GLASS NAVBAR ===== */
       .glass-nav {
-        background: rgba(30, 41, 59, 0.4);
+        background: rgba(30, 41, 59, 0.5);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border: 1px solid var(--border);
+        border-radius: 50px;
+        padding: 0.75rem 1.5rem;
+        margin-top: 1.5rem;
         transition: all 0.4s ease;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
       }
 
       .glass-nav.scrolled {
@@ -126,34 +255,78 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+        text-decoration: none;
+        white-space: nowrap;
         transition: transform 0.3s ease;
+        display: flex;
+        align-items: center;
       }
 
-      .logo-text:hover {
-        transform: scale(1.05);
+      .logo-text:hover { transform: scale(1.05); }
+
+      .nav-links {
+        display: none;
+        align-items: center;
+        gap: 1.5rem;
       }
 
-      /* Auth Buttons */
+      @media (min-width: 992px) { .nav-links { display: flex; } }
+
+      .nav-links a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .nav-links a:hover { color: var(--primary-light); }
+
+      .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: -4px; left: 0;
+        width: 0; height: 2px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        transition: width 0.3s ease;
+      }
+
+      .nav-links a:hover::after { width: 100%; }
+
+      /* ===== AUTH BUTTONS & DROPDOWN ===== */
+      .auth-buttons {
+        display: none;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      @media (min-width: 992px) { .auth-buttons { display: flex; } }
+
       .btn-glass-outline {
         background: transparent;
         border: 1px solid rgba(255, 255, 255, 0.3);
         color: white;
         border-radius: 50px;
-        padding: 0.6rem 1.8rem;
+        padding: 0.5rem 1.5rem;
         font-weight: 500;
+        font-size: 0.9rem;
         transition: all 0.4s ease;
         position: relative;
         overflow: hidden;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
       }
 
       .btn-glass-outline::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
         transition: left 0.5s ease;
       }
@@ -162,31 +335,34 @@
         border-color: var(--primary-light);
         box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
         transform: translateY(-2px);
+        color: white;
       }
 
-      .btn-glass-outline:hover::before {
-        left: 100%;
-      }
+      .btn-glass-outline:hover::before { left: 100%; }
 
       .btn-glow-white {
         background: rgba(255, 255, 255, 0.95);
         border: none;
         border-radius: 50px;
-        padding: 0.6rem 1.8rem;
+        padding: 0.5rem 1.5rem;
         font-weight: 600;
+        font-size: 0.9rem;
         color: var(--bg-dark);
         transition: all 0.4s ease;
         position: relative;
         overflow: hidden;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
       }
 
       .btn-glow-white::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
         background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.2), transparent);
         transition: left 0.5s ease;
       }
@@ -194,19 +370,197 @@
       .btn-glow-white:hover {
         transform: translateY(-2px);
         box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        color: var(--bg-dark);
       }
 
-      .btn-glow-white:hover::before {
-        left: 100%;
+      .btn-glow-white:hover::before { left: 100%; }
+
+      /* ===== REGISTER DROPDOWN ===== */
+      .register-dropdown { position: relative; }
+
+      .dropdown-menu-custom {
+        display: none;
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        right: 0;
+        background: rgba(30, 41, 59, 0.98);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 0.5rem;
+        min-width: 260px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        z-index: 1000;
+        animation: dropdownSlide 0.3s ease;
       }
 
-      /* Hero Glass Box */
+      @keyframes dropdownSlide {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.875rem 1rem;
+        border-radius: 12px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: all 0.3s;
+        margin-bottom: 0.25rem;
+      }
+
+      .dropdown-item:hover {
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--text-primary);
+      }
+
+      .dropdown-item:last-child { margin-bottom: 0; }
+
+      .dropdown-item .icon-box {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .dropdown-item .icon-box.tenant { background: rgba(99, 102, 241, 0.15); }
+      .dropdown-item .icon-box.tenant i { color: var(--primary-light); }
+
+      .dropdown-item .icon-box.landlord { background: rgba(245, 158, 11, 0.15); }
+      .dropdown-item .icon-box.landlord i { color: var(--accent-warm); }
+
+      .dropdown-item .icon-box.agent {
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+      }
+      .dropdown-item .icon-box.agent i { color: white; }
+
+      .dropdown-item .item-title {
+        color: var(--text-primary);
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .dropdown-item .item-desc {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+      }
+
+      .dropdown-divider {
+        height: 1px;
+        background: var(--border);
+        margin: 0.5rem 0;
+      }
+
+      .dropdown-item.agent-highlight {
+        background: rgba(99, 102, 241, 0.08);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+      }
+
+      .dropdown-item.agent-highlight:hover {
+        background: rgba(99, 102, 241, 0.15);
+        border-color: var(--primary);
+      }
+
+      .dropdown-item.agent-highlight .item-title { color: var(--primary-light); }
+
+      /* ===== MOBILE MENU ===== */
+      .mobile-menu-btn {
+        display: block;
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0.5rem 0.75rem;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+      }
+
+      @media (min-width: 992px) { .mobile-menu-btn { display: none; } }
+
+      .mobile-menu {
+        display: none;
+        margin-top: 1rem;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border);
+      }
+
+      .mobile-menu.active { display: block; }
+
+      .mobile-menu a {
+        display: block;
+        padding: 0.5rem 0;
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      .mobile-menu a:hover { color: var(--primary-light); }
+
+      .mobile-menu hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 0.75rem 0;
+      }
+
+      .mobile-menu .mobile-btn {
+        display: block;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        padding: 0.625rem;
+        border-radius: 50px;
+        font-weight: 500;
+        text-decoration: none;
+      }
+
+      .mobile-menu .mobile-btn-login {
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.3);
+        color: white;
+      }
+
+      .mobile-menu .mobile-btn-tenant {
+        background: rgba(255,255,255,0.95);
+        color: var(--bg-dark);
+      }
+
+      .mobile-menu .mobile-btn-landlord {
+        background: rgba(245, 158, 11, 0.9);
+        color: var(--bg-dark);
+      }
+
+      .mobile-menu .mobile-btn-agent {
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: white;
+        font-weight: 600;
+      }
+
+      /* ===== HERO MAIN CONTENT ===== */
+      .hero-main {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1.5rem;
+      }
+
       .hero-glass-box {
-        background: rgba(30, 41, 59, 0.5);
+        background: rgba(30, 41, 59, 0.6);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border: 1px solid var(--border);
         border-radius: 30px;
+        padding: 3rem;
+        max-width: 800px;
+        width: 100%;
+        text-align: center;
         position: relative;
         overflow: hidden;
       }
@@ -214,12 +568,11 @@
       .hero-glass-box::before {
         content: '';
         position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
-        animation: rotate 20s linear infinite;
+        top: -50%; left: -50%;
+        width: 200%; height: 200%;
+        background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+        animation: rotate 25s linear infinite;
+        pointer-events: none;
       }
 
       @keyframes rotate {
@@ -227,12 +580,20 @@
         to { transform: rotate(360deg); }
       }
 
-      .hero-glass-box > * {
-        position: relative;
-        z-index: 1;
+      .hero-glass-box > * { position: relative; z-index: 1; }
+
+      .display-2 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        line-height: 1.2;
       }
 
-      /* Staggered Drift Animations */
+      @media (max-width: 768px) {
+        .display-2 { font-size: 2rem; }
+        .hero-glass-box { padding: 2rem 1.5rem; }
+      }
+
+      /* ===== DRIFT ANIMATIONS ===== */
       .drift-in-1, .drift-in-2, .drift-in-3 {
         opacity: 0;
         transform: translateY(40px);
@@ -247,13 +608,14 @@
         to { opacity: 1; transform: translateY(0); }
       }
 
-      /* Typing Effect for Subtitle */
+      /* ===== TYPING EFFECT ===== */
       .typing-text {
         overflow: hidden;
         white-space: nowrap;
         border-right: 3px solid var(--accent);
         animation: typing 3s steps(40) 1.5s forwards, blink 0.7s step-end infinite;
         width: 0;
+        display: inline-block;
       }
 
       @keyframes typing {
@@ -265,28 +627,41 @@
         50% { border-color: transparent; }
       }
 
-      /* Hero CTA Button */
+      @media (max-width: 768px) {
+        .typing-text {
+          font-size: 1rem !important;
+          white-space: normal;
+          border-right: none;
+          animation: none;
+          width: auto;
+        }
+      }
+
+      /* ===== HERO CTA ===== */
       .hero-cta {
         background: linear-gradient(135deg, var(--primary), var(--accent));
         border: none;
         border-radius: 50px;
-        padding: 1rem 3rem;
-        font-size: 1.1rem;
+        padding: 1rem 2.5rem;
+        font-size: 1.05rem;
         font-weight: 600;
         color: white;
         position: relative;
         overflow: hidden;
         transition: all 0.4s ease;
         animation: pulse-glow 2s infinite;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
       }
 
       .hero-cta::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
         transition: left 0.6s ease;
       }
@@ -294,11 +669,10 @@
       .hero-cta:hover {
         transform: translateY(-3px) scale(1.05);
         box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+        color: white;
       }
 
-      .hero-cta:hover::before {
-        left: 100%;
-      }
+      .hero-cta:hover::before { left: 100%; }
 
       @keyframes pulse-glow {
         0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
@@ -306,34 +680,63 @@
         100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
       }
 
-      /* Particle Canvas */
-      #particleCanvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 2;
-        pointer-events: none;
+      /* ===== STATS ROW ===== */
+      .hero-stats {
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+        margin-top: 2.5rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
       }
 
-      /* Features Section */
-      .features-section {
-        background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(15, 23, 42, 0.98) 100%);
-        position: relative;
-        overflow: hidden;
+      @media (max-width: 576px) { .hero-stats { gap: 1.5rem; } }
+
+      .stat-item { text-align: center; }
+
+      .counter-value {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--primary-light), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
       }
 
-      .features-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, var(--primary), var(--accent), transparent);
+      @media (max-width: 576px) { .counter-value { font-size: 2rem; } }
+
+      .stat-label {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        display: block;
       }
 
+      /* ===== SCROLL INDICATOR ===== */
+      .scroll-indicator {
+        text-align: center;
+        padding-bottom: 2rem;
+        animation: bounce 2s infinite;
+      }
+
+      .scroll-indicator a {
+        color: var(--text-secondary);
+        opacity: 0.6;
+        transition: opacity 0.3s;
+        text-decoration: none;
+      }
+
+      .scroll-indicator a:hover { opacity: 1; }
+
+      @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
+      }
+
+      /* ===== SECTION TITLES ===== */
       .section-title {
         font-family: 'Space Grotesk', sans-serif;
         font-weight: 700;
@@ -344,60 +747,63 @@
         background-clip: text;
         position: relative;
         display: inline-block;
+        margin-bottom: 2rem;
       }
 
       .section-title::after {
         content: '';
         position: absolute;
-        bottom: -15px;
-        left: 50%;
+        bottom: -15px; left: 50%;
         transform: translateX(-50%);
-        width: 60px;
-        height: 4px;
+        width: 60px; height: 4px;
         background: linear-gradient(90deg, var(--primary), var(--accent));
         border-radius: 2px;
       }
 
-      /* Interactive Cards */
+      /* ===== FEATURES GRID ===== */
+      .features-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      @media (min-width: 768px) { .features-grid { grid-template-columns: repeat(3, 1fr); } }
+
+      /* ===== INTERACTIVE CARDS ===== */
       .interactive-card {
         background: var(--bg-card);
         border: 1px solid var(--border);
-        border-radius: 24px !important;
+        border-radius: 24px;
+        padding: 2rem;
         transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         position: relative;
         overflow: hidden;
+        height: 100%;
+        text-align: center;
       }
 
       .interactive-card::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
         background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.05));
         opacity: 0;
         transition: opacity 0.4s ease;
       }
 
       .interactive-card:hover {
-        transform: translateY(-15px) rotateX(5deg) rotateY(2deg);
+        transform: translateY(-15px);
         box-shadow: 0 30px 60px rgba(99, 102, 241, 0.15);
         border-color: var(--primary);
       }
 
-      .interactive-card:hover::before {
-        opacity: 1;
-      }
+      .interactive-card:hover::before { opacity: 1; }
 
-      .interactive-card > * {
-        position: relative;
-        z-index: 1;
-      }
+      .interactive-card > * { position: relative; z-index: 1; }
 
       .icon-circle {
-        width: 80px;
-        height: 80px;
+        width: 80px; height: 80px;
         border-radius: 24px;
         background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.1));
         border: 1px solid var(--border);
@@ -414,13 +820,12 @@
         box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3);
       }
 
-      .interactive-card:hover .icon-circle i {
-        color: white !important;
-      }
+      .interactive-card:hover .icon-circle i { color: white !important; }
 
       .card-title {
         color: var(--text-primary);
         font-weight: 600;
+        margin-bottom: 0.75rem;
       }
 
       .card-text {
@@ -428,18 +833,7 @@
         line-height: 1.7;
       }
 
-      /* Counter Animation */
-      .counter-value {
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 3rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, var(--primary-light), var(--accent));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      /* Scroll Reveal */
+      /* ===== SCROLL REVEAL ===== */
       .reveal {
         opacity: 0;
         transform: translateY(40px);
@@ -451,170 +845,192 @@
         transform: translateY(0);
       }
 
-      /* Footer */
+      /* ===== FOOTER ===== */
       .home-footer {
         background: linear-gradient(180deg, rgba(15, 23, 42, 0.95), var(--bg-dark));
         border-top: 1px solid var(--border);
         position: relative;
+        text-align: center;
+        padding: 1.5rem 0;
       }
 
       .home-footer::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 1px;
+        top: 0; left: 0;
+        width: 100%; height: 1px;
         background: linear-gradient(90deg, transparent, var(--primary), var(--accent), transparent);
       }
 
-      /* Scrollbar */
-      ::-webkit-scrollbar {
-        width: 8px;
+      .home-footer p {
+        color: var(--text-secondary);
+        margin: 0;
       }
 
-      ::-webkit-scrollbar-track {
-        background: var(--bg-dark);
-      }
-
-      ::-webkit-scrollbar-thumb {
-        background: var(--bg-card-hover);
-        border-radius: 4px;
-      }
-
-      ::-webkit-scrollbar-thumb:hover {
-        background: var(--primary);
-      }
-
-      /* Responsive */
-      @media (max-width: 768px) {
-        .hero-glass-box {
-          padding: 2rem !important;
-        }
-        
-        .display-2 {
-          font-size: 2.5rem !important;
-        }
-        
-        .section-title {
-          font-size: 1.8rem;
-        }
-      }
+      /* ===== SCROLLBAR ===== */
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: var(--bg-dark); }
+      ::-webkit-scrollbar-thumb { background: var(--bg-card-hover); border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
     </style>
   {% endblock %}
+<base target="_blank">
 </head>
 <body>
   {% block content %}
-  <!-- Hero Section -->
-  <header class="hero-section text-white" role="banner">
-    <canvas id="particleCanvas"></canvas>
-    <div class="container h-100 d-flex flex-column position-relative" style="z-index: 3;">
-      
-      <!-- Glass Navbar -->
-      <nav class="d-flex justify-content-between align-items-center py-3 glass-nav mt-4 px-4 rounded-pill" id="heroNav">
-        <div class="logo-text"><i class="fas fa-building me-2"></i>Zia Properties Ltd</div>
-        <div class="auth-buttons d-flex gap-2">
-          <a href="{% url 'frontend:login' %}" class="btn btn-glass-outline">Log in</a>
-          <a href="{% url 'frontend:signup' %}" class="btn btn-glow-white">Register</a>
-        </div>
-      </nav>
 
-      <!-- Hero Content with Staggered Drift -->
-      <div class="d-flex flex-column align-items-center justify-content-center text-center flex-grow-1">
-        <div class="hero-glass-box p-5">
-          <h1 class="display-2 fw-bold mb-4 drift-in-1" style="font-family: 'Space Grotesk', sans-serif;">
-            Discover Your <span style="background: linear-gradient(135deg, var(--primary-light), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Suitable Home</span>
-          </h1>
-          <p class="lead mb-5 fs-4 drift-in-2 typing-text" style="color: var(--text-secondary); margin: 0 auto; max-width: 600px;">
-            Buy &bull; Sell &bull; Rent &bull; Manage properties with ease
-          </p>
-          <div class="drift-in-3">
-            <a href="{% url 'frontend:signup' %}" class="btn hero-cta">
-              <i class="fas fa-rocket me-2"></i>Get Started
+  <!-- ===== HERO SECTION ===== -->
+  <header class="hero-section" role="banner" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-orbs"></div>
+    <canvas id="particleCanvas"></canvas>
+
+    <div class="hero-content-wrapper">
+      <div class="container">
+
+        <!-- Glass Navbar -->
+        <nav class="glass-nav" id="heroNav">
+          <a href="#home" class="logo-text">
+            <i class="fas fa-building me-2"></i>Zia Properties Ltd
+          </a>
+
+          <div class="nav-links">
+            <a href="{% url 'frontend:home' %}">Home</a>
+            <a href="{% url 'frontend:about' %}">About</a>
+            <a href="{% url 'frontend:services' %}">Services</a>
+            <a href="{% url 'frontend:contact' %}">Contact</a>
+            <a href="{% url 'frontend:blog' %}">Blog</a>
+            <a href="{% url 'frontend:testimonials' %}">Testimonials</a>
+          </div>
+
+                    <!-- AUTH BUTTONS -->
+          <div class="auth-buttons">
+            <a href="{% url 'frontend:login' %}" class="btn-glass-outline">Log in</a>
+            <a href="{% url 'frontend:agent_register' %}" class="btn-glow-white">
+              <i class="fas fa-user-tie me-1"></i> Become an Agent
             </a>
           </div>
-          
-          <!-- Stats Row -->
-          <div class="row mt-5 pt-4" style="border-top: 1px solid var(--border);">
-            <div class="col-4">
-              <div class="counter-value" data-target="500">0</div>
-              <small style="color: var(--text-secondary);">Properties</small>
-            </div>
-            <div class="col-4">
-              <div class="counter-value" data-target="1200">0</div>
-              <small style="color: var(--text-secondary);">Happy Clients</small>
-            </div>
-            <div class="col-4">
-              <div class="counter-value" data-target="50">0</div>
-              <small style="color: var(--text-secondary);">Cities</small>
+
+          <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+          </button>
+        </nav>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu">
+          <a href="#home" onclick="toggleMobileMenu()">Home</a>
+          <a href="#about" onclick="toggleMobileMenu()">About</a>
+          <a href="#services" onclick="toggleMobileMenu()">Services</a>
+          <a href="#contact" onclick="toggleMobileMenu()">Contact</a>
+          <a href="#blog" onclick="toggleMobileMenu()">Blog</a>
+          <a href="#testimonials" onclick="toggleMobileMenu()">Testimonials</a>
+          <hr>
+          <a href="{% url 'frontend:login' %}" class="mobile-btn mobile-btn-login">Log in</a>
+          <a href="{% url 'frontend:agent_register' %}" class="mobile-btn mobile-btn-agent">
+            <i class="fas fa-user-tie me-1"></i> Become an Agent
+          </a>
+        </div>
+
+      <!-- Hero Main Content -->
+      <div class="hero-main">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-8">
+              <div class="hero-glass-box">
+                <h1 class="display-2 fw-bold mb-4 drift-in-1">
+                  Discover Your <span style="background: linear-gradient(135deg, var(--primary-light), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Suitable Home</span>
+                </h1>
+                <p class="lead mb-5 fs-4 drift-in-2 typing-text" style="color: var(--text-secondary);">
+                  Buy &bull; Sell &bull; Rent &bull; Manage properties with ease
+                </p>
+                <div class="drift-in-3">
+                  <a href="{% url 'frontend:signup' %}" class="hero-cta">
+                    <i class="fas fa-rocket me-2"></i>Get Started
+                  </a>
+                </div>
+
+                <div class="hero-stats">
+                  <div class="stat-item">
+                    <div class="counter-value" data-target="500">0</div>
+                    <span class="stat-label">Properties</span>
+                  </div>
+                  <div class="stat-item">
+                    <div class="counter-value" data-target="1200">0</div>
+                    <span class="stat-label">Happy Clients</span>
+                  </div>
+                  <div class="stat-item">
+                    <div class="counter-value" data-target="50">0</div>
+                    <span class="stat-label">Cities</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      
-      <!-- Scroll Indicator -->
-      <div class="text-center pb-4" style="animation: bounce 2s infinite;">
-        <i class="fas fa-chevron-down fs-3" style="color: var(--text-secondary); opacity: 0.6;"></i>
+
+      <div class="scroll-indicator">
+        <a href="#features">
+          <i class="fas fa-chevron-down fs-3"></i>
+        </a>
       </div>
     </div>
   </header>
 
-  <!-- Features Section -->
-  <section class="py-5 features-section">
+  <!-- ===== FEATURES SECTION ===== -->
+  <section class="py-5" id="features" style="background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(15, 23, 42, 0.98) 100%); position: relative;">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--primary), var(--accent), transparent);"></div>
     <div class="container py-5">
-      <h2 class="text-center mb-5 section-title reveal">Why Choose Zia Properties Ltd?</h2>
-      <div class="row g-4">
-        
-        <div class="col-md-4 reveal">
-          <div class="card h-100 border-0 interactive-card p-4">
-            <div class="card-body text-center">
-              <div class="icon-circle">
-                <i class="fas fa-shield-alt fa-2x" style="color: var(--primary-light);"></i>
-              </div>
-              <h3 class="card-title h4 mb-3">Verified Listings</h3>
-              <p class="card-text">All properties are verified and updated daily for your peace of mind.</p>
+      <div class="text-center mb-5">
+        <h2 class="section-title reveal">Why Choose Zia Properties Ltd?</h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="reveal" style="transition-delay: 0s;">
+          <div class="interactive-card">
+            <div class="icon-circle">
+              <i class="fas fa-shield-alt fa-2x" style="color: var(--primary-light);"></i>
             </div>
+            <h3 class="card-title h4">Verified Listings</h3>
+            <p class="card-text">All properties are verified and updated daily for your peace of mind.</p>
           </div>
         </div>
 
-        <div class="col-md-4 reveal" style="transition-delay: 0.2s;">
-          <div class="card h-100 border-0 interactive-card p-4">
-            <div class="card-body text-center">
-              <div class="icon-circle">
-                <i class="fas fa-credit-card fa-2x" style="color: var(--primary-light);"></i>
-              </div>
-              <h3 class="card-title h4 mb-3">Easy Payments</h3>
-              <p class="card-text">Secure, automated, and convenient rent payment solutions at your fingertips.</p>
+        <div class="reveal" style="transition-delay: 0.2s;">
+          <div class="interactive-card">
+            <div class="icon-circle">
+              <i class="fas fa-credit-card fa-2x" style="color: var(--primary-light);"></i>
             </div>
+            <h3 class="card-title h4">Easy Payments</h3>
+            <p class="card-text">Secure, automated, and convenient rent payment solutions at your fingertips.</p>
           </div>
         </div>
 
-        <div class="col-md-4 reveal" style="transition-delay: 0.4s;">
-          <div class="card h-100 border-0 interactive-card p-4">
-            <div class="card-body text-center">
-              <div class="icon-circle">
-                <i class="fas fa-chart-line fa-2x" style="color: var(--primary-light);"></i>
-              </div>
-              <h3 class="card-title h4 mb-3">Smart Management</h3>
-              <p class="card-text">Track leases, tenants, and maintenance effortlessly from one central dashboard.</p>
+        <div class="reveal" style="transition-delay: 0.4s;">
+          <div class="interactive-card">
+            <div class="icon-circle">
+              <i class="fas fa-chart-line fa-2x" style="color: var(--primary-light);"></i>
             </div>
+            <h3 class="card-title h4">Smart Management</h3>
+            <p class="card-text">Track leases, tenants, and maintenance effortlessly from one central dashboard.</p>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <footer class="text-center py-4 home-footer">
-    <p class="mb-0" style="color: var(--text-secondary);">
-      <i class="fas fa-heart me-2" style="color: var(--primary);"></i>
-      &copy; 2026 Zia Properties Ltd. All rights reserved.
-    </p>
+  <footer class="home-footer">
+    <div class="container">
+      <p>
+        <i class="fas fa-heart me-2" style="color: var(--primary);"></i>
+        &copy; 2026 Zia Properties Ltd. All rights reserved.
+      </p>
+    </div>
   </footer>
   {% endblock %}
 
   <script>
-    // Particle System
+    // ===== PARTICLE SYSTEM =====
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -642,7 +1058,6 @@
         this.x += this.speedX;
         this.y += this.speedY;
 
-        // Mouse interaction
         const dx = mouseX - this.x;
         const dy = mouseY - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
@@ -672,14 +1087,13 @@
 
     function animateParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw connections
+
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          
+
           if (distance < 150) {
             ctx.beginPath();
             ctx.strokeStyle = `rgba(99, 102, 241, ${0.1 * (1 - distance / 150)})`;
@@ -707,7 +1121,7 @@
     initParticles();
     animateParticles();
 
-    // Navbar scroll effect
+    // ===== NAVBAR SCROLL EFFECT =====
     window.addEventListener('scroll', () => {
       const nav = document.getElementById('heroNav');
       if (window.scrollY > 50) {
@@ -717,7 +1131,39 @@
       }
     });
 
-    // Counter Animation
+    // ===== MOBILE MENU =====
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('active');
+    }
+
+        // ===== REGISTER DROPDOWN =====
+    function toggleRegisterDropdown() {
+      const dropdown = document.getElementById('registerDropdown');
+      const btn = document.getElementById('registerBtn');
+      const chevron = btn.querySelector('.fa-chevron-down');
+
+      if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+        dropdown.style.display = 'block';
+        chevron.style.transform = 'rotate(180deg)';
+      } else {
+        dropdown.style.display = 'none';
+        chevron.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      const dropdown = document.getElementById('registerDropdown');
+      const btn = document.getElementById('registerBtn');
+      const chevron = btn ? btn.querySelector('.fa-chevron-down') : null;
+
+      if (btn && dropdown && !btn.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+        if (chevron) chevron.style.transform = 'rotate(0deg)';
+      }
+    });
+    // ===== COUNTER ANIMATION =====
     function animateCounter(element) {
       const target = parseInt(element.getAttribute('data-target'));
       const duration = 2000;
@@ -735,23 +1181,19 @@
       }, 16);
     }
 
-    // Scroll Reveal
+    // ===== SCROLL REVEAL =====
     const revealElements = document.querySelectorAll('.reveal');
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('active');
-          
-          // Trigger counters when stats are visible
-          const counters = entry.target.querySelectorAll('.counter-value');
-          counters.forEach(counter => animateCounter(counter));
         }
       });
     }, { threshold: 0.1 });
 
     revealElements.forEach(el => revealObserver.observe(el));
 
-    // Also observe the hero stats
+    // ===== HERO STATS COUNTER =====
     const heroStats = document.querySelectorAll('.counter-value');
     const statsObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -764,7 +1206,7 @@
 
     heroStats.forEach(stat => statsObserver.observe(stat));
 
-    // Smooth scroll for internal links
+    // ===== SMOOTH SCROLL =====
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();

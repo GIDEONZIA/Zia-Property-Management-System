@@ -10,34 +10,47 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+"""
+Django settings for property_mgmt project.
+Production-ready for Render deployment.
+"""
+
 import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+try:
+    import dj_database_url
+except ImportError:
+    dj_database_url = None  # noqa: F401
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load environment variables from .env (override=True forces .env values over shell vars)
-load_dotenv(BASE_DIR / '.env', override=True)
+# Load local .env for development only
+if os.getenv('RENDER') is None:
+    load_dotenv(BASE_DIR / '.env', override=True)
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+# =============================================================================
+# SECURITY
+# =============================================================================
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY environment variable is required")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'zia-property.onrender.com',
+    'ziapropertyagency.com',
+    'www.ziapropertyagency.com',
+]
 
-DJANGO_SETTINGS_MODULE = "property_mgmt.settings"
-
-# openai
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-
-# Application definition
+# =============================================================================
+# APPLICATIONS
+# =============================================================================
 
 INSTALLED_APPS = [
     'jazzmin',
@@ -57,36 +70,40 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     'django_extensions',
     'widget_tweaks',
-   
 
     # Custom apps
-    'analytics', # Analytics App for property insights
-    'frontend',  # Frontend App for the Property Management System
-    'properties',  # Property Management App
-    'transactions', # Transaction Management App
-    'reports',  # Reporting App
-    'testimonial',  # Testimonials App
-    'subscriptions',  # Subscription Management App
-    'payments',  # Payments App for handling transactions and Mpesa integration
-    
+    'analytics',
+    'frontend',
+    'properties',
+    'transactions',
+    'reports',
+    'testimonial',
+    'subscriptions',
+    'payments',
+
     # Third-party apps
-    'rest_framework',  # Django REST Framework
-    'rest_framework_simplejwt', # JWT Authentication
-      
-    
+    'rest_framework',
+    'rest_framework_simplejwt',
 ]
 
+SITE_ID = 1
 
-SITE_ID = 1  # Required for allauth to function
+# =============================================================================
+# DJANGO-Q (Background Tasks — Database-backed, no Redis needed)
+# =============================================================================
 
 Q_CLUSTER = {
     'name': 'ZiaQ',
-    'workers': 4,
+    'workers': 2,
     'timeout': 60,
     'retry': 90,
     'queue_limit': 50,
     'orm': 'default',
 }
+
+# =============================================================================
+# JAZZMIN ADMIN
+# =============================================================================
 
 JAZZMIN_SETTINGS = {
     "site_title": "Zia Property Admin",
@@ -94,29 +111,16 @@ JAZZMIN_SETTINGS = {
     "site_brand": "Zia Properties Ltd",
     "welcome_sign": "Welcome to Zia Admin",
     "copyright": "Zia Properties Ltd",
-    "search_model": ["properties.Property"],  # optional
+    "search_model": ["properties.Property"],
     "order_with_respect_to": ["properties", "accounts"],
-
-    # -*- coding: utf-8 -*-
-
     "icons": {
-        # 🔐 Built-in apps
         "auth.Group": "fas fa-user-shield",
         "auth.User": "fas fa-user",
-
-        # 📧 Email (django-allauth)
         "account.EmailAddress": "fas fa-envelope",
         "account.EmailConfirmation": "fas fa-envelope-open-text",
-
-        # 🌐 Social Auth
         "socialaccount.SocialApp": "fas fa-cogs",
         "socialaccount.SocialAccount": "fab fa-facebook-square",
         "socialaccount.SocialToken": "fas fa-key",
-
-        #AI chat
-        "chat.ChatMessage": "fas fa-comments",
-
-        # 🏘️ Property System (properties app)
         "properties.Agent": "fas fa-user-tie",
         "properties.AgentSubscription": "fas fa-id-badge",
         "properties.Property": "fas fa-home",
@@ -131,84 +135,87 @@ JAZZMIN_SETTINGS = {
         "properties.Inspection": "fas fa-search",
         "properties.Payment": "fas fa-money-bill-wave",
         "properties.ContactMessage": "fas fa-envelope-open",
-
-        # 📈 Reports
         "reports.IncomeReport": "fas fa-chart-line",
-
-        "subscriptions.PremiumSubscription": "fas fa-crown",  # 👑 Crown icon for premium
-        "subscriptions.MpesaAuditLog": "fas fa-file-invoice-dollar",  # 💵 Payment log icon
-
-        # 💳 Transactions
+        "subscriptions.PremiumSubscription": "fas fa-crown",
+        "subscriptions.MpesaAuditLog": "fas fa-file-invoice-dollar",
         "transactions.Transaction": "fas fa-credit-card",
         "transactions.MpesaTransaction": "fas fa-mobile-alt",
-
-        # 💬 Testimonials
         "testimonial.Testimonial": "fas fa-comment-dots",
-
-                # Django Q core models
-        "django_q.Failure": "fas fa-times-circle",         # ❌ Failed tasks
-        "django_q.Task": "fas fa-hourglass-alt",          #  Queued / running tasks
-        "django_q.Schedule": "fas fa-calendar-alt  ",        # 📅 Scheduled tasks
-        "django_q.Success": "fas fa-check-circle",         # ✅ Successful tasks
-
-        # Bonus suggestion for overall tasks:
-        "django_q.QueuedTask": "fas fa-tasks",             
+        "django_q.Failure": "fas fa-times-circle",
+        "django_q.Task": "fas fa-hourglass-alt",
+        "django_q.Schedule": "fas fa-calendar-alt",
+        "django_q.Success": "fas fa-check-circle",
     },
-
     "custom_links": {
-    "django_q": [{
-        "name": "View Q Cluster Logs",
-        "url": "/admin/django_q/task/",
-        "icon": "fas fa-tasks",
-        "permissions": ["django_q.view_task"]
-    }],
-},
-
+        "django_q": [{
+            "name": "View Q Cluster Logs",
+            "url": "/admin/django_q/task/",
+            "icon": "fas fa-tasks",
+            "permissions": ["django_q.view_task"]
+        }],
+    },
 }
-
 
 JAZZMIN_UI_TWEAKS = {
     "css": "frontend/custom_dark.css"
 }
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
+# =============================================================================
+# STATIC FILES
+# =============================================================================
 
-# The URL prefix used to access static files in the browser
-STATIC_URL = 'static/'
-
-# Directories where Django looks for additional static files (Source folders)
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
     BASE_DIR / 'property_mgmt_backend' / 'static',
     BASE_DIR / 'frontend',
 ]
 
-# The single folder where Vercel will look for all compiled production assets
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# =============================================================================
+# MEDIA FILES (Local — WARNING: Won't persist on Render without S3/R2)
+# =============================================================================
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# TODO: Configure Cloudflare R2 or AWS S3 for persistent file storage
+# When ready, uncomment and configure django-storages:
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# AWS_ACCESS_KEY_ID = os.getenv('R2_ACCESS_KEY_ID')
+# AWS_SECRET_ACCESS_KEY = os.getenv('R2_SECRET_ACCESS_KEY')
+# AWS_STORAGE_BUCKET_NAME = os.getenv('R2_BUCKET_NAME')
+# AWS_S3_ENDPOINT_URL = os.getenv('R2_ENDPOINT_URL')  # e.g., https://<account>.r2.cloudflarestorage.com
+# AWS_S3_REGION_NAME = 'auto'
+
+# =============================================================================
+# AUTHENTICATION
+# =============================================================================
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-# Authentication settings for DRF
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    
         'rest_framework.authentication.SessionAuthentication',
     ],
-
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
 
-# Middleware configuration
+# =============================================================================
+# MIDDLEWARE
+# =============================================================================
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -217,9 +224,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-
-    # Custom middleware
-    "subscriptions.middleware.PremiumRequiredMiddleware",
+    'subscriptions.middleware.PremiumRequiredMiddleware',
 ]
 
 premium_paths = [
@@ -227,12 +232,16 @@ premium_paths = [
     "/properties/add/",
 ]
 
+# =============================================================================
+# URLS & TEMPLATES
+# =============================================================================
+
 ROOT_URLCONF = 'property_mgmt.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR/'frontend'/'templates')],
+        'DIRS': [BASE_DIR / 'frontend' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -245,112 +254,110 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = 'property_mgmt.wsgi.application'
 
-ASGI_APPLICATION = "property_mgmt.asgi.application"
+# =============================================================================
+# ASGI / CHANNELS (Disabled — no WebSocket in production)
+# =============================================================================
 
-# Redis for real-time communication
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],  
-        },
-    },
-}
+# ASGI_APPLICATION = "property_mgmt.asgi.application"
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [os.getenv('REDIS_URL', 'redis://127.0.0.1:6379')],
+#         },
+#     },
+# }
 
+# =============================================================================
+# DATABASE
+# =============================================================================
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'zia_db'),  # Added 'zia_db' as a fallback
-        'USER': os.getenv('DB_USER', 'postgres'),
-        'PASSWORD': os.getenv('DB_PASSWORD', ''),
-        'HOST': os.getenv('DB_HOST', '127.0.0.1'),
-        'PORT': os.getenv('DB_PORT', '5432'),
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL', 'sqlite:///db.sqlite3'),
+        conn_max_age=600,
+    )
 }
 
-AFRICASTALKING_USERNAME = os.getenv("AFRICASTALKING_USERNAME", "sandbox")
-AFRICASTALKING_API_KEY = os.getenv("AFRICASTALKING_API_KEY", "")
+# =============================================================================
+# M-PESA SETTINGS
+# =============================================================================
 
-# Mpesa Daraja API Settings
 MPESA_CONSUMER_KEY = os.getenv("MPESA_CONSUMER_KEY")
 MPESA_CONSUMER_SECRET = os.getenv("MPESA_CONSUMER_SECRET")
 MPESA_BASE_URL = os.getenv("MPESA_BASE_URL", "https://sandbox.safaricom.co.ke")
 MPESA_SHORTCODE = os.getenv("MPESA_SHORTCODE")
 MPESA_PASSKEY = os.getenv("MPESA_PASSKEY")
 MPESA_SECURITY_CREDENTIAL = os.getenv("MPESA_SECURITY_CREDENTIAL")
-
-# My Ngrok/Public callback base
 MPESA_CALLBACK_URL = os.getenv("MPESA_CALLBACK_URL")
 
+# =============================================================================
+# EMAIL
+# =============================================================================
 
-# Email
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
-
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@zia-properties.com")
 
+# =============================================================================
+# AFRICA'S TALKING (Placeholder — not integrated yet)
+# =============================================================================
+
+AFRICASTALKING_USERNAME = os.getenv("AFRICASTALKING_USERNAME", "")
+AFRICASTALKING_API_KEY = os.getenv("AFRICASTALKING_API_KEY", "")
+
+# =============================================================================
+# OPENAI (Placeholder — not integrated yet)
+# =============================================================================
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+OPENAI_WORKFLOW_ID = os.getenv("OPENAI_WORKFLOW_ID", "")
+
+# =============================================================================
+# SECURITY HEADERS
+# =============================================================================
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://*.ngrok-free.app"
+    "https://*.onrender.com",
+    "https://ziapropertyagency.com",
+    "https://www.ziapropertyagency.com",
 ]
 
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
 
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
+# =============================================================================
+# PASSWORD VALIDATION
+# =============================================================================
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
+# =============================================================================
+# INTERNATIONALIZATION
+# =============================================================================
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'Africa/Nairobi'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-ALLOWED_HOSTS = ['*']
-
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+DEFAULT_AUTO_FIELD = 'django.models.BigAutoField'
 
 LOGIN_URL = 'dashboard/login/'
-  
 LOGIN_REDIRECT_URL = '/home/'
 LOGOUT_REDIRECT_URL = '/'
-
-
-# Removed invalid pytest configuration from settings.py.
