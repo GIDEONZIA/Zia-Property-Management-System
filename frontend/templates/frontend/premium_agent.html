@@ -7,7 +7,13 @@
 {% block content %}
 <!-- Hero Banner -->
 <div class="card" style="text-align: center; padding: 3rem 2rem; margin-bottom: 2rem; background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.1)); border-color: var(--primary);">
-  <div style="font-size: 3rem; margin-bottom: 1rem;">👑</div>
+  {% if agent.profile_picture %}
+    <div style="width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 1rem; overflow: hidden; border: 3px solid var(--primary); box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);">
+      <img src="{{ agent.profile_picture.url }}" alt="{{ agent.first_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+    </div>
+  {% else %}
+    <div style="font-size: 3rem; margin-bottom: 1rem;">👑</div>
+  {% endif %}
   <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.75rem; margin-bottom: 0.5rem;">Unlock Your Full Potential</h2>
   <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 1.5rem;">Get verified badges, unlimited listings, priority placement, and exclusive marketing tools.</p>
   {% if agent.is_premium %}

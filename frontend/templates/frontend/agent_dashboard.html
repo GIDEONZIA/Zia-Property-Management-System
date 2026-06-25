@@ -92,7 +92,13 @@
         <tr>
           <td>
             <div class="tenant-info">
-              <div class="tenant-avatar">{{ lease.tenant.property_name|slice:":1"|upper }}</div>
+              {% if lease.tenant.profile_picture %}
+                <div class="tenant-avatar">
+                  <img src="{{ lease.tenant.profile_picture.url }}" alt="{{ lease.tenant.property_name }}">
+                </div>
+              {% else %}
+                <div class="tenant-avatar">{{ lease.tenant.property_name|slice:":1"|upper }}</div>
+              {% endif %}
               <div>
                 <div class="tenant-name">{{ lease.tenant.property_name }}</div>
                 <div class="tenant-email">{{ lease.tenant.email }}</div>
@@ -172,7 +178,13 @@
       <tr>
         <td>
           <div class="tenant-info">
-            <div class="tenant-avatar">{{ payment.tenant.property_name|slice:":1"|upper }}</div>
+            {% if payment.tenant.profile_picture %}
+              <div class="tenant-avatar">
+                <img src="{{ payment.tenant.profile_picture.url }}" alt="{{ payment.tenant.property_name }}">
+              </div>
+            {% else %}
+              <div class="tenant-avatar">{{ payment.tenant.property_name|slice:":1"|upper }}</div>
+            {% endif %}
             <div>
               <div class="tenant-name">{{ payment.tenant.property_name }}</div>
               <div class="tenant-email">{{ payment.tenant.email }}</div>

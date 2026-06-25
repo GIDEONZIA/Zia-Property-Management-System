@@ -247,16 +247,22 @@
       padding-right: 2.5rem;
     }
 
+    /* ===== FILE INPUT - FIXED ===== */
     .file-input-wrapper {
       position: relative;
+      display: block;
+      min-height: 48px;
     }
 
     .file-input-wrapper input[type="file"] {
       position: absolute;
+      top: 0;
+      left: 0;
       opacity: 0;
       width: 100%;
       height: 100%;
       cursor: pointer;
+      z-index: 10;
     }
 
     .file-input-label {
@@ -271,9 +277,13 @@
       font-size: 0.9rem;
       cursor: pointer;
       transition: all 0.3s ease;
+      pointer-events: none;
+      position: relative;
+      z-index: 1;
     }
 
-    .file-input-label:hover {
+    .file-input-label:hover,
+    .file-input-wrapper:hover .file-input-label {
       border-color: var(--primary);
       color: var(--primary-light);
     }
@@ -575,21 +585,21 @@
             <div class="form-group">
               <label>Profile Picture</label>
               <div class="file-input-wrapper">
+                <input type="file" name="profile_picture" id="id_profile_picture" accept="image/*">
                 <div class="file-input-label">
                   <i class="fas fa-camera"></i>
                   <span id="profile-label">Choose profile picture...</span>
                 </div>
-                {{ form.profile_picture }}
               </div>
             </div>
             <div class="form-group">
               <label>National ID / Passport</label>
               <div class="file-input-wrapper">
+                <input type="file" name="id_document" id="id_id_document" accept=".pdf,.jpg,.jpeg,.png">
                 <div class="file-input-label">
                   <i class="fas fa-id-card"></i>
                   <span id="id-doc-label">Upload ID document...</span>
                 </div>
-                {{ form.id_document }}
               </div>
               <div class="help-text">Required for verification. PDF, JPG, or PNG accepted.</div>
             </div>
@@ -597,11 +607,11 @@
           <div class="form-group">
             <label>Business Certificate</label>
             <div class="file-input-wrapper">
+              <input type="file" name="business_certificate" id="id_business_certificate" accept=".pdf,.jpg,.jpeg,.png">
               <div class="file-input-label">
                 <i class="fas fa-certificate"></i>
                 <span id="cert-label">Upload business certificate...</span>
               </div>
-              {{ form.business_certificate }}
             </div>
           </div>
         </div>
@@ -634,13 +644,13 @@
 
   <script>
     // File input label updates
-    document.querySelector('input[name="profile_picture"]').addEventListener('change', function() {
+    document.getElementById('id_profile_picture').addEventListener('change', function() {
       document.getElementById('profile-label').textContent = this.files[0] ? this.files[0].name : 'Choose profile picture...';
     });
-    document.querySelector('input[name="id_document"]').addEventListener('change', function() {
+    document.getElementById('id_id_document').addEventListener('change', function() {
       document.getElementById('id-doc-label').textContent = this.files[0] ? this.files[0].name : 'Upload ID document...';
     });
-    document.querySelector('input[name="business_certificate"]').addEventListener('change', function() {
+    document.getElementById('id_business_certificate').addEventListener('change', function() {
       document.getElementById('cert-label').textContent = this.files[0] ? this.files[0].name : 'Upload business certificate...';
     });
   </script>
