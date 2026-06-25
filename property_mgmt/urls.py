@@ -31,6 +31,11 @@ urlpatterns = [
     path('payments/', include('payments.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/', include('properties.api_urls')),
+    path('api/payments/', include('payments.api_urls')),
+    path('api/subscriptions/', include('subscriptions.api_urls')),
+    path('api/reports/', include('reports.api_urls')),
+    path('api/frontend/', include('frontend.api_urls')),
 ]
 
 # Serve static and media files in production (Whitenoise handles static)
